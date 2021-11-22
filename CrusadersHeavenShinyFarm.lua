@@ -1,4 +1,3 @@
-_G.shinyFarm = true
 _G.nonShiny = {"Golden Experience", "Killer Queen", "Silver Chariot", "Star Platinum", "The World", "Tusk Act 1", "Tusk Act 2", "The World Alternate Universe", "The Hand", "Doppio King Crimson", "King Crimson: Doppio"}
 
 local function pickUpArrows()
