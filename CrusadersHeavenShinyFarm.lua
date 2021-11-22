@@ -14,6 +14,7 @@ local function pickUpArrows()
     return true
 end
 
+game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Credits"; Text = "Made by: Ghabrieel On V3rmillion"})
 while _G.shinyFarm do wait()
     e = game.Players.LocalPlayer.PlayerGui.Menu.Frame.StandInfo.vpf:FindFirstChildOfClass("Model")
     if e and not table.find(_G.nonShiny, e.Name) then
