@@ -31,7 +31,7 @@ while _G.shinyFarm do wait()
         break
     elseif e and table.find(_G.nonShiny, e.Name) then
         game:GetService("Workspace").Pucci.Pucci:FireServer()
-        wait(1)
+        game.Players.LocalPlayer.CharacterAdded:Wait()
     else
         if game.Players.LocalPlayer.Backpack:FindFirstChild("Stand Arrow") then
             game:GetService("ReplicatedStorage").ItemEvent.StandArrow:FireServer()
