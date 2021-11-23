@@ -18,7 +18,7 @@ local function useArrow(arrow)
     repeat wait() until game.Players.LocalPlayer.PlayerGui.Menu.Frame.StandInfo.vpf:FindFirstChildOfClass("Model")
 end
 
-game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Credits"; Text = "Made by: Ghabrieel On V3rmillion"})
+game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Made by: Ghabrieel"; Text = "On V3rmillion"})
 while _G.shinyFarm do wait()
     game.Players.LocalPlayer.PlayerGui:WaitForChild("Menu")
     e = game.Players.LocalPlayer.PlayerGui.Menu.Frame.StandInfo.vpf:FindFirstChildOfClass("Model")
