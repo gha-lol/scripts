@@ -84,6 +84,6 @@ b:Label("Mushroom Config",{TextSize = 17; TextColor = Color3.fromRGB(255,255,255
 b:Toggle("Use Mushroom",function(bool)
     _G.useMushroom = bool
 end)
-b:Dropdown("Use Mushroom On",_G.nonShiny,true,function(stand)
+b:Dropdown("Select Stand",_G.nonShiny,true,function(stand)
     _G.stand = stand
 end)
