@@ -1,3 +1,5 @@
+game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Update 1.4"; Text = "Updated on: 12/24/2021"})
+
 _G.nonShiny = {"Golden Experience", "Killer Queen", "Silver Chariot", "Star Platinum", "The World", "Tusk Act 1", "The World Alternate Universe", "The Hand", "King Crimson: Doppio"}
 _G.stand = "None"
 
