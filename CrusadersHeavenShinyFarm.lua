@@ -8,7 +8,7 @@ local function pickUpArrows()
     end
     while wait() do
         v = workspace:FindFirstChild("Stand Arrow")
-        if v and v:FindFirstChild("ClickDetector") and v:FindFirstChild("Handle") and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        if v and v:FindFirstChild("ProximityPrompt") and v:FindFirstChild("Handle") and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
             if game.Players.LocalPlayer.Character:FindFirstChild("LowerTorso") then
                 game.Players.LocalPlayer.Character.LowerTorso:Destroy()
             end
