@@ -13,7 +13,7 @@ local function pickUpArrows()
                 game.Players.LocalPlayer.Character.LowerTorso:Destroy()
             end
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Handle.CFrame
-            fireclickdetector(v.ClickDetector)
+            fireproximityprompt(v.ProximityPrompt)
         else
             break
         end
