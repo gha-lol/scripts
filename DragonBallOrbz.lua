@@ -44,11 +44,11 @@ f:Toggle("Auto Farm",function(bool)
     end)
     spawn(function()
         while _G.e do wait()
-            workspace.Gravity = 0
-            invis()
-            equip()
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
             pcall(function()
+                workspace.Gravity = 0
+                invis()
+                equip()
+                game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
                 if game.Players.LocalPlayer.PlayerGui.ActiveQuest.Background.Background.Visible == false then
                     if _G.m == "Oscar" or _G.m == "Destroyer" or _G.m == "Freezer Force Commander" then
                         quest("Elite Freezer Force Quest")
@@ -56,21 +56,21 @@ f:Toggle("Auto Farm",function(bool)
                         quest(_G.m .. " Quest")
                     end
                 end
+                for i,mob in pairs(game:GetService("Workspace").Resources.SpawnedAI:GetChildren()) do
+                    if mob.Name == _G.m and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 and mob:FindFirstChild("HumanoidRootPart") then
+                        v = mob
+                        break
+                    end
+                end
+                if v and v.Name == _G.m and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("PlayerTag") then
+                    for i,anims in pairs(v.Humanoid:GetPlayingAnimationTracks()) do
+                        anims:Stop()
+                    end
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.Angles(-300, math.rad(0), 0) * CFrame.new(0,0,_G.dis)
+                    game:GetService("ReplicatedStorage").Packages.Knit.Services.CombatService.RF.MeleeAttack:InvokeServer("Punch")
+                end
+                game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
             end)
-            for i,mob in pairs(game:GetService("Workspace").Resources.SpawnedAI:GetChildren()) do
-                if mob.Name == _G.m and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 and mob:FindFirstChild("HumanoidRootPart") then
-                    v = mob
-                    break
-                end
-            end
-            if v and v.Name == _G.m and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("PlayerTag") then
-                for i,anims in pairs(v.Humanoid:GetPlayingAnimationTracks()) do
-                    anims:Stop()
-                end
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.Angles(-300, math.rad(0), 0) * CFrame.new(0,0,_G.dis)
-                game:GetService("ReplicatedStorage").Packages.Knit.Services.CombatService.RF.MeleeAttack:InvokeServer("Punch")
-            end
-            game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
         end
         workspace.Gravity = 196.1999969482422
     end)
