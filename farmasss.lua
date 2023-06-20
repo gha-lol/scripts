@@ -168,6 +168,36 @@ for i,v in pairs({1,2,3}) do
     end)
 end
 
+local tab8,name8 = win:CreateTab("Teleport",function() end)
+
+local function tpp(cf)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
+end
+
+tab8:CreateButton("Spawn", function()
+    tpp(CFrame.new(-2.40392, 3.19242, -18.6507))
+end)
+
+tab8:CreateButton("Hospital", function()
+    tpp(CFrame.new(242.283, 3.39242, 1088.21))
+end)
+
+tab8:CreateButton("UA", function()
+    tpp(CFrame.new(765.222, 24.98, -24.976))
+end)
+
+tab8:CreateButton("Prestige", function()
+    tpp(CFrame.new(638.628, 3.79342, 125.95))
+end)
+
+tab8:CreateButton("Prisao 1", function()
+    tpp(CFrame.new(444.214, 2.33322, -1442.97))
+end)
+
+tab8:CreateButton("Prisao 2", function()
+    tpp(CFrame.new(645.07, -114.795, -3357.75))
+end)
+
 local tab6,name6 = win:CreateTab("Debug",function() end)
 
 local textbox4 = tab6:CreateTextbox("Nome","Nome")
