@@ -198,6 +198,14 @@ tab8:CreateButton("Prisao 2", function()
     tpp(CFrame.new(645.07, -114.795, -3357.75))
 end)
 
+tab8:CreateButton("Loja", function()
+    tpp(CFrame.new(-722.125, 4.04802, 1084.91))
+end)
+
+tab8:CreateButton("Floresta", function()
+    tpp(CFrame.new(-1399.33, -1.11415, -17.6662))
+end)
+
 local tab6,name6 = win:CreateTab("Debug",function() end)
 
 local textbox4 = tab6:CreateTextbox("Nome","Nome")
