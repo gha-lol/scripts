@@ -51,7 +51,7 @@ tab2:CreateSlider("Points",1,350,1,function(valor)
     _G.pontos = valor
 end)
 
-tab2:CreateDropdown("Converter Para", {"QuirkSpins", "RaceSpins"},false,function(stat)
+tab2:CreateDropdown("Converter Para", {"QuirkSpins", "RaceSpins", "QuirkLevel", "StaminaLevel", "DefenseLevel", "StrengthLevel", "WeaponLevel"},false,function(stat)
     _G.convpara = stat
 end)
 
@@ -153,7 +153,7 @@ local function addTable(nomeda)
     msg(nomeda .. " " .. textoo2, "Selecionados: " .. textoo)
 end
 
-local tabbb = {"Cremation", "One for All", "Half-Cold Half-Hot", "Explosion", "Decay"}
+local tabbb = {"Cremation", "OFA", "HCHH", "Explosion", "Decay"}
 for i,v in pairs(tabbb) do
     tab5:CreateButton(v,function()
         addTable(v)
