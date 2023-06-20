@@ -45,6 +45,35 @@ tab1:CreateDropdown("Quest", {"Hero2", "Hero13", "Hero18", "Side1", "Side3", "Si
     _G.ques = quest
 end)
 
+local function get()
+    local returner
+    for i,v in pairs(game:GetService("Workspace").Characters:GetChildren()) do
+        if v.Name ~= game.Players.LocalPlayer.Name and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") then
+            returner = v
+            break
+        end
+    end
+    return returner
+end
+
+tab1:CreateToggle("Auto-Raid", false, function(bool)
+    _G.autraid = bool
+
+    if game.Players.LocalPlayer.Character.LowerTorso:FindFirstChild("Root") then
+        game.Players.LocalPlayer.Character.LowerTorso.Root:Destroy()
+    end
+
+    local v
+    while _G.autraid do wait()
+        v = get()
+        if v and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,4)
+            game:GetService("ReplicatedStorage").Power:FireServer(nil, false, 1, false)
+            game:GetService("ReplicatedStorage").Power:FireServer(nil, false, 2, false)
+        end
+    end
+end)
+
 local tab2,name2 = win:CreateTab("Personagem",function() end)
 
 tab2:CreateSlider("Points",1,350,1,function(valor)
