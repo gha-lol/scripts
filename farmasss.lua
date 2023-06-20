@@ -107,11 +107,13 @@ tab5:CreateToggle("Auto-Spin",false,function(bool)
     while _G.sp do wait()
         if table.find(_G.eetab, quirk.Value) then _G.sp = false error("e") return end
         if _G.autobuyy == true and quirk.Parent.QuirkSpins.Value == 0 then game:GetService("ReplicatedStorage").SpinQuirk:FireServer("buy") end
-        cu = tick()
-        old = quirk.Value
-        game:GetService("ReplicatedStorage").SpinQuirk:FireServer("spin", false)
-        repeat wait() until quirk.Value ~= old or tick() - cu >= 8
-        wait(1)
+        if quirk.Parent.QuirkSpins.Value > 0 then
+            cu = tick()
+            old = quirk.Value
+            game:GetService("ReplicatedStorage").SpinQuirk:FireServer("spin", false)
+            repeat wait() until quirk.Value ~= old or tick() - cu >= 8
+            wait(1)
+        end
     end
 end)
 
@@ -155,6 +157,14 @@ local tabbb = {"Cremation", "One for All", "Half-Cold Half-Hot", "Explosion", "D
 for i,v in pairs(tabbb) do
     tab5:CreateButton(v,function()
         addTable(v)
+    end)
+end
+
+local tab7,name7 = win:CreateTab("No CD",function() end)
+
+for i,v in pairs({1,2,3}) do
+    tab7:CreateButton("Skill " .. tostring(v),function()
+        game:GetService("ReplicatedStorage").Power:FireServer(nil, false, v, false)
     end)
 end
 
