@@ -1,6 +1,8 @@
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/InfinitiveUI",true))()
 local win = lib:CreateWindow("Farmassss",1,nil,nil)
 
+local data = game.ReplicatedStorage.AllPlayerData[game.Players.LocalPlayer.Name]["Char Data"]
+
 local tab1,name1 = win:CreateTab("Auto-Farm",function() end)
 _G.ques = "Hero2"
 tab1:CreateToggle("Auto-Farm",false,function(bool)
@@ -20,15 +22,15 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
                 game:GetService("ReplicatedStorage").questremote:FireServer("", true)
             end
             if _G.ques == "Hero2" then
-                tp = CFrame.new(932, 73, -23)
+                tp = CFrame.new(972, 73, -93)
             elseif _G.ques == "Side1" then
                 tp = CFrame.new(306, 29, 1179)
             elseif _G.ques == "Side3" then
-                tp = CFrame.new(-733, 4, 1066)
+                tp = CFrame.new(-786, 17, 1090)
             elseif _G.ques == "Hero13" then
-                tp = CFrame.new(276, 3, 1102)
+                tp = CFrame.new(306, 29, 1179)
             elseif _G.ques == "Hero18" then
-                tp = CFrame.new(932, 73, -23)
+                tp = CFrame.new(972, 73, -93)
             elseif _G.ques == "Side4" then
                 tp = CFrame.new(-32, 569, 158)
             elseif _G.ques == "Villain14" then
@@ -80,12 +82,12 @@ tab1:CreateToggle("Auto-Raid", false, function(bool)
 end)
 
 local tab2,name2 = win:CreateTab("Personagem",function() end)
-
+_G.pontos = 1
 tab2:CreateSlider("Points",1,350,1,function(valor)
     _G.pontos = valor
 end)
 
-tab2:CreateDropdown("Converter Para", {"QuirkSpins", "RaceSpins", "QuirkLevel", "StaminaLevel", "DefenseLevel", "StrengthLevel", "WeaponLevel"},false,function(stat)
+tab2:CreateDropdown("Converter Para", {"QuirkSpins", "RaceSpins", "QuirkLevel", "StaminaLevel", "DefenseLevel", "StrengthLevel", "WeaponLevel", "CurrentQuestStoryline"},false,function(stat)
     _G.convpara = stat
 end)
 
@@ -96,8 +98,17 @@ textbox1:GetPropertyChangedSignal("Text"):Connect(function()
 end)
 
 tab2:CreateButton("Converter Points",function()
-    for i=1, _G.pontos do
-        game:GetService("ReplicatedStorage").AddPoint:FireServer(_G.convpara)
+    if _G.convpara == "CurrentQuestStoryline" then
+        local calc = 19 - data.CurrentQuestStoryline.Value
+        if calc > 0 then
+            for i=1, calc do
+                game:GetService("ReplicatedStorage").AddPoint:FireServer(_G.convpara)
+            end
+        end
+    else
+        for i=1, _G.pontos do
+            game:GetService("ReplicatedStorage").AddPoint:FireServer(_G.convpara)
+        end
     end
 end)
 
@@ -207,6 +218,20 @@ local tab8,name8 = win:CreateTab("Teleport",function() end)
 local function tpp(cf)
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
 end
+
+tab8:CreateButton("TP Boss", function()
+    local achou = false
+    for i,v in pairs(game:GetService("Workspace").Characters:GetChildren()) do
+        if v:FindFirstChild("NonSpawnable") and string.find(v.Name, "Boss") then
+            achou = true
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,100,0)
+            break
+        end
+    end
+    if not achou then
+        msg("TP Boss", "Boss não spawnado")
+    end
+end)
 
 tab8:CreateButton("Spawn", function()
     tpp(CFrame.new(-2.40392, 3.19242, -18.6507))
