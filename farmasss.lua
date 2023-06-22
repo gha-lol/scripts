@@ -10,6 +10,7 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
         if game.Players.LocalPlayer.Character.LowerTorso:FindFirstChild("Root") then
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-32, 569, 158)
             wait(1)
+            game.Players.LocalPlayer.Character.LowerTorso.Anchored = true
             game.Players.LocalPlayer.Character.LowerTorso.Root:Destroy()
             wait(1)
         end
@@ -21,7 +22,7 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
             if _G.ques == "Hero2" then
                 tp = CFrame.new(932, 73, -23)
             elseif _G.ques == "Side1" then
-                tp = CFrame.new(276, 3, 1102)
+                tp = CFrame.new(306, 29, 1179)
             elseif _G.ques == "Side3" then
                 tp = CFrame.new(-733, 4, 1066)
             elseif _G.ques == "Hero13" then
@@ -30,6 +31,8 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
                 tp = CFrame.new(932, 73, -23)
             elseif _G.ques == "Side4" then
                 tp = CFrame.new(-32, 569, 158)
+            elseif _G.ques == "Villain14" then
+                tp = CFrame.new(306, 29, 1179)
             end
             game:GetService("ReplicatedStorage").questremote:FireServer(_G.ques)
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = tp
@@ -41,7 +44,7 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
     end)
 end)
 
-tab1:CreateDropdown("Quest", {"Hero2", "Hero13", "Hero18", "Side1", "Side3", "Side4"},false,function(quest)
+tab1:CreateDropdown("Quest", {"Hero2", "Hero13", "Hero18", "Side1", "Side3", "Side4", "Villain14"},false,function(quest)
     _G.ques = quest
 end)
 
@@ -60,6 +63,8 @@ tab1:CreateToggle("Auto-Raid", false, function(bool)
     _G.autraid = bool
 
     if game.Players.LocalPlayer.Character.LowerTorso:FindFirstChild("Root") then
+        game.Players.LocalPlayer.Character.LowerTorso.Anchored = true
+        wait(1)
         game.Players.LocalPlayer.Character.LowerTorso.Root:Destroy()
     end
 
