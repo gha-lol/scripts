@@ -222,7 +222,7 @@ end
 tab8:CreateButton("TP Boss", function()
     local achou = false
     for i,v in pairs(game:GetService("Workspace").Characters:GetChildren()) do
-        if v:FindFirstChild("NonSpawnable") and string.find(v.Name, "Boss") then
+        if v:FindFirstChild("NonSpawnable") and string.find(v.Name, "Boss") or v.Name == "Goto" then
             achou = true
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,100,0)
             break
