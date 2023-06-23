@@ -53,7 +53,7 @@ end)
 local function get()
     local returner
     for i,v in pairs(game:GetService("Workspace").Characters:GetChildren()) do
-        if v.Name ~= game.Players.LocalPlayer.Name and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") then
+        if game.Players:FindFirstChild(v.Name) == nil and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v:FindFirstChild("HumanoidRootPart") then
             returner = v
             break
         end
