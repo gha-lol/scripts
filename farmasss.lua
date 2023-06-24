@@ -12,7 +12,6 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
         if game.Players.LocalPlayer.Character.LowerTorso:FindFirstChild("Root") then
             game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-32, 569, 158)
             wait(1)
-            game.Players.LocalPlayer.Character.LowerTorso.Anchored = true
             game.Players.LocalPlayer.Character.LowerTorso.Root:Destroy()
             wait(1)
         end
