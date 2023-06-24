@@ -150,7 +150,7 @@ tab5:CreateToggle("Auto-Spin",false,function(bool)
     local old
     local quirk = game.ReplicatedStorage.AllPlayerData[game.Players.LocalPlayer.Name]["Char Data"].Quirk
     while _G.sp do wait()
-        if table.find(_G.eetab, quirk.Value) then _G.sp = false error("e") return end
+        if table.find(_G.eetab, quirk.Value) then _G.sp = false return end
         if _G.autobuyy == true and quirk.Parent.QuirkSpins.Value == 0 then game:GetService("ReplicatedStorage").SpinQuirk:FireServer("buy") end
         if quirk.Parent.QuirkSpins.Value > 0 then
             cu = tick()
@@ -198,7 +198,7 @@ local function addTable(nomeda)
     msg(nomeda .. " " .. textoo2, "Selecionados: " .. textoo)
 end
 
-local tabbb = {"Cremation", "OFA", "HCHH", "Explosion", "Decay"}
+local tabbb = {"Cremation", "Overhaul", "OFA", "HCHH", "Explosion", "Decay"}
 for i,v in pairs(tabbb) do
     tab5:CreateButton(v,function()
         addTable(v)
