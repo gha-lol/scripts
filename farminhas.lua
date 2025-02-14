@@ -5,6 +5,7 @@ _G.codeToUse = ""
 _G.autofarm = false
 _G.arrowfarm = false
 _G.autopoints = false
+_G.autoblock = false
 
 local plr = game.Players.LocalPlayer
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/InfinitiveUI",true))()
@@ -142,4 +143,29 @@ end)
 
 tab2:CreateButton("Tp Italy",function()
     game:GetService("TeleportService"):Teleport(93140024895832)
+end)
+
+tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
+    spawn(function()
+        _G.autoblock = bool
+        
+        while _G.autoblock do task.wait(1) do
+            for i,v in pairs(game.Players:GetChildren()) do
+                if v.Name ~= plr.Name then
+                    _G.autofarm = false
+                    
+                    local s = Instance.new("Sound",game.Workspace)
+                    s.Name = "ItemSound"
+                    s.SoundId = "http://www.roblox.com/asset?id=171270157"
+                    s.Volume = 3
+                    s.Looped = false
+                    s:Play()
+                    
+                    game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
+                    task.wait(10)
+                    game:GetService("TeleportService"):Teleport(game.PlaceId)
+                end
+            end
+        end
+    end)
 end)
