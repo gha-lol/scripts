@@ -1,5 +1,5 @@
 _G.ques = ""
-_G.dis = 7.5
+_G.dis = 8
 _G.statt = "Strength"
 _G.codeToUse = ""
 _G.autofarm = false
@@ -52,7 +52,7 @@ tab1:CreateDropdown("Quest",questTable,false,function(quest)
     _G.ques = quest
 end)
 
-tab1:CreateSlider("Distance",5,15,7.5,function(valor)
+tab1:CreateSlider("Distance",5,15,8,function(valor)
     _G.dis = valor
 end)
 
