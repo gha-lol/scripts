@@ -70,8 +70,13 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
             else
                 if mob and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
                     pcall(function()
-                        plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(90), 0, 0) + Vector3.new(0,-_G.dis,0)
-                        game.ReplicatedStorage.Remote.HumonEvent:FireServer("M1", true, plr.Character.HumanoidRootPart.CFrame.LookVector)
+                        if _G.ques == "Diavolo" then
+                            plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(180), 0, 0) + Vector3.new(0,_G.dis,0)
+                            game.ReplicatedStorage.Remote.HumonEvent:FireServer("M1", true, plr.Character.HumanoidRootPart.CFrame.LookVector)
+                        else
+                            plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(90), 0, 0) + Vector3.new(0,-_G.dis,0)
+                            game.ReplicatedStorage.Remote.HumonEvent:FireServer("M1", true, plr.Character.HumanoidRootPart.CFrame.LookVector)
+                        end
                     end)
                 else
                     if workspace.Enemies:FindFirstChild(plr.Quest.Target.Value) then
