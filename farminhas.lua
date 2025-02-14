@@ -62,6 +62,9 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
         local mob
         
         while _G.autofarm do task.wait()
+            pcall(function()
+                plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+            end)
             if not plr.Quest:FindFirstChild("Target") then
                 game.ReplicatedStorage.Remote.GameEvent:FireServer("Quest", _G.ques)
             else
