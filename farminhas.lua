@@ -70,15 +70,18 @@ end
 
 tab1:CreateDropdown("Quest",questTable,false,function(quest)
     _G.ques = quest
+    t.ques = quest
 end)
 
 tab1:CreateSlider("Distance",5,15,8,function(valor)
     _G.dis = valor
+    t.dis = valor
 end)
 
 tab1:CreateToggle("Auto-Farm",false,function(bool)
     spawn(function()
         _G.autofarm = bool
+        t.autofarm = bool
         noClip()
         local mob
         
@@ -122,11 +125,13 @@ local tab2,name2 = win:CreateTab("Misc",function() end)
 
 tab2:CreateDropdown("Stat",{"Health", "Stamina", "Strength"},false,function(stat)
     _G.statt = stat
+    t.statt = stat
 end)
 
 tab2:CreateToggle("Auto-Points",false,function(bool)
     spawn(function()
         _G.autopoints = bool
+        t.autopoints = bool
         
         while _G.autopoints do task.wait(1)
             if plr.Stats.Points.Value > 0 then
@@ -143,6 +148,7 @@ end
 
 tab2:CreateDropdown("Code List",codeList,false,function(stat)
     _G.codeToUse = stat
+    t.code = stat
 end)
 
 tab2:CreateButton("Use Code",function()
@@ -168,6 +174,7 @@ end)
 tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
     spawn(function()
         _G.autoblock = bool
+        t.autoblock = bool
         
         while _G.autoblock do task.wait(1)
             for i,v in pairs(game.Players:GetChildren()) do
