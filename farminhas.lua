@@ -131,17 +131,6 @@ tab2:CreateButton("Get Arrows",function()
     end
 end)
 
-tab2:CreateButton("Test Invis",function()
-    local character = plr.Character
-    local hrp = character.HumanoidRootPart
-    local old = hrp.CFrame
-
-    local newroot = character.LowerTorso.Root:Clone()
-    hrp.Parent = workspace
-    character.PrimaryPart = hrp
-    character:MoveTo(Vector3.new(old.X,9e9,old.Z))
-    hrp.Parent = character
-    task.wait(0.5)
-    newroot.Parent = hrp
-    hrp.CFrame = old
+tab2:CreateButton("Tp Italy",function()
+    game:GetService("TeleportService"):Teleport(93140024895832)
 end)
