@@ -9,10 +9,10 @@ _G.autopoints = false
 local plr = game.Players.LocalPlayer
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/InfinitiveUI",true))()
 local win = lib:CreateWindow("BizBlox",1,nil,nil)
-local tab1,name1 = win:CreateTab("Farms",function() end)
-local tab2,name2 = win:CreateTab("Misc",function() end)
 
 -- Tab1
+local tab1,name1 = win:CreateTab("Farms",function() end)
+
 local questTable = {}
 for i,v in pairs(workspace.Enemies.Pos:GetChildren()) do
     if not table.find(questTable, v.Name) then
@@ -81,6 +81,7 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
 end)
 
 -- Tab2
+local tab2,name2 = win:CreateTab("Misc",function() end)
 
 tab2:CreateDropdown("Stat",{"Health", "Stamina", "Strength"},false,function(stat)
     _G.statt = stat
