@@ -1,11 +1,31 @@
-_G.ques = ""
-_G.dis = 8
-_G.statt = "Strength"
-_G.codeToUse = ""
-_G.autofarm = false
-_G.arrowfarm = false
-_G.autopoints = false
-_G.autoblock = false
+local Service = game:GetService("HttpService")
+local t = {
+  ques = "",
+  dis = 8,
+  statt = "Strength",
+  code = "",
+  autofarm = false,
+  arrowfarm = false,
+  autopoints = false,
+  autoblock = false
+}
+
+if isfile("bizblox.cfg") then
+    t = Service:JSONDecode(readfile("bizblox.cfg"))
+end
+
+local function saveSettings()
+    writefile("bizblox.cfg", Service:JSONEncode(t))
+end
+
+_G.ques = t.ques
+_G.dis = t.dis
+_G.statt = t.statt
+_G.codeToUse = t.code
+_G.autofarm = t.autofarm
+_G.arrowfarm = t.arrowfarm
+_G.autopoints = t.autopoints
+_G.autoblock = t.autoblock
 
 local plr = game.Players.LocalPlayer
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/InfinitiveUI",true))()
@@ -161,10 +181,15 @@ tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
                     s.Looped = false
                     s:Play()
                     
+                    saveSettings()
+                    queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/farminhas.lua",true))()')
+                    
                     game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
                     task.wait(10)
-                    game:GetService("TeleportService"):Teleport(game.PlaceId)
-                    task.wait(5)
+                    for i=1,10 do
+                        game:GetService("TeleportService"):Teleport(game.PlaceId)
+                        task.wait(3)
+                    end
                 end
             end
         end
