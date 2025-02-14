@@ -8,7 +8,7 @@ local win = lib:CreateWindow("BizBlox",1,nil,nil)
 local tab1,name1 = win:CreateTab("Farms",function() end)
 
 local questTable = {}
-for i,v in pairs(workspace.Enemies.Pos:GetChildren())
+for i,v in pairs(workspace.Enemies.Pos:GetChildren()) do
     if not table.find(questTable, v.Name) then
         table.insert(questTable, v.Name)
     end
