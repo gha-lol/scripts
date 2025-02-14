@@ -1,13 +1,18 @@
 _G.ques = ""
 _G.dis = 7.5
+_G.statt = "Strength"
+_G.codeToUse = ""
 _G.autofarm = false
 _G.arrowfarm = false
+_G.autopoints = false
 
 local plr = game.Players.LocalPlayer
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/InfinitiveUI",true))()
 local win = lib:CreateWindow("BizBlox",1,nil,nil)
 local tab1,name1 = win:CreateTab("Farms",function() end)
+local tab2,name2 = win:CreateTab("Misc",function() end)
 
+-- Tab1
 local questTable = {}
 for i,v in pairs(workspace.Enemies.Pos:GetChildren()) do
     if not table.find(questTable, v.Name) then
@@ -73,4 +78,47 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
             end
         end
     end)
+end)
+
+-- Tab2
+
+tab2:CreateDropdown("Stat",{"Health", "Stamina", "Strength"},false,function(stat)
+    _G.statt = stat
+end)
+
+tab2:CreateToggle("Auto-Points",false,function(bool)
+    spawn(function()
+        _G.autopoints = bool
+        
+        while _G.autopoints do task.wait(1)
+            if plr.Stats.Points.Value > 0 then
+                plr.PlayerGui.UiService.StatsFrame.upstats:InvokeServer(_G.statt, "up", plr.Stats.Points.Value)
+            end
+        end
+    end)
+end)
+
+local codeList = {}
+for i,v in pairs(plr.Confirmed_Code:GetChildren()) do
+    table.insert(codeList,v.Name)
+end
+
+tab2:CreateDropdown("Code List",codeList,false,function(stat)
+    _G.codeToUse = stat
+end)
+
+tab2:CreateButton("Use Code",function()
+    game.ReplicatedStorage.Remote.GameEvent:FireServer("GetCode", _G.codeToUse)
+end)
+
+tab2:CreateButton("Teleportar Spawn",function()
+    plr.Character.HumanoidRootPart.CFrame = CFrame.new(179, 3.4, -3.2)
+end)
+
+tab2:CreateButton("Get Arrows",function()
+    for i,v in pairs(workspace:GetChildren()) do
+        if v:IsA("Tool") then
+            plr.Character.Humanoid:EquipTool(v)
+        end
+    end
 end)
