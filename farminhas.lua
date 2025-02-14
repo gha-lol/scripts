@@ -17,9 +17,12 @@ end
 local function noClip()
     local stepped
     stepped = game:GetService('RunService').Stepped:Connect(function()
-        if _G.autofarm then
+        if plr.Character.Humanoid.Health <= 0 then
+            plr.Character.Humanoid:ChangeState(2)
+        elseif _G.autofarm then
             plr.Character.Humanoid:ChangeState(11)
         else
+            plr.Character.Humanoid:ChangeState(2)
             stepped:Disconnect()
         end
     end)
