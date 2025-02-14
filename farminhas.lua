@@ -68,20 +68,8 @@ local function getMob()
     return returner
 end
 
-tab1:CreateDropdown("Quest",questTable,false,function(quest)
-    _G.ques = quest
-    t.ques = quest
-end)
-
-tab1:CreateSlider("Distance",5,15,8,function(valor)
-    _G.dis = valor
-    t.dis = valor
-end)
-
-tab1:CreateToggle("Auto-Farm",false,function(bool)
+local function autofarm()
     spawn(function()
-        _G.autofarm = bool
-        t.autofarm = bool
         noClip()
         local mob
         
@@ -118,6 +106,62 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
             end
         end
     end)
+end
+
+local function autopoints()
+    spawn(function()
+        while _G.autopoints do task.wait(1)
+            if plr.Stats.Points.Value > 0 then
+                plr.PlayerGui.UiService.StatsFrame.upstats:InvokeServer(_G.statt, "up", plr.Stats.Points.Value)
+            end
+        end
+    end)
+end
+
+local function blockrejoin()
+    spawn(function()
+        while _G.autoblock do task.wait(1)
+            for i,v in pairs(game.Players:GetChildren()) do
+                if v.Name ~= plr.Name then
+                    _G.autofarm = false
+                    
+                    local s = Instance.new("Sound",game.Workspace)
+                    s.Name = "ItemSound"
+                    s.SoundId = "http://www.roblox.com/asset?id=171270157"
+                    s.Volume = 3
+                    s.Looped = false
+                    s:Play()
+                    
+                    saveSettings()
+                    queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/farminhas.lua",true))()')
+                    
+                    game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
+                    task.wait(10)
+                    for i=1,10 do
+                        game:GetService("TeleportService"):Teleport(game.PlaceId)
+                        task.wait(3)
+                    end
+                end
+            end
+        end
+    end)
+end
+
+tab1:CreateDropdown("Quest",questTable,false,function(quest)
+    _G.ques = quest
+    t.ques = quest
+end)
+
+tab1:CreateSlider("Distance",5,15,8,function(valor)
+    _G.dis = valor
+    t.dis = valor
+end)
+
+tab1:CreateToggle("Auto-Farm",false,function(bool)
+    _G.autofarm = bool
+    t.autofarm = bool
+    
+    autofarm()
 end)
 
 -- Tab2
@@ -129,16 +173,10 @@ tab2:CreateDropdown("Stat",{"Health", "Stamina", "Strength"},false,function(stat
 end)
 
 tab2:CreateToggle("Auto-Points",false,function(bool)
-    spawn(function()
-        _G.autopoints = bool
-        t.autopoints = bool
-        
-        while _G.autopoints do task.wait(1)
-            if plr.Stats.Points.Value > 0 then
-                plr.PlayerGui.UiService.StatsFrame.upstats:InvokeServer(_G.statt, "up", plr.Stats.Points.Value)
-            end
-        end
-    end)
+    _G.autopoints = bool
+    t.autopoints = bool
+    
+    autopoints()
 end)
 
 local codeList = {}
@@ -172,33 +210,12 @@ tab2:CreateButton("Tp Italy",function()
 end)
 
 tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
-    spawn(function()
-        _G.autoblock = bool
-        t.autoblock = bool
-        
-        while _G.autoblock do task.wait(1)
-            for i,v in pairs(game.Players:GetChildren()) do
-                if v.Name ~= plr.Name then
-                    _G.autofarm = false
-                    
-                    local s = Instance.new("Sound",game.Workspace)
-                    s.Name = "ItemSound"
-                    s.SoundId = "http://www.roblox.com/asset?id=171270157"
-                    s.Volume = 3
-                    s.Looped = false
-                    s:Play()
-                    
-                    saveSettings()
-                    queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/farminhas.lua",true))()')
-                    
-                    game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
-                    task.wait(10)
-                    for i=1,10 do
-                        game:GetService("TeleportService"):Teleport(game.PlaceId)
-                        task.wait(3)
-                    end
-                end
-            end
-        end
-    end)
+    _G.autoblock = bool
+    t.autoblock = bool
+    
+    blockrejoin()
 end)
+
+autofarm()
+autopoints()
+blockrejoin()
