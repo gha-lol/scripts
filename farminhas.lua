@@ -66,13 +66,17 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
                 game.ReplicatedStorage.Remote.GameEvent:FireServer("Quest", _G.ques)
             else
                 if mob and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
-                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(90), 0, 0) + Vector3.new(0,-_G.dis,0)
-                    game.ReplicatedStorage.Remote.HumonEvent:FireServer("M1", true, plr.Character.HumanoidRootPart.CFrame.LookVector)
+                    pcall(function()
+                        plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(90), 0, 0) + Vector3.new(0,-_G.dis,0)
+                        game.ReplicatedStorage.Remote.HumonEvent:FireServer("M1", true, plr.Character.HumanoidRootPart.CFrame.LookVector)
+                    end)
                 else
                     if workspace.Enemies:FindFirstChild(plr.Quest.Target.Value) then
                         mob = getMob()
                     else
-                        plr.Character.HumanoidRootPart.CFrame = workspace.Enemies.Pos[plr.Quest.Target.Value].CFrame * CFrame.new(0,-20,0)
+                        pcall(function()
+                            plr.Character.HumanoidRootPart.CFrame = workspace.Enemies.Pos[plr.Quest.Target.Value].CFrame * CFrame.new(0,-20,0)
+                        end)
                     end
                 end
             end
