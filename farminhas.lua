@@ -164,6 +164,7 @@ tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
                     game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
                     task.wait(10)
                     game:GetService("TeleportService"):Teleport(game.PlaceId)
+                    task.wait(5)
                 end
             end
         end
