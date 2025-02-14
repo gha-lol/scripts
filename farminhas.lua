@@ -149,7 +149,7 @@ tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
     spawn(function()
         _G.autoblock = bool
         
-        while _G.autoblock do task.wait(1) do
+        while _G.autoblock do task.wait(1)
             for i,v in pairs(game.Players:GetChildren()) do
                 if v.Name ~= plr.Name then
                     _G.autofarm = false
