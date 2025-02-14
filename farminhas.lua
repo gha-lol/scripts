@@ -38,7 +38,7 @@ local function getMob()
     return returner
 end
 
-tab1:CreateDropdown("Quest", {questTable},false,function(quest)
+tab1:CreateDropdown("Quest",questTable,false,function(quest)
     _G.ques = quest
 end)
 
