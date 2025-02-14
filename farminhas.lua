@@ -85,7 +85,9 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
                         mob = getMob()
                     else
                         pcall(function()
-                            plr.Character.HumanoidRootPart.CFrame = workspace.Enemies.Pos[plr.Quest.Target.Value].CFrame * CFrame.new(0,-20,0)
+                            local studss = -20
+                            if _G.ques == "Diavolo" then studss = 20 end
+                            plr.Character.HumanoidRootPart.CFrame = workspace.Enemies.Pos[plr.Quest.Target.Value].CFrame * CFrame.new(0,studss,0)
                         end)
                     end
                 end
