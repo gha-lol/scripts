@@ -10,12 +10,12 @@ local t = {
   autoblock = false
 }
 
-if isfile("bizblox.cfg") then
-    t = Service:JSONDecode(readfile("bizblox.cfg"))
+if isfile("bizblox.json") then
+    t = Service:JSONDecode(readfile("bizblox.json"))
 end
 
 local function saveSettings()
-    writefile("bizblox.cfg", Service:JSONEncode(t))
+    writefile("bizblox.json", Service:JSONEncode(t))
 end
 
 _G.ques = t.ques
