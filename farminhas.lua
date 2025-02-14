@@ -1,4 +1,5 @@
 _G.ques = ""
+_G.dis = 7.5
 _G.autofarm = false
 _G.arrowfarm = false
 
@@ -45,6 +46,10 @@ tab1:CreateDropdown("Quest",questTable,false,function(quest)
     _G.ques = quest
 end)
 
+tab1:CreateSlider("Distance",5,15,7.5,function(valor)
+    _G.dis = valor
+end)
+
 tab1:CreateToggle("Auto-Farm",false,function(bool)
     spawn(function()
         _G.autofarm = bool
@@ -56,7 +61,7 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
                 game.ReplicatedStorage.Remote.GameEvent:FireServer("Quest", _G.ques)
             else
                 if mob and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
-                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(90), 0, 0) + Vector3.new(0,-8,0)
+                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.Angles(math.rad(90), 0, 0) + Vector3.new(0,-_G.dis,0)
                     game.ReplicatedStorage.Remote.HumonEvent:FireServer("M1", true, plr.Character.HumanoidRootPart.CFrame.LookVector)
                 else
                     if workspace.Enemies:FindFirstChild(plr.Quest.Target.Value) then
