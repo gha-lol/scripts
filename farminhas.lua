@@ -152,7 +152,7 @@ tab1:CreateDropdown("Quest",questTable,false,function(quest)
     t.ques = quest
 end)
 
-tab1:CreateSlider("Distance",5,15,8,function(valor)
+tab1:CreateSlider("Distance",5,15,t.dis,function(valor)
     _G.dis = valor
     t.dis = valor
 end)
