@@ -165,7 +165,7 @@ tab1:CreateToggle("Auto-Farm",false,function(bool)
 end)
 
 -- Tab2
-local tab2,name2 = win:CreateTab("Misc",function() end)
+local tab2,name2 = win:CreateTab("Auto Misc",function() end)
 
 tab2:CreateDropdown("Stat",{"Health", "Stamina", "Strength"},false,function(stat)
     _G.statt = stat
@@ -179,25 +179,35 @@ tab2:CreateToggle("Auto-Points",false,function(bool)
     autopoints()
 end)
 
+tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
+    _G.autoblock = bool
+    t.autoblock = bool
+    
+    blockrejoin()
+end)
+
+-- Tab3
+local tab3,name3 = win:CreateTab("Misc",function() end)
+
 local codeList = {}
 for i,v in pairs(plr.Confirmed_Code:GetChildren()) do
     table.insert(codeList,v.Name)
 end
 
-tab2:CreateDropdown("Code List",codeList,false,function(stat)
+tab3:CreateDropdown("Code List",codeList,false,function(stat)
     _G.codeToUse = stat
     t.code = stat
 end)
 
-tab2:CreateButton("Use Code",function()
+tab3:CreateButton("Use Code",function()
     game.ReplicatedStorage.Remote.GameEvent:FireServer("GetCode", _G.codeToUse)
 end)
 
-tab2:CreateButton("Teleportar Spawn",function()
+tab3:CreateButton("Teleportar Spawn",function()
     plr.Character.HumanoidRootPart.CFrame = CFrame.new(179, 3.4, -3.2)
 end)
 
-tab2:CreateButton("Get Arrows",function()
+tab3:CreateButton("Get Arrows",function()
     for i,v in pairs(workspace:GetChildren()) do
         if v:IsA("Tool") then
             plr.Character.Humanoid:EquipTool(v)
@@ -205,15 +215,23 @@ tab2:CreateButton("Get Arrows",function()
     end
 end)
 
-tab2:CreateButton("Tp Italy",function()
-    game:GetService("TeleportService"):Teleport(93140024895832)
+local dupeAmount = 1
+tab3:CreateSlider("Dupe Amount",1,5000,1,function(valor)
+    dupeAmount = valor
 end)
 
-tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
-    _G.autoblock = bool
-    t.autoblock = bool
+tab3:CreateButton("Dupe Rebirth",function()
+    local rebirthArrow = plr.Backpack:FindFirstChild("Rebirth Arrow") or plr.Character:FindFirstChild("Rebirth Arrow")
     
-    blockrejoin()
+    if rebirthArrow then
+        for i=1,dupeAmount do
+            game.ReplicatedStorage.Remote.GameEvent:FireServer("StoreBackPack", rebirthArrow)
+        end
+    end
+end)
+
+tab3:CreateButton("Tp Italy",function()
+    game:GetService("TeleportService"):Teleport(93140024895832)
 end)
 
 autofarm()
