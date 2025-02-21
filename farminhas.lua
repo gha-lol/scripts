@@ -149,6 +149,7 @@ local function blockrejoin()
 end
 
 local function autorebirth()
+    task.wait(1)
     for i=1,5 do
         game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
     end
