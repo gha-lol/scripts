@@ -29,6 +29,7 @@ _G.autoblock = t.autoblock
 _G.autorebirth = false
 
 local plr = game.Players.LocalPlayer
+local conPlrAdded
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/InfinitiveUI",true))()
 local win = lib:CreateWindow("BizBlox",1,nil,nil)
 
@@ -126,6 +127,8 @@ local function blockrejoin()
                 if v.Name ~= plr.Name then
                     _G.autofarm = false
                     _G.autorebirth = false
+                    pcall(function() conPlrAdded:Disconnect() end)
+                    
                     
                     local s = Instance.new("Sound",game.Workspace)
                     s.Name = "ItemSound"
@@ -201,7 +204,6 @@ tab2:CreateToggle("Auto-Points",false,function(bool)
     autopoints()
 end)
 
-local conPlrAdded
 tab2:CreateToggle("Auto Use Rebirth",false,function(bool)
     _G.autorebirth = bool
     
