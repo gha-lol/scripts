@@ -271,6 +271,11 @@ tab3:CreateButton("Tp Italy",function()
     game:GetService("TeleportService"):Teleport(93140024895832)
 end)
 
+tab3:CreateButton("Rejoin",function()
+    game:GetService("TeleportService"):Teleport(game.PlaceId)
+    queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/farminhas.lua",true))()')
+end)
+
 autofarm()
 autopoints()
 blockrejoin()
