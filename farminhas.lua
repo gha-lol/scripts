@@ -26,6 +26,7 @@ _G.autofarm = t.autofarm
 _G.arrowfarm = t.arrowfarm
 _G.autopoints = t.autopoints
 _G.autoblock = t.autoblock
+_G.autorebirth = false
 
 local plr = game.Players.LocalPlayer
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/InfinitiveUI",true))()
@@ -147,6 +148,25 @@ local function blockrejoin()
     end)
 end
 
+local function autorebirth()
+    for i=1,5 do
+        game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
+    end
+    task.wait(1)
+    
+    for i,v in pairs(plr.Backpack:GetChildren()) do
+        if v.Name == "Rebirth Arrow" then
+            plr.Character.Humanoid:EquipTool(v)
+            repeat task.wait() until plr.PlayerGui:FindFirstChild("Drop")
+            for i=1,10 do
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(520,  300,  0, true, game, 1)
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(520,  300,  0, false, game, 1)
+                task.wait(0.04)
+            end
+        end
+    end
+end
+
 tab1:CreateDropdown("Quest",questTable,false,function(quest)
     _G.ques = quest
     t.ques = quest
@@ -177,6 +197,19 @@ tab2:CreateToggle("Auto-Points",false,function(bool)
     t.autopoints = bool
     
     autopoints()
+end)
+
+local conPlrAdded
+tab2:CreateToggle("Auto Use Rebirth",false,function(bool)
+    _G.autorebirth = bool
+    
+    if bool then
+        autorebirth()
+        
+        conPlrAdded = plr.CharacterAdded:Connect(autorebirth)
+    else
+        conPlrAdded:Disconnect()
+    end
 end)
 
 tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
