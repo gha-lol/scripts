@@ -253,7 +253,7 @@ tab3:CreateButton("Get Arrows",function()
 end)
 
 local dupeAmount = 1
-tab3:CreateSlider("Dupe Amount",1,5000,1,function(valor)
+tab3:CreateSlider("Dupe Amount",1,10000,1,function(valor)
     dupeAmount = valor
 end)
 
