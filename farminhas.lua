@@ -125,6 +125,7 @@ local function blockrejoin()
             for i,v in pairs(game.Players:GetChildren()) do
                 if v.Name ~= plr.Name then
                     _G.autofarm = false
+                    _G.autorebirth = false
                     
                     local s = Instance.new("Sound",game.Workspace)
                     s.Name = "ItemSound"
