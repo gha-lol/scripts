@@ -276,6 +276,8 @@ tab3:CreateButton("Rejoin",function()
     queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/farminhas.lua",true))()')
 end)
 
+game.ReplicatedStorage.Remote.GameEvent:FireServer("PvP", false)
+task.wait(0.2)
 autofarm()
 autopoints()
 blockrejoin()
