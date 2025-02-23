@@ -288,6 +288,10 @@ tab4:Button("Tp Italy",function()
     game:GetService("TeleportService"):Teleport(93140024895832)
 end)
 
+tab4:Button("Test Server",function()
+    game:GetService("TeleportService"):Teleport(104259677668546)
+end)
+
 tab4:Button("Rejoin",function()
     game:GetService("TeleportService"):Teleport(game.PlaceId)
     queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/farminhas.lua",true))()')
