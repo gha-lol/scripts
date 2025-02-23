@@ -204,7 +204,7 @@ tab2:Dropdown("Stat",{"Health", "Stamina", "Strength"},function(stat)
     t.statt = stat
 end)
 
-local autopointsToggle = tab2:Toggle("Auto-Points",function(bool)
+local autopointsToggle = tab2:Toggle("Auto-Points","",function(bool)
     _G.autopoints = bool
     t.autopoints = bool
     
@@ -212,7 +212,7 @@ local autopointsToggle = tab2:Toggle("Auto-Points",function(bool)
 end)
 autopointsToggle:UpdateToggle(t.autopoints)
 
-tab2:Toggle("Auto Use Rebirth",function(bool)
+tab2:Toggle("Auto Use Rebirth","",function(bool)
     _G.autorebirth = bool
     
     if bool then
@@ -224,7 +224,7 @@ tab2:Toggle("Auto Use Rebirth",function(bool)
     end
 end)
 
-local autoblockToggle = tab2:Toggle("Block Player And Rejoin",function(bool)
+local autoblockToggle = tab2:Toggle("Block Player And Rejoin","",function(bool)
     _G.autoblock = bool
     t.autoblock = bool
     
