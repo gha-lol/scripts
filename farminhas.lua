@@ -32,6 +32,7 @@ local plr = game.Players.LocalPlayer
 local conPlrAdded
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/libHawk.lua", true))()
 local win = lib:Window({ScriptName = "farminhas kk", DestroyIfExists = true, Theme = "Dark"})
+win:Minimize({visibility = true, OpenButton = true, Callback = function() end})
 
 -- FUNCTIONS
 
