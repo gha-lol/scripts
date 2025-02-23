@@ -187,7 +187,7 @@ local disSlider = tab1:Slider("Distance",5,15,function(valor)
 end)
 disSlider:SetValue(t.dis)
 
-local autofarmToggle = tab1:Toggle("Auto-Farm",function(bool)
+local autofarmToggle = tab1:Toggle("Auto-Farm","",function(bool)
     _G.autofarm = bool
     t.autofarm = bool
     
