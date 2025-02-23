@@ -30,11 +30,10 @@ _G.autorebirth = false
 
 local plr = game.Players.LocalPlayer
 local conPlrAdded
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/InfinitiveUI",true))()
-local win = lib:CreateWindow("BizBlox",1,nil,nil)
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/libHawk.lua", true))()
+local win = lib:Window({ScriptName = "farminhas kk", DestroyIfExists = true, Theme = "Dark"})
 
--- Tab1
-local tab1,name1 = win:CreateTab("Farms",function() end)
+-- FUNCTIONS
 
 local questTable = {}
 for i,v in pairs(workspace.Enemies.Pos:GetChildren()) do
@@ -172,39 +171,47 @@ local function autorebirth()
     end
 end
 
-tab1:CreateDropdown("Quest",questTable,false,function(quest)
+
+-- Tab1
+local tab1 = win:Tab("Farms")
+
+tab1:Dropdown("Quest",questTable,function(quest)
     _G.ques = quest
     t.ques = quest
 end)
 
-tab1:CreateSlider("Distance",5,15,t.dis,function(valor)
+local disSlider = tab1:Slider("Distance",5,15,function(valor)
     _G.dis = valor
     t.dis = valor
 end)
+disSlider:SetValue(t.dis)
 
-tab1:CreateToggle("Auto-Farm",false,function(bool)
+local autofarmToggle = tab1:Toggle("Auto-Farm",function(bool)
     _G.autofarm = bool
     t.autofarm = bool
     
     autofarm()
 end)
+autofarmToggle:UpdateToggle(t.autofarm)
+
 
 -- Tab2
-local tab2,name2 = win:CreateTab("Auto Misc",function() end)
+local tab2 = win:Tab("Auto Misc")
 
-tab2:CreateDropdown("Stat",{"Health", "Stamina", "Strength"},false,function(stat)
+tab2:Dropdown("Stat",{"Health", "Stamina", "Strength"},function(stat)
     _G.statt = stat
     t.statt = stat
 end)
 
-tab2:CreateToggle("Auto-Points",false,function(bool)
+local autopointsToggle = tab2:Toggle("Auto-Points",function(bool)
     _G.autopoints = bool
     t.autopoints = bool
     
     autopoints()
 end)
+autopointsToggle:UpdateToggle(t.autopoints)
 
-tab2:CreateToggle("Auto Use Rebirth",false,function(bool)
+tab2:Toggle("Auto Use Rebirth",function(bool)
     _G.autorebirth = bool
     
     if bool then
@@ -216,35 +223,32 @@ tab2:CreateToggle("Auto Use Rebirth",false,function(bool)
     end
 end)
 
-tab2:CreateToggle("Block Player And Rejoin",false,function(bool)
+local autoblockToggle = tab2:Toggle("Block Player And Rejoin",function(bool)
     _G.autoblock = bool
     t.autoblock = bool
     
     blockrejoin()
 end)
+autoblockToggle:UpdateToggle(t.autoblock)
 
 -- Tab3
-local tab3,name3 = win:CreateTab("Misc",function() end)
+local tab3 = win:Tab("Misc")
 
 local codeList = {}
 for i,v in pairs(plr.Confirmed_Code:GetChildren()) do
     table.insert(codeList,v.Name)
 end
 
-tab3:CreateDropdown("Code List",codeList,false,function(stat)
+tab3:Dropdown("Code List",codeList,function(stat)
     _G.codeToUse = stat
     t.code = stat
 end)
 
-tab3:CreateButton("Use Code",function()
+tab3:Button("Use Selected Code",function()
     game.ReplicatedStorage.Remote.GameEvent:FireServer("GetCode", _G.codeToUse)
 end)
 
-tab3:CreateButton("Teleportar Spawn",function()
-    plr.Character.HumanoidRootPart.CFrame = CFrame.new(179, 3.4, -3.2)
-end)
-
-tab3:CreateButton("Get Arrows",function()
+tab3:Button("Get Arrows","Collects all spawned arrows",function()
     for i,v in pairs(workspace:GetChildren()) do
         if v:IsA("Tool") then
             plr.Character.Humanoid:EquipTool(v)
@@ -253,11 +257,11 @@ tab3:CreateButton("Get Arrows",function()
 end)
 
 local dupeAmount = 1
-tab3:CreateSlider("Dupe Amount",1,10000,1,function(valor)
+tab3:Slider("Dupe Amount",1,10000,function(valor)
     dupeAmount = valor
 end)
 
-tab3:CreateButton("Dupe Rebirth",function()
+tab3:Button("Dupe Rebirth",function()
     local rebirthArrow = plr.Backpack:FindFirstChild("Rebirth Arrow") or plr.Character:FindFirstChild("Rebirth Arrow")
     
     if rebirthArrow then
@@ -267,17 +271,30 @@ tab3:CreateButton("Dupe Rebirth",function()
     end
 end)
 
-tab3:CreateButton("Tp Italy",function()
+tab3:Button("Save Settings",function()
+    saveSettings()
+end)
+
+
+-- Tab4
+local tab4 = win:Tab("Teleports")
+
+tab4:Button("Teleportar Spawn",function()
+    plr.Character.HumanoidRootPart.CFrame = CFrame.new(179, 3.4, -3.2)
+end)
+
+tab4:Button("Tp Italy",function()
     game:GetService("TeleportService"):Teleport(93140024895832)
 end)
 
-tab3:CreateButton("Rejoin",function()
+tab4:Button("Rejoin",function()
     game:GetService("TeleportService"):Teleport(game.PlaceId)
     queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/farminhas.lua",true))()')
 end)
 
 game.ReplicatedStorage.Remote.GameEvent:FireServer("PvP", false)
-task.wait(0.2)
-autofarm()
+if #game.Players:GetChildren() > 1 and _G.blockrejoin == false or _G.blockrejoin and #game.Players:GetChildren() == 1 then
+    autofarm()
+end
 autopoints()
 blockrejoin()
