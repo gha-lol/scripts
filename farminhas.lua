@@ -188,14 +188,14 @@ local function autorebirth()
                 game.ReplicatedStorage.Remote.GameEvent:FireServer("StoreBackPack", plr.Backpack:FindFirstChild("Rebirth Arrow"))
             end
 
-            print("Antes do wait " .. game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
-            task.wait(10)
-            print("Depois do wait " .. game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
+            repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() > 300
+            repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < 300
             
             if plr.BackPackBox["Rebirth Arrow"].Value == 4 then
-                repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < 300
+                print("de prima")
                 break
             end
+            print("foi n ó doido kkkk")
         end
         
         useRebirths()
