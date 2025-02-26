@@ -153,20 +153,22 @@ local function blockrejoin()
 end
 
 local function useRebirths()
-    for i=1,(plr.BackPackBox["Rebirth Arrow"].Value - 1) do
-        task.wait(2.3)
-        game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
-    end
-    task.wait(1)
-    
-    for i,v in pairs(plr.Backpack:GetChildren()) do
-        if v.Name == "Rebirth Arrow" then
-            plr.Character.Humanoid:EquipTool(v)
-            repeat task.wait() until plr.PlayerGui:FindFirstChild("Drop")
-            for i=1,10 do
-                game:GetService("VirtualInputManager"):SendMouseButtonEvent(520,  300,  0, true, game, 1)
-                game:GetService("VirtualInputManager"):SendMouseButtonEvent(520,  300,  0, false, game, 1)
-                task.wait(0.04)
+    if _G.autorebirth then
+        for i=1,(plr.BackPackBox["Rebirth Arrow"].Value - 1) do
+            task.wait(2.3)
+            game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
+        end
+        task.wait(1)
+        
+        for i,v in pairs(plr.Backpack:GetChildren()) do
+            if v.Name == "Rebirth Arrow" then
+                plr.Character.Humanoid:EquipTool(v)
+                repeat task.wait() until plr.PlayerGui:FindFirstChild("Drop")
+                for i=1,10 do
+                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(520,  300,  0, true, game, 1)
+                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(520,  300,  0, false, game, 1)
+                    task.wait(0.04)
+                end
             end
         end
     end
@@ -176,7 +178,7 @@ local function autorebirth()
     if plr.BackPackBox["Rebirth Arrow"].Value == 4 then
         useRebirths()
     elseif plr.BackPackBox["Rebirth Arrow"].Value > 0 then
-        while task.wait() do
+        while _G.autorebirth do task.wait()
             if game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() > 300 then
                 repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < 300
             end
