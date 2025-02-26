@@ -202,7 +202,7 @@ local function autorebirth()
         
         useRebirths()
     else
-        local Notifications = Hawk:AddNotifications()
+        local Notifications = lib:AddNotifications()
         Notifications:Notification("Erro","Sem Rebirth No Storage","Warning",5)
     end
 end
