@@ -247,6 +247,8 @@ autopointsToggle:UpdateToggle(t.autopoints)
 
 tab2:Toggle("Auto Use Rebirth","",function(bool)
     _G.autorebirth = bool
+
+    pcall(function() conPlrAdded:Disconnect() end)
     
     if bool then
         autorebirth()
