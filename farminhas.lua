@@ -158,7 +158,7 @@ local function useRebirths()
             task.wait(2.3)
             game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
         end
-        task.wait(1)
+        task.wait(.3)
         
         for i,v in pairs(plr.Backpack:GetChildren()) do
             if v.Name == "Rebirth Arrow" then
@@ -194,10 +194,8 @@ local function autorebirth()
             repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < 300
             
             if plr.BackPackBox["Rebirth Arrow"].Value == 4 then
-                print("de prima")
                 break
             end
-            print("foi n ó doido kkkk")
         end
         
         useRebirths()
