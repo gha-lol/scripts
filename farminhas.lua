@@ -176,13 +176,13 @@ local function autorebirth()
     if plr.BackPackBox["Rebirth Arrow"].Value == 4 then
         useRebirths()
     elseif plr.BackPackBox["Rebirth Arrow"].Value > 0 then
-        game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
-        repeat task.wait() until plr.Backpack:FindFirstChild("Rebirth Arrow")
-        
         while task.wait() do
             if game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() > 300 then
                 repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < 300
             end
+
+            game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
+            repeat task.wait() until plr.Backpack:FindFirstChild("Rebirth Arrow")
           
             for i=1,10000 do
                 game.ReplicatedStorage.Remote.GameEvent:FireServer("StoreBackPack", plr.Backpack:FindFirstChild("Rebirth Arrow"))
