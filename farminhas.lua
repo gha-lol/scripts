@@ -154,7 +154,7 @@ end
 
 local function useRebirths()
     for i=1,(plr.BackPackBox["Rebirth Arrow"].Value - 1) do
-        task.wait(4)
+        task.wait(2.3)
         game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
     end
     task.wait(1)
