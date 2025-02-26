@@ -153,10 +153,9 @@ local function blockrejoin()
 end
 
 local function useRebirths()
-    task.wait(1)
     for i=1,(plr.BackPackBox["Rebirth Arrow"].Value - 1) do
-        game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
         task.wait(4)
+        game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
     end
     task.wait(1)
     
@@ -190,12 +189,11 @@ local function autorebirth()
             end
 
             print("Antes do wait " .. game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
-            task.wait(5)
+            task.wait(10)
             print("Depois do wait " .. game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue())
             
             if plr.BackPackBox["Rebirth Arrow"].Value == 4 then
                 repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < 300
-                task.wait(4)
                 break
             end
         end
