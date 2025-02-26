@@ -152,10 +152,11 @@ local function blockrejoin()
     end)
 end
 
-local function autorebirth()
+local function useRebirths()
     task.wait(1)
-    for i=1,5 do
+    for i=1,(plr.BackPackBox["Rebirth Arrow"].Value - 1) do
         game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
+        task.wait(4)
     end
     task.wait(1)
     
@@ -169,6 +170,38 @@ local function autorebirth()
                 task.wait(0.04)
             end
         end
+    end
+end
+
+local function autorebirth()
+    if plr.BackPackBox["Rebirth Arrow"].Value == 4 then
+        useRebirths()
+    elseif plr.BackPackBox["Rebirth Arrow"].Value > 0 then
+        game.ReplicatedStorage.Remote.GameEvent:FireServer("GetBackPack", plr.BackPackBox["Rebirth Arrow"])
+        repeat task.wait() until plr.Backpack:FindFirstChild("Rebirth Arrow")
+        
+        while task.wait() do
+            if game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() > 300 then
+                repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < 300
+            end
+          
+            for i=1,10000 do
+                game.ReplicatedStorage.Remote.GameEvent:FireServer("StoreBackPack", plr.Backpack:FindFirstChild("Rebirth Arrow"))
+            end
+            
+            task.wait(10)
+            
+            if plr.BackPackBox["Rebirth Arrow"].Value == 4 then
+                repeat task.wait() until game.Stats.Network.ServerStatsItem["Data Ping"]:GetValue() < 300
+                task.wait(4)
+                break
+            end
+        end
+        
+        useRebirths()
+    else
+        local Notifications = Hawk:AddNotifications()
+        Notifications:Notification("Erro","Sem Rebirth No Storage","Warning",5)
     end
 end
 
