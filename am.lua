@@ -60,5 +60,63 @@ if game.PlaceId == 6284881984 then
             end
         end)
     end)
+    
 else
+    
+    _G.e = true
+    _G.dis = 6.5
+    
+    local mob
+    
+    function getMob()
+        local returner
+        
+        for i,v in pairs(workspace.Living:GetChildren()) do
+            if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and not game.Players:FindFirstChild(v.Name) then
+                returner = v
+                break
+            end
+        end
+        
+        return returner
+    end
+    
+    function Remote(tab)
+        pcall(function()
+            plr.Backpack.Input.Remote:FireServer({unpack(tab)})
+        end)
+    end
+    
+    function createForce(part)
+        local bv = instance.new("BodyVelocity")
+        bv.Name = "fno"
+        bv.MaxForce = Vector3.new(1/0,1/0,1/0)
+        bv.P = 1/0
+        bv.Velocity = Vector3.new(30,30,30)
+        bv.Parent = part
+    end
+    
+    while _G.e do task.wait()
+        if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
+            pcall(function()
+                plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,-_G.dis,0)
+                plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
+    
+                if mob:FindFirstChild("Head") then mob.Head:Destroy() end
+                if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob.HumanoidRootPart) end
+              
+                mob.Humanoid.Health = 0
+                game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
+                sethiddenproperty(plr, "SimulationRadius", math.huge)
+                
+                Remote({"Light"})
+                for i=1,4 do
+                    Remote({"Skill", tostring(i)})
+                end
+            end)
+        else
+            mob = getMob()
+        end
+    end
+    
 end
