@@ -88,12 +88,14 @@ else
     end
     
     function createForce(v)
-        local bv = Instance.new("BodyVelocity")
+        --[[local bv = Instance.new("BodyVelocity")
         bv.Name = "fno"
         bv.MaxForce = Vector3.new(1/0,1/0,1/0)
         bv.P = 1/0
         bv.Velocity = Vector3.new(30,30,30)
-        bv.Parent = v.HumanoidRootPart
+        bv.Parent = v.HumanoidRootPart]]
+        local e = Instance.new("NumberValue",v.HumanoidRootPart)
+        e.Name = "fno"
 
         v.HumanoidRootPart.CanCollide = false
         v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
