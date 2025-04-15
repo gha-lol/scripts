@@ -103,7 +103,7 @@ else
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
     
                 if mob:FindFirstChild("Head") then mob.Head:Destroy() end
-                if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob.HumanoidRootPart) end
+                --if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob.HumanoidRootPart) end
               
                 mob.Humanoid.Health = 0
                 game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
