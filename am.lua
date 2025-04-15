@@ -87,13 +87,22 @@ else
         end)
     end
     
-    function createForce(part)
+    function createForce(v)
         local bv = Instance.new("BodyVelocity")
         bv.Name = "fno"
         bv.MaxForce = Vector3.new(1/0,1/0,1/0)
         bv.P = 1/0
         bv.Velocity = Vector3.new(30,30,30)
-        bv.Parent = part
+        bv.Parent = v.HumanoidRootPart
+
+        v.HumanoidRootPart.CanCollide = false
+        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+        v.HumanoidRootPart.Transparency = 1
+        v.Humanoid:ChangeState(11)
+        v.Humanoid:ChangeState(14)
+        if v.Humanoid:FindFirstChild("Animator") then
+            v.Humanoid.Animator:Destroy()
+        end
     end
     
     while _G.e do task.wait()
@@ -103,7 +112,7 @@ else
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
     
                 if mob:FindFirstChild("Head") then mob.Head:Destroy() end
-                if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob.HumanoidRootPart) end
+                if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob) end
               
                 mob.Humanoid.Health = 0
                 game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
