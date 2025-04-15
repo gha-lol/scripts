@@ -98,8 +98,8 @@ else
         v.HumanoidRootPart.CanCollide = false
         v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
         v.HumanoidRootPart.Transparency = 1
-        v.Humanoid:ChangeState(11)
-        v.Humanoid:ChangeState(14)
+        --v.Humanoid:ChangeState(11)
+        --v.Humanoid:ChangeState(14)
         if v.Humanoid:FindFirstChild("Animator") then
             v.Humanoid.Animator:Destroy()
         end
@@ -116,6 +116,8 @@ else
               
                 mob.Humanoid.Health = 0
                 game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
+                mob.Humanoid:ChangeState(11)
+                mob.Humanoid:ChangeState(14)
                 sethiddenproperty(plr, "SimulationRadius", math.huge)
                 
                 Remote({"Light"})
