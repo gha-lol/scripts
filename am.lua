@@ -98,7 +98,7 @@ else
     
     while _G.e do task.wait()
         if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
-            pcall(function()
+            --pcall(function()
                 plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,-_G.dis,0)
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
     
@@ -113,7 +113,7 @@ else
                 for i=1,4 do
                     Remote({"Skill", tostring(i)})
                 end
-            end)
+            --end)
         else
             mob = getMob()
         end
