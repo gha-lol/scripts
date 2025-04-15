@@ -30,7 +30,7 @@ if game.PlaceId == 6284881984 then
         missionDropdown:Refresh(missionsTable, false)
     end)
     
-    missionDropdown = tab1:Dropdown("Maps", missionsTable, function(mission)
+    missionDropdown = tab1:Dropdown("Mission", missionsTable, function(mission)
         selectedMission = mission
     end)
     
