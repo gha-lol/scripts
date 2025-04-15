@@ -107,7 +107,7 @@ else
               
                 mob.Humanoid.Health = 0
                 game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
-                sethiddenproperty(plr, "SimulationRadius", math.huge)
+                sethiddenproperty(plr, "SimulationRadius", 200000)
                 
                 Remote({"Light"})
                 for i=1,4 do
