@@ -137,15 +137,15 @@ coroutine.resume(Network["PartOwnership"]["Enable"])
 _G.e = true
 while _G.e do task.wait()
     for i,v in pairs(workspace.Living:GetChildren()) do
+		pcall(function()
         if v.Name ~= game.Players.LocalPlayer.Name then
             for _,part in pairs(v:GetChildren()) do
                 if part:IsA("BasePart") then
                     Network.RetainPart(part)
                 end
             end
-        end
-        pcall(function()
-            v.Humanoid.Health = 0
+	v.Humanoid.Health = 0
+		end
         end)
     end
 end
