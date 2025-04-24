@@ -61,6 +61,107 @@ if game.PlaceId == 6284881984 then
         end)
     end)
     
+    
+    -- TAB AUTO FEED
+    
+    local selectedUnit = ""
+    local unitsTable = {}
+    local unitsDropdown
+    local toggleUnit
+    
+    function getUnits()
+        table.clear(unitsTable)
+      
+        local unitsTab = game.ReplicatedStorage.Remotes.CharacterSelection:InvokeServer()
+        
+        for id,v in pairs(unitsTab) do
+            if not table.find(unitsTable, v.Name) then
+                table.insert(unitsTable, v.Name)
+            end
+        end
+    end
+    
+    function getSelectedUnit()
+        local returner = {}
+        
+        local unitsTab = game.ReplicatedStorage.Remotes.CharacterSelection:InvokeServer()
+        
+        for id,v in pairs(unitsTab) do
+            if v.Name == selectedUnit and v.Level < 100 then
+                returner["id"] = id
+                returner["xp"] = v.Experience
+                returner["lvl"] = v.Level
+                break
+            end
+        end
+        
+        return returner
+    end
+    
+    function getFodders()
+        local returner = {}
+        
+        local unitsTab = game.ReplicatedStorage.Remotes.CharacterSelection:InvokeServer()
+        
+        for id,v in pairs(unitsTab) do
+            if game.ReplicatedStorage.Characters[v.Name].Rarity.Value == "Fodder" and not v.Favorite then
+                returner[id] = true
+            end
+        end
+        
+        return returner
+    end
+    
+    getUnits()
+    
+    local tab3 = win:Tab("Auto Feed")
+    
+    tab3:TextBox("Search Unit", "Name Here", function(unit)
+        getUnits()
+      
+        for i,v in pairs(unitsTable) do
+            if not string.find(v:lower(), unit:lower()) then
+                table.remove(unitsTable, i)
+            end
+        end
+        
+        unitsDropdown:Refresh(unitsTable, false)
+    end)
+    
+    unitsDropdown = tab3:Dropdown("Units", unitsTable, function(unit)
+        selectedUnit = unit
+    end)
+    
+    toggleUnit = tab3:Toggle("Auto Feed", "", function(bool)
+        _G.autofeed = bool
+        
+        while _G.autofeed do task.wait()
+            local info = getSelectedUnit()
+            
+            if info then
+                local summonsNecessary = math.ceil(info.xp / 10)
+                
+                if summonsNecessary >= 1 then
+                    local successSummons = 0
+                    
+                    repeat task.wait(.25)
+                        
+                        local results = game.ReplicatedStorage.Remotes["Rollx10"]:InvokeServer(true)
+                        if results ~= "SLOW DOWN" then successSummons += 1 end
+                        
+                    until successSummons == summonsNecessary
+                    
+                    game.ReplicatedStorage.Remotes.FeedCharacter:InvokeServer(getFodders(), info.id)
+                else
+                    _G.autofeed = false
+                    toggleUnit:UpdateToggle(false)
+                end
+            else
+                _G.autofeed = false
+                toggleUnit:UpdateToggle(false)
+            end
+        end
+    end)
 else
     
     _G.e = true
