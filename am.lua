@@ -66,8 +66,12 @@ if game.PlaceId == 6284881984 then
     
     local selectedUnit = ""
     local unitsTable = {}
+    local infoLevel = "1"
+    local infoSummoning = "false"
     local unitsDropdown
     local toggleUnit
+    local infoLabelSummoning
+    local infoLabelLevel
     
     function getUnits()
         table.clear(unitsTable)
@@ -87,9 +91,8 @@ if game.PlaceId == 6284881984 then
         local unitsTab = game.ReplicatedStorage.Remotes.CharacterSelection:InvokeServer()
         
         for id,v in pairs(unitsTab) do
-            if v.Name == selectedUnit and v.Level < 100 then
+            if v.Name == selectedUnit then
                 returner["id"] = id
-                returner["xp"] = v.Experience
                 returner["lvl"] = v.Level
                 break
             end
@@ -110,6 +113,11 @@ if game.PlaceId == 6284881984 then
         end
         
         return returner
+    end
+    
+    function updateInfo()
+        infoLabelLevel:UpdateLabel("Character Level: " .. infoLevel)
+        infoLabelSummoning:UpdateLabel("Is Summoning: " .. infoSummoning)
     end
     
     getUnits()
@@ -138,11 +146,17 @@ if game.PlaceId == 6284881984 then
         while _G.autofeed do task.wait()
             local info = getSelectedUnit()
             
+            infoLevel = tostring(info.lvl)
+            updateInfo()
+            
             if info then
-                local summonsNecessary = math.ceil(info.xp / 10)
+                local summonsNecessary = math.ceil((info.lvl * 5) / 10)
                 
-                if summonsNecessary >= 1 then
+                if summonsNecessary >= 1 and info.lvl < 100 then
                     local successSummons = 0
+                    
+                    infoSummoning = tostring("true")
+                    updateInfo()
                     
                     repeat task.wait(.25)
                         
@@ -152,16 +166,25 @@ if game.PlaceId == 6284881984 then
                     until successSummons == summonsNecessary
                     
                     game.ReplicatedStorage.Remotes.FeedCharacter:InvokeServer(getFodders(), info.id)
+                    
+                    infoSummoning = tostring("false")
+                    updateInfo()
                 else
+                    infoLevel = tostring(info.lvl)
+                    updateInfo()
+                  
                     _G.autofeed = false
                     toggleUnit:UpdateToggle(false)
                 end
-            else
-                _G.autofeed = false
-                toggleUnit:UpdateToggle(false)
             end
         end
     end)
+    
+    local infoSection = tab3:Section("Auto Feed Info")
+    
+    infoLabelLevel = infoSection:Label("Character Level: " .. infoLevel)
+    infoLabelSummoning = infoSection:Label("Is Summoning: " .. infoSummoning)
+    
 else
     
     _G.e = true
