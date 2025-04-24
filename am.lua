@@ -94,6 +94,7 @@ if game.PlaceId == 6284881984 then
             if v.Name == selectedUnit then
                 returner["id"] = id
                 returner["lvl"] = v.Level
+                returner["xp"] = v.Experience
                 break
             end
         end
@@ -150,7 +151,7 @@ if game.PlaceId == 6284881984 then
             updateInfo()
             
             if info then
-                local summonsNecessary = math.ceil(((info.lvl * 5) / 10) / 10)
+                local summonsNecessary = math.ceil((((info.lvl * 5) - info.xp) / 10) / 10)
                 
                 if summonsNecessary >= 1 and info.lvl < 100 then
                     local successSummons = 0
