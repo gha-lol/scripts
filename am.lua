@@ -208,7 +208,7 @@ else
     
     function Remote(tab)
         pcall(function()
-            plr.Backpack.Input.Remote:FireServer({unpack(tab)})
+            game.ReplicatedStorage.Remotes.Input:FireServer({unpack(tab)})
         end)
     end
     
