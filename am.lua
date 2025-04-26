@@ -249,6 +249,7 @@ else
                 sethiddenproperty(plr, "SimulationRadius", math.huge)
                 
                 Remote({"Light"})
+                Remote({"Skill", "TeamAssist"})
                 for i=1,4 do
                     Remote({"Skill", tostring(i)})
                 end
