@@ -222,8 +222,8 @@ else
         local e = Instance.new("NumberValue",v.HumanoidRootPart)
         e.Name = "fno"
 
-        v.HumanoidRootPart.CanCollide = false
-        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+        --v.HumanoidRootPart.CanCollide = false
+        --v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
         v.HumanoidRootPart.Transparency = 1
         --v.Humanoid:ChangeState(11)
         --v.Humanoid:ChangeState(14)
