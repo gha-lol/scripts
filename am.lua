@@ -247,9 +247,9 @@ else
                 --mob.Humanoid:ChangeState(11)
                 --mob.Humanoid:ChangeState(14)
                 sethiddenproperty(plr, "SimulationRadius", math.huge)
-                
-                Remote({"Light"})
+
                 Remote({"Skill", "TeamAssist"})
+                Remote({"Light"})
                 for i=1,4 do
                     Remote({"Skill", tostring(i)})
                 end
