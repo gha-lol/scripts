@@ -228,7 +228,7 @@ else
         --v.Humanoid:ChangeState(11)
         --v.Humanoid:ChangeState(14)
         if v.Humanoid:FindFirstChild("Animator") then
-            v.Humanoid.Animator:Destroy()
+            --v.Humanoid.Animator:Destroy()
         end
     end
     
@@ -238,11 +238,11 @@ else
                 plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,_G.dis,0)
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
     
-                if mob:FindFirstChild("Head") then mob.Head:Destroy() end
+                --if mob:FindFirstChild("Head") then mob.Head:Destroy() end
                 if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob) end
               
                 mob.Humanoid.Health = 0
-                game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
+                --game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
                 --mob.Humanoid:ChangeState(11)
                 --mob.Humanoid:ChangeState(14)
                 sethiddenproperty(plr, "SimulationRadius", math.huge)
