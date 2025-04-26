@@ -125,11 +125,11 @@ if game.PlaceId == 6284881984 then
     
     local tab3 = win:Tab("Auto Feed")
     
-    tab3:TextBox("Search Unit", "Name Here", function(unit)
+    tab3:TextBox("Search Unit", "Name Here", function(unitt)
         getUnits()
       
         for i,v in pairs(unitsTable) do
-            if not string.find(v:lower(), unit:lower()) then
+            if not string.find(v:lower(), unitt:lower()) then
                 table.remove(unitsTable, i)
             end
         end
