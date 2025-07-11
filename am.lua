@@ -239,7 +239,7 @@ else
             end
 
             if workspace.FX:FindFirstChild("CamGod") then
-                repeat task.wait() until not workspace.FX:FindFirstChild("CamGod")
+                repeat task.wait() until workspace.FX:FindFirstChild("CamGod") == nil
             end
         end)
         if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
