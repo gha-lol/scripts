@@ -233,6 +233,11 @@ else
     end
     
     while _G.e do task.wait()
+        pcall(function()
+            if workspace.FX:FindFirstChild("WaveSilo") then
+                plr.Character.HumanoidRootPart.CFrame = workspace.FX.WaveSilo.CFrame
+            end
+        end)
         if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
             pcall(function()
                 plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
@@ -241,10 +246,6 @@ else
     
                 --if mob:FindFirstChild("Head") then mob.Head:Destroy() end
                 --if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob) end
-
-                if workspace.FX:FindFirstChild("WaveSilo") then
-                    plr.Character.HumanoidRootPart.CFrame = workspace.FX.WaveSilo.CFrame
-                end
               
                 mob.Humanoid.Health = 0
                 --game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
