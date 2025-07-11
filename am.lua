@@ -240,7 +240,7 @@ else
 
             if workspace.FX:FindFirstChild("CamGod") then
                 repeat task.wait() until workspace.FX:FindFirstChild("CamGod") == nil
-                task.wait(1.5)
+                task.wait(2)
                 mob = getMob()
             end
         end)
