@@ -237,6 +237,10 @@ else
             if workspace.FX:FindFirstChild("WaveSilo") then
                 plr.Character.HumanoidRootPart.CFrame = workspace.FX.WaveSilo.CFrame
             end
+
+            if workspace.FX:FindFirstChild("CamGod") then
+                repeat task.wait() until not workspace.FX:FindFirstChild("CamGod")
+            end
         end)
         if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
             pcall(function()
