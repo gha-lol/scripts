@@ -69,13 +69,14 @@ if game.PlaceId == 6284881984 then
     local infoLevel = "1"
     local infoSummoning = "false"
     local infoTrait = "None"
-    local wantedTrait = "Godly"
+    local wantedTrait = {}
     local unitsDropdown
     local toggleUnit
     local toggleTrait
     local infoLabelSummoning
     local infoLabelLevel
     local infoLabelTrait
+    local selectedTraitsLabel
     
     function getUnits()
         table.clear(unitsTable)
@@ -133,6 +134,16 @@ if game.PlaceId == 6284881984 then
         infoLabelTrait:UpdateLabel("Trait: " .. infoTrait)
     end
     
+    function updateTraitSelected()
+        local texto = ""
+        
+        for i,v in pairs(wantedTrait) do
+            texto = texto .. v .. "  "
+        end
+        
+        selectedTraitsLabel:Refresh(texto)
+    end
+    
     function getPossibleTraits()
         local returner = {}
         
@@ -166,8 +177,19 @@ if game.PlaceId == 6284881984 then
     end)
     
     tab3:Dropdown("Traits", getPossibleTraits(), function(unit)
-        wantedTrait = unit
+        if table.find(wantedTrait, unit) then
+            for i,v in pairs(wantedTrait) do
+                if v == unit then
+                    table.remove(wantedTrait,i)
+                end
+            end
+        else
+            table.insert(wantedTrait, unit)
+        end
     end)
+    
+    selectedTraitsLabel = tab3:Label("")
+    updateTraitSelected()
     
     toggleTrait = tab3:Toggle("Auto Trait", "", function(bool)
         _G.autotrait = bool
@@ -180,14 +202,14 @@ if game.PlaceId == 6284881984 then
                 infoTrait = info.trait
                 updateInfo()
                 
-                if info.trait ~= wantedTrait then
+                if not table.find(wantedTrait, info.trait) then
                     local pegou = false
                   
                     repeat task.wait(0.4)
                         
                         local trait = game.ReplicatedStorage.Remotes.RollTrait:InvokeServer(info.id)
                         
-                        if trait == wantedTrait then
+                        if table.find(wantedTrait, trait) then
                             pegou = true
                         end
 
@@ -253,6 +275,21 @@ else
     
     _G.e = true
     _G.dis = 6.5
+    _G.sogwait = 2
+    
+    local tab1 = win:Tab("Config")
+    
+    tab1:Toggle("Farm", "", function(bool)
+        _G.e = bool
+    end)
+    
+    tab1:TextBox("Distance", "6.5", function(unitt)
+        _G.dis = tonumber(unitt)
+    end)
+    
+    tab1:TextBox("SOG wait", "2", function(unitt)
+        _G.sogwait = tonumber(unitt)
+    end)
     
     local mob
     
@@ -304,7 +341,7 @@ else
 
             if workspace.FX:FindFirstChild("CamGod") then
                 repeat task.wait() until workspace.FX:FindFirstChild("CamGod") == nil
-                task.wait(2)
+                task.wait(_G.sogwait)
                 mob = getMob()
             end
         end)
