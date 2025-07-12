@@ -191,7 +191,7 @@ if game.PlaceId == 6284881984 then
                             pegou = true
                         end
                         
-                    until pegou == true or _G.autotrait == false
+                    until pegou == true or _G.autotrait == false or plr.Data.Crystals.Value == 0
                 else
                     _G.autotrait = false
                 end
