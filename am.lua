@@ -141,7 +141,7 @@ if game.PlaceId == 6284881984 then
             texto = texto .. v .. "  "
         end
         
-        selectedTraitsLabel:Refresh(texto)
+        selectedTraitsLabel:UpdateLabel(texto)
     end
     
     function getPossibleTraits()
