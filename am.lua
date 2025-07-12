@@ -186,6 +186,7 @@ if game.PlaceId == 6284881984 then
         else
             table.insert(wantedTrait, unit)
         end
+        updateTraitSelected()
     end)
     
     selectedTraitsLabel = tab3:Label("")
