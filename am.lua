@@ -183,13 +183,16 @@ if game.PlaceId == 6284881984 then
                 if info.trait ~= wantedTrait then
                     local pegou = false
                   
-                    repeat task.wait(0.1)
+                    repeat task.wait(0.4)
                         
                         local trait = game.ReplicatedStorage.Remotes.RollTrait:InvokeServer(info.id)
                         
                         if trait == wantedTrait then
                             pegou = true
                         end
+
+                        infoTrait = trait
+                        updateInfo()
                         
                     until pegou == true or _G.autotrait == false or plr.Data.Crystals.Value == 0
                 else
