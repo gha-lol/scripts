@@ -336,7 +336,7 @@ else
     while _G.e do task.wait()
         pcall(function()
             if workspace.FX:FindFirstChild("WaveSilo") then
-                task.wait(1)
+                task.wait(2)
                 plr.Character.HumanoidRootPart.CFrame = workspace.FX.WaveSilo.CFrame
             end
 
