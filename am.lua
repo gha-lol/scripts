@@ -68,10 +68,14 @@ if game.PlaceId == 6284881984 then
     local unitsTable = {}
     local infoLevel = "1"
     local infoSummoning = "false"
+    local infoTrait = "None"
+    local wantedTrait = "Godly"
     local unitsDropdown
     local toggleUnit
+    local toggleTrait
     local infoLabelSummoning
     local infoLabelLevel
+    local infoLabelTrait
     
     function getUnits()
         table.clear(unitsTable)
@@ -95,6 +99,13 @@ if game.PlaceId == 6284881984 then
                 returner["id"] = id
                 returner["lvl"] = v.Level
                 returner["xp"] = v.Experience
+                
+                if v.Trait then
+                    returner["trait"] = v.Trait
+                else
+                    returner["trait"] = "None"
+                end
+                
                 break
             end
         end
@@ -119,6 +130,19 @@ if game.PlaceId == 6284881984 then
     function updateInfo()
         infoLabelLevel:UpdateLabel("Character Level: " .. infoLevel)
         infoLabelSummoning:UpdateLabel("Is Summoning: " .. infoSummoning)
+        infoLabelTrait:UpdateLabel("Trait: " .. infoTrait)
+    end
+    
+    function getPossibleTraits()
+        local returner = {}
+        
+        local traits = require(game.ReplicatedStorage.Modules.PossibleTraits)
+        
+        for i,v in pairs(traits.traits) do
+            table.insert(returner, tostring(i))
+        end
+        
+        return returner
     end
     
     getUnits()
@@ -129,7 +153,7 @@ if game.PlaceId == 6284881984 then
         getUnits()
       
         for i,v in pairs(unitsTable) do
-            if not string.find(v:lower(), unitt:lower()) then
+            if not string.find(v, unitt) then
                 table.remove(unitsTable, i)
             end
         end
@@ -141,16 +165,51 @@ if game.PlaceId == 6284881984 then
         selectedUnit = unit
     end)
     
+    tab3:Dropdown("Traits", getPossibleTraits(), function(unit)
+        wantedTrait = unit
+    end)
+    
+    toggleTrait = tab3:Toggle("Auto Trait", "", function(bool)
+        _G.autotrait = bool
+        
+        while _G.autotrait do task.wait(.1)
+            local info = getSelectedUnit()
+            
+            if info then
+              
+                infoTrait = info.trait
+                updateInfo()
+                
+                if info.trait ~= wantedTrait then
+                    local pegou = false
+                  
+                    repeat task.wait(0.1)
+                        
+                        local trait = game.ReplicatedStorage.Remotes.RollTrait:InvokeServer(info.id)
+                        
+                        if trait == wantedTrait then
+                            pegou = true
+                        end
+                        
+                    until pegou == true
+                else
+                    _G.autotrait = false
+                end
+            end
+        end
+    end)
+    
     toggleUnit = tab3:Toggle("Auto Feed", "", function(bool)
         _G.autofeed = bool
         
         while _G.autofeed do task.wait()
             local info = getSelectedUnit()
             
-            infoLevel = tostring(info.lvl)
-            updateInfo()
-            
             if info then
+              
+                infoLevel = tostring(info.lvl)
+                updateInfo()
+              
                 local summonsNecessary = math.ceil((((info.lvl * 5) - info.xp) / 10) / 10)
                 
                 if summonsNecessary >= 1 and info.lvl < 100 then
@@ -185,6 +244,7 @@ if game.PlaceId == 6284881984 then
     
     infoLabelLevel = infoSection:Label("Character Level: " .. infoLevel)
     infoLabelSummoning = infoSection:Label("Is Summoning: " .. infoSummoning)
+    infoLabelTrait = infoSection:Label("Trait: " .. infoTrait)
     
 else
     
