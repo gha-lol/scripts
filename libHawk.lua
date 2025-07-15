@@ -1,5 +1,6 @@
 -- Image Function is firstly made by __spyro. After the ui libs with image function probably skidded this source
 -- Credits: github.com/TheHanki/HawkHUB/blob/main/LibExamples/HawkLibExample.MD
+-- https://github.com/incrimination/HawkHUB-fork/tree/main/LibExamples
 _Hawk = "ohhahtuhthttouttpwuttuaunbotwo"
 
 local UserInputService = game:GetService("UserInputService")
