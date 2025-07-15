@@ -164,7 +164,7 @@ if game.PlaceId == 6284881984 then
         getUnits()
       
         for i,v in pairs(unitsTable) do
-            if not string.find(v, unitt) then
+            if not v:find("unitt") then
                 table.remove(unitsTable, i)
             end
         end
@@ -266,17 +266,36 @@ if game.PlaceId == 6284881984 then
         end
     end)
     
-    local infoSection = tab3:Section("Auto Feed Info")
+    local infoSection = tab3:Section("Info")
     
     infoLabelLevel = infoSection:Label("Character Level: " .. infoLevel)
     infoLabelSummoning = infoSection:Label("Is Summoning: " .. infoSummoning)
     infoLabelTrait = infoSection:Label("Trait: " .. infoTrait)
     
 else
-    
+  
+  
     _G.e = true
     _G.dis = 6.5
     _G.sogwait = 2
+    _G.skillsToUse = {1,2,3,4)
+    
+    function addRemoveSkill(skill)
+        if table.find(_G.skillsToUse, skill) then
+          
+            for i,v in pairs(_G.skillsToUse) do
+                if v == skill then
+                    table.remove(_G.skillsToUse, i)
+                    break
+                end
+            end
+            
+        else
+            
+            table.insert(_G.skillsToUse, skill)
+            
+        end
+    end
     
     local tab1 = win:Tab("Config")
     
@@ -291,6 +310,14 @@ else
     tab1:TextBox("SOG wait", "2", function(unitt)
         _G.sogwait = tonumber(unitt)
     end)
+    
+    for i=1,4 do
+        local e = tab1:Toggle("Use Skill " .. tostring(i), "", function(bool)
+            addRemoveSkill(i)
+        end)
+        
+        e:UpdateToggle(true)
+    end
     
     local mob
     
@@ -362,7 +389,7 @@ else
                 sethiddenproperty(plr, "SimulationRadius", math.huge)
 
                 Remote({"Light"})
-                for i=1,4 do
+                for i,v in pairs(_G.skillsToUse) do
                     Remote({"Skill", tostring(i)})
                 end
                 Remote({"Skill", "TeamAssist"})
