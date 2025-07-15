@@ -162,14 +162,16 @@ if game.PlaceId == 6284881984 then
     
     tab3:TextBox("Search Unit", "Name Here", function(unitt)
         getUnits()
+        
+        local outrTable = {}
       
         for i,v in pairs(unitsTable) do
-            if not v:find("unitt") then
-                table.remove(unitsTable, i)
+            if v:find(unitt) then
+                table.insert(outrTable, v)
             end
         end
         
-        unitsDropdown:Refresh(unitsTable, false)
+        unitsDropdown:Refresh(outrTable, false)
     end)
     
     unitsDropdown = tab3:Dropdown("Units", unitsTable, function(unit)
@@ -336,7 +338,7 @@ else
                       
                         pcall(function()
                             if mob:FindFirstChild("Highlight") then
-                                task.wait(1)
+                                task.wait(_G.sogwait)
                                 statueAttack = true
                             end
                         end)
@@ -359,9 +361,12 @@ else
                     --mob.Humanoid:ChangeState(14)
                     sethiddenproperty(plr, "SimulationRadius", math.huge)
     
-                    Remote({"Light"})
-                    for i,v in pairs(_G.skillsToUse) do
-                        Remote({"Skill", tostring(i)})
+                    if _G.useM1 then
+                        Remote({"Light"})
+                    end
+                    
+                    for i,v in pairs(_G.skillsToUseee) do
+                        Remote({"Skill", tostring(v)})
                     end
                     Remote({"Skill", "TeamAssist"})
                 end)
@@ -375,21 +380,22 @@ else
     _G.e = false
     _G.dis = 6.5
     _G.sogwait = 2
-    _G.skillsToUse = {1,2,3,4}
+    _G.skillsToUseee = {1,2,3,4}
+    _G.useM1 = true
     
     function addRemoveSkill(skill)
-        if table.find(_G.skillsToUse, skill) then
+        if table.find(_G.skillsToUseee, skill) then
           print("Achou na table")
-            for i,v in pairs(_G.skillsToUse) do
+            for i,v in pairs(_G.skillsToUseee) do
                 if v == skill then
                   print("Removeu")
-                    table.remove(_G.skillsToUse, i)
+                    table.remove(_G.skillsToUseee, i)
                 end
             end
             
         else
             print("Adicionou")
-            table.insert(_G.skillsToUse, skill)
+            table.insert(_G.skillsToUseee, skill)
             
         end
     end
@@ -418,5 +424,10 @@ else
         
         e:UpdateToggle(true)
     end
+    
+    local m1s = tab1:Toggle("Use M1s", "", function(bool)
+        _G.useM1 = bool
+    end)
+    m1s:UpdateToggle(true)
 
 end
