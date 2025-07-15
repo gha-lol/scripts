@@ -347,9 +347,8 @@ else
                 end
             end)
             if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
+                if mob.Name == "Statue Of God" and statueAttack == false then continue end
                 pcall(function()
-                    if mob.Name == "Statue Of God" and statueAttack == false then continue end
-                  
                     plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                     plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,_G.dis,0)
                     plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
