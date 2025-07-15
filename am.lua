@@ -275,52 +275,6 @@ if game.PlaceId == 6284881984 then
 else
   
   
-    _G.e = true
-    _G.dis = 6.5
-    _G.sogwait = 2
-    _G.skillsToUse = {1,2,3,4}
-    
-    function addRemoveSkill(skill)
-        if table.find(_G.skillsToUse, skill) then
-          
-            for i,v in pairs(_G.skillsToUse) do
-                if v == skill then
-                    table.remove(_G.skillsToUse, i)
-                    break
-                end
-            end
-            
-        else
-            
-            table.insert(_G.skillsToUse, skill)
-            
-        end
-    end
-    
-    local tab1 = win:Tab("Config")
-    
-    tab1:Toggle("Farm", "", function(bool)
-        _G.e = bool
-    end)
-    
-    tab1:TextBox("Distance", "6.5", function(unitt)
-        _G.dis = tonumber(unitt)
-    end)
-    
-    tab1:TextBox("SOG wait", "2", function(unitt)
-        _G.sogwait = tonumber(unitt)
-    end)
-    
-    for i=1,4 do
-        local e = tab1:Toggle("Use Skill " .. tostring(i), "", function(bool)
-            addRemoveSkill(i)
-        end)
-        
-        e:UpdateToggle(true)
-    end
-    
-    local mob
-    
     function getMob()
         local returner
         
@@ -359,44 +313,110 @@ else
             --v.Humanoid.Animator:Destroy()
         end
     end
+  
+    function autofarm()
+        local mob
+        local statueAttack = false
+        
+        while _G.e do task.wait()
+            pcall(function()
+                if workspace.FX:FindFirstChild("WaveSilo") then
+                    task.wait(2)
+                    plr.Character.HumanoidRootPart.CFrame = workspace.FX.WaveSilo.CFrame
+                end
     
-    while _G.e do task.wait()
-        pcall(function()
-            if workspace.FX:FindFirstChild("WaveSilo") then
-                task.wait(2)
-                plr.Character.HumanoidRootPart.CFrame = workspace.FX.WaveSilo.CFrame
-            end
-
-            if workspace.FX:FindFirstChild("CamGod") then
-                repeat task.wait() until workspace.FX:FindFirstChild("CamGod") == nil
-                task.wait(_G.sogwait)
+                if workspace.FX:FindFirstChild("CamGod") then
+                    repeat task.wait() until workspace.FX:FindFirstChild("CamGod") == nil
+                    task.wait(_G.sogwait)
+                    mob = getMob()
+                end
+                
+                if mob.Name == "Statue Of God" and statueAttack == false then
+                    repeat task.wait()
+                      
+                        pcall(function()
+                            if mob:FindFirstChild("Highlight") then
+                                task.wait(1)
+                                statueAttack = true
+                            end
+                        end)
+                      
+                    until statueAttack == true or _G.e == false or mob == nil
+                end
+            end)
+            if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
+                pcall(function()
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,_G.dis,0)
+                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
+        
+                    --if mob:FindFirstChild("Head") then mob.Head:Destroy() end
+                    --if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob) end
+                  
+                    mob.Humanoid.Health = 0
+                    --game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
+                    --mob.Humanoid:ChangeState(11)
+                    --mob.Humanoid:ChangeState(14)
+                    sethiddenproperty(plr, "SimulationRadius", math.huge)
+    
+                    Remote({"Light"})
+                    for i,v in pairs(_G.skillsToUse) do
+                        Remote({"Skill", tostring(i)})
+                    end
+                    Remote({"Skill", "TeamAssist"})
+                end)
+            else
+                statueAttack = false
                 mob = getMob()
             end
-        end)
-        if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
-            pcall(function()
-                plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,_G.dis,0)
-                plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
+        end
+    end
+  
+    _G.e = false
+    _G.dis = 6.5
+    _G.sogwait = 2
+    _G.skillsToUse = {1,2,3,4}
     
-                --if mob:FindFirstChild("Head") then mob.Head:Destroy() end
-                --if not mob.HumanoidRootPart:FindFirstChild("fno") then createForce(mob) end
-              
-                mob.Humanoid.Health = 0
-                --game:GetService("Workspace").FallenPartsDestroyHeight = 0 / 0
-                --mob.Humanoid:ChangeState(11)
-                --mob.Humanoid:ChangeState(14)
-                sethiddenproperty(plr, "SimulationRadius", math.huge)
-
-                Remote({"Light"})
-                for i,v in pairs(_G.skillsToUse) do
-                    Remote({"Skill", tostring(i)})
+    function addRemoveSkill(skill)
+        if table.find(_G.skillsToUse, skill) then
+          print("Achou na table")
+            for i,v in pairs(_G.skillsToUse) do
+                if v == skill then
+                  print("Removeu")
+                    table.remove(_G.skillsToUse, i)
                 end
-                Remote({"Skill", "TeamAssist"})
-            end)
+            end
+            
         else
-            mob = getMob()
+            print("Adicionou")
+            table.insert(_G.skillsToUse, skill)
+            
         end
     end
     
+    local tab1 = win:Tab("Config")
+    
+    tab1:Toggle("Farm", "", function(bool)
+        _G.e = bool
+        
+        autofarm()
+    end)
+    
+    tab1:TextBox("Distance", "6.5", function(unitt)
+        _G.dis = tonumber(unitt)
+    end)
+    
+    tab1:TextBox("SOG wait", "2", function(unitt)
+        _G.sogwait = tonumber(unitt)
+    end)
+    
+    for i=1,4 do
+        local nom = "Use Skill " .. tostring(i)
+        local e = tab1:Toggle(nom, "", function(bool)
+            addRemoveSkill(i)
+        end)
+        
+        e:UpdateToggle(true)
+    end
+
 end
