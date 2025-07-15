@@ -348,6 +348,8 @@ else
             end)
             if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
                 pcall(function()
+                    if mob.Name == "Statue Of God" and statueAttack == false then continue end
+                  
                     plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                     plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,_G.dis,0)
                     plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
@@ -440,4 +442,14 @@ else
     end)
     m1s:UpdateToggle(true)
 
+    local tab2 = win:Tab("Pre Set Config")
+    
+    tab2:Button("Statue Config",function()
+        _G.dis = 20
+        _G.sogwait = 10
+        _G.skillsToUseee = {1}
+        _G.useM1 = false
+        _G.delaySkill = 0.5
+    end)
+    
 end
