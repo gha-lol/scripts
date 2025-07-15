@@ -364,9 +364,17 @@ else
                     if _G.useM1 then
                         Remote({"Light"})
                     end
-                    
-                    for i,v in pairs(_G.skillsToUseee) do
-                        Remote({"Skill", tostring(v)})
+
+                    if _G.delaySkill > 0 then
+                        delay(_G.delaySkill, function()
+                            for i,v in pairs(_G.skillsToUseee) do
+                                Remote({"Skill", tostring(v)})
+                            end
+                        end)
+                    else
+                        for i,v in pairs(_G.skillsToUseee) do
+                            Remote({"Skill", tostring(v)})
+                        end
                     end
                     Remote({"Skill", "TeamAssist"})
                 end)
@@ -380,21 +388,21 @@ else
     _G.e = false
     _G.dis = 6.5
     _G.sogwait = 2
-    _G.skillsToUseee = {1,2,3,4}
+    _G.skillsToUseee = {}
     _G.useM1 = true
+    _G.delaySkill = 0
     
     function addRemoveSkill(skill)
         if table.find(_G.skillsToUseee, skill) then
-          print("Achou na table")
+          
             for i,v in pairs(_G.skillsToUseee) do
                 if v == skill then
-                  print("Removeu")
                     table.remove(_G.skillsToUseee, i)
                 end
             end
             
         else
-            print("Adicionou")
+            
             table.insert(_G.skillsToUseee, skill)
             
         end
@@ -415,14 +423,16 @@ else
     tab1:TextBox("SOG wait", "2", function(unitt)
         _G.sogwait = tonumber(unitt)
     end)
+
+    tab1:TextBox("Skill Delay", "0", function(unitt)
+         _G.delaySkill = tonumber(unitt)
+    end)
     
     for i=1,4 do
         local nom = "Use Skill " .. tostring(i)
         local e = tab1:Toggle(nom, "", function(bool)
             addRemoveSkill(i)
         end)
-        
-        e:UpdateToggle(true)
     end
     
     local m1s = tab1:Toggle("Use M1s", "", function(bool)
