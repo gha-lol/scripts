@@ -278,7 +278,7 @@ else
     _G.e = true
     _G.dis = 6.5
     _G.sogwait = 2
-    _G.skillsToUse = {1,2,3,4)
+    _G.skillsToUse = {1,2,3,4}
     
     function addRemoveSkill(skill)
         if table.find(_G.skillsToUse, skill) then
