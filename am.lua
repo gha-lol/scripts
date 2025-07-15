@@ -318,7 +318,6 @@ else
   
     function autofarm()
         local mob
-        local statueAttack = false
         
         while _G.e do task.wait()
             pcall(function()
@@ -333,21 +332,24 @@ else
                     mob = getMob()
                 end
                 
-                if mob.Name == "Statue Of God" and statueAttack == false then
+                if mob.Name == "Statue Of God" and mob:FindFirstChild("podeMatar") == nil then
                     repeat task.wait()
                       
                         pcall(function()
                             if mob:FindFirstChild("Highlight") then
                                 task.wait(_G.sogwait)
-                                statueAttack = true
+                                
+                                local instaa = Instance.new("BoolValue")
+                                instaa.Name = "podeMatar"
+                                instaa.Parent = mob
                             end
                         end)
                       
-                    until statueAttack == true or _G.e == false or mob == nil
+                    until mob:FindFirstChild("podeMatar") or _G.e == false or mob == nil
                 end
             end)
             if mob and mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") then
-                if mob.Name == "Statue Of God" and statueAttack == false then continue end
+                if mob.Name == "Statue Of God" and mob:FindFirstChild("podeMatar") == nil then continue end
                 pcall(function()
                     plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                     plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,_G.dis,0)
@@ -380,7 +382,6 @@ else
                     Remote({"Skill", "TeamAssist"})
                 end)
             else
-                statueAttack = false
                 mob = getMob()
             end
         end
