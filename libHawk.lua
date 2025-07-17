@@ -619,7 +619,7 @@ function HawkLib:Window(Win)
 							OpenFrame.Parent = Hawk
 							OpenFrame.Active = true
 							OpenFrame.BackgroundColor3 = HawkLib.Themes[Theme].TitleBar
-							OpenFrame.Position = UDim2.new(0, 0, 0, 282)
+							OpenFrame.Position = UDim2.new(0, 0, 0, 200)
 							OpenFrame.Selectable = true
 							OpenFrame.Size = UDim2.new(0, 120, 0, 50)
 							OpenFrame.Visible = false
