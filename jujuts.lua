@@ -72,7 +72,7 @@ end)
 
 unitListPartida = tab1Section:Dropdown("Unit List", unitPartidaTable(), function(sele)
     partidaSelected = sele
-    placePriceLabel:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers[sele].Config.Price),"")
+    placePriceLabel:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers[sele].Config.Price.Value),"")
 end)
 
 placePriceLabel = tab1Section:Label("Placement Price: ","") 
@@ -105,9 +105,9 @@ tab1Section2:Button("Upgrade Unit", function()
     remote("SpawnTower", {nomeReal .. tostring(upgradeSelected), inst.HumanoidRootPart.CFrame, inst})
 end)
 
-tab1Section2:Label("Transform Selected Spawned Unit")
+local tab1Section3 = tab1:Section("Transform Selected Spawned Unit")
 
-tab1Section2:TextBox("Search Unit", "Name Here", function(unitt)
+tab1Section3:TextBox("Search Unit", "Name Here", function(unitt)
     if unitt == " " then
         transformList:Refresh(unitPartidaTable())
     else
@@ -123,19 +123,19 @@ tab1Section2:TextBox("Search Unit", "Name Here", function(unitt)
     end
 end)
 
-transformList = tab1Section2:Dropdown("Unit List", unitPartidaTable(), function(sele)
+transformList = tab1Section3:Dropdown("Unit List", unitPartidaTable(), function(sele)
     transformSelected = sele
-    transformPrice:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[sele .. tostring(transformUpgrade)].Config.Price),"")
+    transformPrice:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[sele .. tostring(transformUpgrade)].Config.Price.Value),"")
 end)
 
-transformList = tab1Section2:Dropdown("Select Upgrade", {1,2,3,4}, function(sele)
+transformList = tab1Section3:Dropdown("Select Upgrade", {1,2,3,4}, function(sele)
     transformUpgrade = tostring(sele)
-    transformPrice:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[sele .. tostring(transformUpgrade)].Config.Price),"")
+    transformPrice:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[sele .. tostring(transformUpgrade)].Config.Price.Value),"")
 end)
 
-transformPrice = tab1Section2:Label("Transform Price: ","")
+transformPrice = tab1Section3:Label("Transform Price: ","")
 
-tab1Section2:Button("Transform",function()
+tab1Section3:Button("Transform",function()
     local inst = workspace.Towers[spawnedSelected]
     
     remote("SpawnTower", {transformSelected .. tostring(transformUpgrade), inst.HumanoidRootPart.CFrame, inst})
