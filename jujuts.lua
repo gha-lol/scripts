@@ -212,10 +212,20 @@ end)
 
 -- MISC TAB
 
+local mahoragaAmount = 1
+
 local tab3 = win:Tab("Misc")
 
 tab3:Button("Get Money",function()
     for i=1,9990 do
         remote("RDT", {7})
     end
+end)
+
+tab3:TextBox("Amount of Mahoraga", "Amount Here", function(amount)
+    mahoragaAmount = tonumber(amount)
+end)
+
+tab3:Button("Spawn Mahoragas", function()
+    remote("Unit", {"Mahoraga", mahoragaAmount, workspace.Map:FindFirstChildOfClass("Folder")})
 end)
