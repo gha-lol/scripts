@@ -128,7 +128,7 @@ transformList = tab1Section3:Dropdown("Unit List", unitPartidaTable(), function(
     transformPrice:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[sele .. tostring(transformUpgrade)].Config.Price.Value),"")
 end)
 
-transformList = tab1Section3:Dropdown("Select Upgrade", {1,2,3,4}, function(sele)
+tab1Section3:Dropdown("Select Upgrade", {1,2,3,4}, function(sele)
     transformUpgrade = tostring(sele)
     transformPrice:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[sele .. tostring(transformUpgrade)].Config.Price.Value),"")
 end)
