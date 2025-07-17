@@ -25,8 +25,9 @@ local unitListPartida
 local partidaSelected
 local spawnedSelected
 local spawnedDropdown
-local upgradeSelected
+local upgradeSelected = "1"
 local placePriceLabel
+local upgradePriceBruh
 local transformUpgrade = "1"
 local transformSelected
 local transformPrice
@@ -86,11 +87,15 @@ local tab1Section2 = tab1:Section("Already Placed Units")
 
 local spawnedDropdown = tab1Section2:Dropdown("Spawned Units", getSpawnedUnits(), function(unitt)
     spawnedSelected = unitt
+    upgradePriceBruh:UpdateLabel("Upgrade Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[spawnedSelected .. tostring(upgradeSelected)].Config.Price.Value),"")
 end)
 
 tab1Section2:Dropdown("Select Upgrade", {1,2,3,4}, function(unitt)
     upgradeSelected = tostring(unitt)
+    upgradePriceBruh:UpdateLabel("Upgrade Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[spawnedSelected .. tostring(upgradeSelected)].Config.Price.Value),"")
 end)
+
+upgradePriceBruh = tab1Section2:Label("Upgrade Price: ","")
 
 tab1Section2:Button("Upgrade Unit", function()
     local nomeReal
@@ -130,7 +135,7 @@ end)
 
 tab1Section3:Dropdown("Select Upgrade", {1,2,3,4}, function(sele)
     transformUpgrade = tostring(sele)
-    transformPrice:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[sele .. tostring(transformUpgrade)].Config.Price.Value),"")
+    transformPrice:UpdateLabel("Placement Price: " .. tostring(game.ReplicatedStorage.Towers.Upgrades[transformSelected .. tostring(transformUpgrade)].Config.Price.Value),"")
 end)
 
 transformPrice = tab1Section3:Label("Transform Price: ","")
