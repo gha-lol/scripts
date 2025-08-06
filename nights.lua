@@ -75,7 +75,7 @@ local autoKillToggle = Tabs.Main:CreateToggle("autoKillToggle", {Title = "Auto K
 autoKillToggle:OnChanged(function()
     _G.akt = Options.autoKillToggle.Value
     while _G.akt do task.wait()
-        --pcall(function()
+        pcall(function()
             local mob = workspace.Characters:FindFirstChild(selectedEnemy)
             if mob then
                 char.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,12,0)
@@ -83,7 +83,7 @@ autoKillToggle:OnChanged(function()
                 remote("EquipItemHandle", {"FireAllClients", inv[selectedWeapon]})
                 remote("ToolDamageObject", {mob, inv[selectedWeapon], "2_" .. tostring(plr.UserId), char.HumanoidRootPart.CFrame})
             end
-        --end)
+        end)
     end
 end)
 
