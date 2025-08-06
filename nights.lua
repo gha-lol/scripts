@@ -74,14 +74,14 @@ updateEnemies()
 local autoKillToggle = Tabs.Main:CreateToggle("autoKillToggle", {Title = "Auto Kill", Default = false})
 autoKillToggle:OnChanged(function()
     _G.akt = Options.autoKillToggle.Value
-    if _G.akt then remote("EquipItemHandle", {"FireAllClients", inv[selectedWeapon]}) end
     while _G.akt do task.wait()
         --pcall(function()
             local mob = workspace.Characters:FindFirstChild(selectedEnemy)
             if mob then
                 char.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,12,0)
                 char.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                remote("ToolDamageObject", {mob, inv[selectedWeapon], "2_" .. tostring(plr.PlayerId), char.HumanoidRootPart.CFrame})
+                remote("EquipItemHandle", {"FireAllClients", inv[selectedWeapon]})
+                remote("ToolDamageObject", {mob, inv[selectedWeapon], "2_" .. tostring(plr.UserId), char.HumanoidRootPart.CFrame})
             end
         --end)
     end
