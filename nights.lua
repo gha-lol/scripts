@@ -81,7 +81,7 @@ autoKillToggle:OnChanged(function()
                 char.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,12,0)
                 char.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                 remote("EquipItemHandle", {"FireAllClients", inv[selectedWeapon]})
-                remote("ToolDamageObject", {mob, inv[selectedWeapon], "30" .. tostring(plr.PlayerId), char.HumanoidRootPart.CFrame})
+                remote("ToolDamageObject", {mob, inv[selectedWeapon], "2_" .. tostring(plr.PlayerId), char.HumanoidRootPart.CFrame})
             end
         end)
     end
