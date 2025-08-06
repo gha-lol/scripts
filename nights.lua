@@ -51,7 +51,7 @@ function updateEnemies()
     local enemies = {}
     for _,v in pairs(workspace.Characters:GetChildren()) do
         if not table.find(enemies, v.Name) then
-            table.insert(v.Name)
+            table.insert(enemies, v.Name)
         end
     end
     Enemies:SetValues(enemies)
