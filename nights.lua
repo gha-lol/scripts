@@ -49,18 +49,14 @@ function updateWeapons()
 end
 
 local Enemies
-local enemyCooldown = math.huge
 function updateEnemies()
-    if enemyCooldown - tick() >= 0.3 then
-        enemyCooldown = tick()
-        local enemies = {}
-        for _,v in pairs(workspace.Characters:GetChildren()) do
-            if not table.find(enemies, v.Name) then
-                table.insert(enemies, v.Name)
-            end
+    local enemies = {}
+    for _,v in pairs(workspace.Characters:GetChildren()) do
+        if not table.find(enemies, v.Name) then
+            table.insert(enemies, v.Name)
         end
-        Enemies:SetValues(enemies)
     end
+    Enemies:SetValues(enemies)
 end
 
 function removeTraps()
