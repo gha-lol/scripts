@@ -127,8 +127,8 @@ autoUpCampfire:OnChanged(function()
                         finished = true
                     end
                 end
-                if foundItems == 0 then finished = true end
             end
+            if foundItems == 0 then finished = true end
         until finished
 
         local droppedTable = {}
