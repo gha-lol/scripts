@@ -106,10 +106,12 @@ autoUpCampfire:OnChanged(function()
             for i,v in pairs(itemsFolder:GetChildren()) do
                 if v.Name == "Coal" or v.Name == "Fuel Canister" and v:FindFirstChildWhichIsA("BasePart") then
                     if getSack():GetAttribute("Capacity") > #plr.ItemBag:GetChildren() then
-                        char.HumanoidRootPart.CFrame = v:FindFirstChildWhichIsA("BasePart").CFrame
-                        task.wait(0.2)
-                        remote("RequestBagStoreItem", {getSack(), v})
-                        task.wait(0.2)
+                        pcall(function()
+                            char.HumanoidRootPart.CFrame = v:FindFirstChildWhichIsA("BasePart").CFrame
+                            task.wait(0.2)
+                            remote("RequestBagStoreItem", {getSack(), v})
+                            task.wait(0.2)
+                        end)
                     else
                         finished = true
                     end
