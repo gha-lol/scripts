@@ -112,8 +112,8 @@ autoUpCampfire:OnChanged(function()
         removeTraps()
             
         repeat task.wait()
+            local foundItems = 0
             for i,v in pairs(itemsFolder:GetChildren()) do
-                local foundItems = 0
                 if (v.Name == "Coal" or v.Name == "Fuel Canister") and v:FindFirstChildWhichIsA("BasePart") then
                     foundItems += 1
                     if getSack():GetAttribute("Capacity") > #plr.ItemBag:GetChildren() then
