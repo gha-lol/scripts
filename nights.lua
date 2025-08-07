@@ -133,10 +133,11 @@ autoUpCampfire:OnChanged(function()
         until finished
 
         local droppedTable = {}
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
         task.wait(.5)
         for i,v in pairs(plr.ItemBag:GetChildren()) do
             if v.Name == "Coal" or v.Name == "Fuel Canister" then
-                char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
+                char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
                 task.wait(.2)
                 table.insert(droppedTable, v)
                 remote("RequestBagDropItem", {getSack(), v})
@@ -149,7 +150,7 @@ autoUpCampfire:OnChanged(function()
     end
 
     pcall(function()
-        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
     end)
 end)
 
