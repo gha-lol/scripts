@@ -132,6 +132,7 @@ autoUpCampfire:OnChanged(function()
         task.wait(1)
         for i,v in pairs(plr.ItemBag:GetChildren()) do
             if v.Name == "Coal" or v.Name == "Fuel Canister" then
+                    print("achou coal no inv")
                 char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
                 task.wait(.2)
                 table.insert(droppedTable, v)
@@ -142,6 +143,7 @@ autoUpCampfire:OnChanged(function()
             remote("RequestBurnItem",{workspace.Map.Campground.MainFire, v})
         end
         task.wait(.1)
+            print("bruh")
     end
 
     pcall(function()
