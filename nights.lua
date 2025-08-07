@@ -65,7 +65,8 @@ end
 
 function removeTraps()
     for i,v in pairs(workspace.Map.Landmarks:GetChildren()) do
-        if string.find(v.Name:lower(), "trap") then
+        if string.find(v.Name, "Trap") then
+            print("Destroyed",v.Name)
             v:Destroy()
         end
     end
@@ -132,10 +133,9 @@ autoUpCampfire:OnChanged(function()
         until finished
 
         local droppedTable = {}
-        task.wait(1)
+        task.wait(.5)
         for i,v in pairs(plr.ItemBag:GetChildren()) do
             if v.Name == "Coal" or v.Name == "Fuel Canister" then
-                    print("achou coal no inv")
                 char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
                 task.wait(.2)
                 table.insert(droppedTable, v)
@@ -146,12 +146,21 @@ autoUpCampfire:OnChanged(function()
             remote("RequestBurnItem",{workspace.Map.Campground.MainFire, v})
         end
         task.wait(.1)
-            print("bruh")
     end
 
     pcall(function()
         char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
     end)
+end)
+
+Tabs.Main:CreateButton{Title = "Open All Chests", Description = "", Callback = function()
+    for i,v in pairs(itemsFolder:GetChildren()) do
+        char.HumanoidRootPart.CFrame = v.Main.CFrame
+        task.wait(.2)
+        remote("RequestOpenItemChest",{v})
+        task.wait(.2)
+    end
+    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
 end)
 
 workspace.Characters.ChildAdded:Connect(updateEnemies)
