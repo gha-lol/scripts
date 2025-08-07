@@ -16,6 +16,7 @@ local inv = plr.Inventory
 local selectedWeapon = "Old Axe"
 local selectedEnemy = "Bunny"
 local killDistance = 12
+local itemsFolder = workspace.Items
 
 function remote(name, args)
     local rem = game.ReplicatedStorage.RemoteEvents:FindFirstChild(name)
@@ -62,8 +63,6 @@ function updateEnemies()
     end
 end
 
---sack:GetAttribute("Capacity")
-
 Weapons = Tabs.Main:CreateDropdown("ItemsList", {Title = "Weapon List", Values = {}, Multi = false, Default = "Old Axe",})
 Weapons:OnChanged(function(Value)
     selectedWeapon = Value
@@ -94,6 +93,44 @@ autoKillToggle:OnChanged(function()
             end
         end)
     end
+end)
+
+local autoUpCampfire = Tabs.Main:CreateToggle("autoUpCampfire", {Title = "Auto Upgrade Campfire", Default = false})
+autoUpCampfire:OnChanged(function()
+    _G.auc = Options.autoUpCampfire.Value
+        
+    while _G.auc do task.wait()
+        local finished = false
+            
+        repeat task.wait()
+            for i,v in pairs(itemsFolder:GetChildren()) do
+                if v.Name == "Coal" or v.Name == "Fuel Canister" and v:FindFirstChildWhichIsA("BasePart") then
+                    if getSack():GetAttribute("Capacity") < #plr.ItemBag:GetChildren() then
+                        char.HumanoidRootPart.CFrame = v:FindFirstChildWhichIsA("BasePart").CFrame
+                        task.wait(0.2)
+                        remote("RequestBagStoreItem", {getSack(), v})
+                        task.wait(0.2
+                    else
+                        finished = true
+                    end
+                end
+            end
+        until finished
+
+        local droppedTable = {}
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
+        for i,v in pairs(plr.ItemBag:GetChildren()) do
+            if v.Name == "Coal" or v.Name == "Fuel Canister" then
+                table.insert(droppedTable, v)
+                remote("RequestBagDropItem", {getSack(), v})
+            end
+        end
+        for _,v in pairs(droppedTable) do
+            remote("RequestBurnItem",{workspace.Map.Campground.MainFire, v})
+        end
+    end
+
+    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
 end)
 
 workspace.Characters.ChildAdded:Connect(updateEnemies)
