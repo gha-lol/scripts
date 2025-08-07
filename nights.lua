@@ -132,7 +132,9 @@ autoUpCampfire:OnChanged(function()
         end
     end
 
-    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
+    pcall(function()
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
+    end)
 end)
 
 workspace.Characters.ChildAdded:Connect(updateEnemies)
