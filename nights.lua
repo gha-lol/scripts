@@ -163,7 +163,7 @@ Tabs.Main:CreateButton{Title = "Open All Chests", Description = "", Callback = f
             task.wait(.2)
         end
     end
-    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
+    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,3,0)
 end}
 
 workspace.Characters.ChildAdded:Connect(updateEnemies)
