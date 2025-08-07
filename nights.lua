@@ -155,10 +155,12 @@ end)
 
 Tabs.Main:CreateButton{Title = "Open All Chests", Description = "", Callback = function()
     for i,v in pairs(itemsFolder:GetChildren()) do
-        char.HumanoidRootPart.CFrame = v.Main.CFrame
-        task.wait(.2)
-        remote("RequestOpenItemChest",{v})
-        task.wait(.2)
+        if string.find(v.Name, "Chest") and v:FindFirstChild("Main") then
+            char.HumanoidRootPart.CFrame = v.Main.CFrame
+            task.wait(.2)
+            remote("RequestOpenItemChest",{v})
+            task.wait(.2)
+        end
     end
     char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
 end}
