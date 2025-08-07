@@ -121,6 +121,7 @@ autoUpCampfire:OnChanged(function()
 
         local droppedTable = {}
         char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
+        task.wait(.5)
         for i,v in pairs(plr.ItemBag:GetChildren()) do
             if v.Name == "Coal" or v.Name == "Fuel Canister" then
                 table.insert(droppedTable, v)
