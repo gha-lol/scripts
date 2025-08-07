@@ -129,6 +129,7 @@ autoUpCampfire:OnChanged(function()
         until finished
 
         local droppedTable = {}
+        task.wait(1)
         char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame
         task.wait(.5)
         for i,v in pairs(plr.ItemBag:GetChildren()) do
@@ -140,6 +141,7 @@ autoUpCampfire:OnChanged(function()
         for _,v in pairs(droppedTable) do
             remote("RequestBurnItem",{workspace.Map.Campground.MainFire, v})
         end
+        task.wait(.1)
     end
 
     pcall(function()
