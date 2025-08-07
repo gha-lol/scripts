@@ -113,7 +113,9 @@ autoUpCampfire:OnChanged(function()
             
         repeat task.wait()
             for i,v in pairs(itemsFolder:GetChildren()) do
-                if v.Name == "Coal" or v.Name == "Fuel Canister" and v:FindFirstChildWhichIsA("BasePart") then
+                local foundItems = 0
+                if (v.Name == "Coal" or v.Name == "Fuel Canister") and v:FindFirstChildWhichIsA("BasePart") then
+                    foundItems += 1
                     if getSack():GetAttribute("Capacity") > #plr.ItemBag:GetChildren() then
                         pcall(function()
                             char.HumanoidRootPart.CFrame = v:FindFirstChildWhichIsA("BasePart").CFrame
@@ -125,6 +127,7 @@ autoUpCampfire:OnChanged(function()
                         finished = true
                     end
                 end
+                if foundItems == 0 then finished = true end
             end
         until finished
 
