@@ -109,7 +109,7 @@ autoUpCampfire:OnChanged(function()
                         char.HumanoidRootPart.CFrame = v:FindFirstChildWhichIsA("BasePart").CFrame
                         task.wait(0.2)
                         remote("RequestBagStoreItem", {getSack(), v})
-                        task.wait(0.2
+                        task.wait(0.2)
                     else
                         finished = true
                     end
