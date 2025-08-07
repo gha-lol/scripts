@@ -169,4 +169,6 @@ end}
 workspace.Characters.ChildAdded:Connect(updateEnemies)
 workspace.Characters.ChildRemoved:Connect(updateEnemies)
 inv.ChildAdded:Connect(updateWeapons)
+
+Window:SelectTab(1)
 inv.ChildRemoved:Connect(updateWeapons)
