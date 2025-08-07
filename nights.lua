@@ -63,6 +63,14 @@ function updateEnemies()
     end
 end
 
+function removeTraps()
+    for i,v in pairs(workspace.Map.Landmarks:GetChildren()) do
+        if string.find(v.Name:lower(), "trap") then
+            v:Destroy()
+        end
+    end
+end
+
 Weapons = Tabs.Main:CreateDropdown("ItemsList", {Title = "Weapon List", Values = {}, Multi = false, Default = "Old Axe",})
 Weapons:OnChanged(function(Value)
     selectedWeapon = Value
@@ -101,6 +109,7 @@ autoUpCampfire:OnChanged(function()
         
     while _G.auc do task.wait()
         local finished = false
+        removeTraps()
             
         repeat task.wait()
             for i,v in pairs(itemsFolder:GetChildren()) do
