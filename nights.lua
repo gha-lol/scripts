@@ -48,9 +48,9 @@ function updateWeapons()
 end
 
 local Enemies
-local enemyCooldown = tick()
+local enemyCooldown = math.huge
 function updateEnemies()
-    if enemyCooldown - tick() >= 0.5 then
+    if enemyCooldown - tick() >= 0.3 then
         enemyCooldown = tick()
         local enemies = {}
         for _,v in pairs(workspace.Characters:GetChildren()) do
