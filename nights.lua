@@ -50,7 +50,7 @@ end
 local Enemies
 local enemyCooldown = tick()
 function updateEnemies()
-    if tick() - enemyCooldown >= 0.5 then
+    if enemyCooldown - tick() >= 0.5 then
         enemyCooldown = tick()
         local enemies = {}
         for _,v in pairs(workspace.Characters:GetChildren()) do
