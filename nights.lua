@@ -15,6 +15,7 @@ local inv = plr.Inventory
 
 local selectedWeapon = "Old Axe"
 local selectedEnemy = "Bunny"
+local killDistance = 12
 
 function remote(name, args)
     local rem = game.ReplicatedStorage.RemoteEvents:FindFirstChild(name)
@@ -47,19 +48,23 @@ function updateWeapons()
 end
 
 local Enemies
+local enemyCooldown = tick()
 function updateEnemies()
-    local enemies = {}
-    for _,v in pairs(workspace.Characters:GetChildren()) do
-        if not table.find(enemies, v.Name) then
-            table.insert(enemies, v.Name)
+    if tick() - enemyCooldown >= 0.5 then
+        enemyCooldown = tick()
+        local enemies = {}
+        for _,v in pairs(workspace.Characters:GetChildren()) do
+            if not table.find(enemies, v.Name) then
+                table.insert(enemies, v.Name)
+            end
         end
+        Enemies:SetValues(enemies)
     end
-    Enemies:SetValues(enemies)
 end
 
 --sack:GetAttribute("Capacity")
 
-Weapons = Tabs.Main:CreateDropdown("ItemsList", {Title = "Items List", Values = {}, Multi = false, Default = "Old Axe",})
+Weapons = Tabs.Main:CreateDropdown("ItemsList", {Title = "Weapon List", Values = {}, Multi = false, Default = "Old Axe",})
 Weapons:OnChanged(function(Value)
     selectedWeapon = Value
 end)
@@ -71,6 +76,10 @@ Enemies:OnChanged(function(Value)
 end)
 updateEnemies()
 
+local Slider = Tabs.Main:CreateSlider("Distance", {Title = "Distance", Description = "Distance from enemy", Default = killDistance, Min = 0, Max = 17, Rounding = 1, Callback = function(Value)
+    killDistance = Value
+end})
+
 local autoKillToggle = Tabs.Main:CreateToggle("autoKillToggle", {Title = "Auto Kill", Default = false})
 autoKillToggle:OnChanged(function()
     _G.akt = Options.autoKillToggle.Value
@@ -78,7 +87,7 @@ autoKillToggle:OnChanged(function()
         pcall(function()
             local mob = workspace.Characters:FindFirstChild(selectedEnemy)
             if mob then
-                char.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,12,0)
+                char.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,killDistance,0)
                 char.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                 remote("EquipItemHandle", {"FireAllClients", inv[selectedWeapon]})
                 remote("ToolDamageObject", {mob, inv[selectedWeapon], "2_" .. tostring(plr.UserId), char.HumanoidRootPart.CFrame})
