@@ -115,7 +115,7 @@ autoUpCampfire:OnChanged(function()
         repeat task.wait()
             local foundItems = 0
             for i,v in pairs(itemsFolder:GetChildren()) do
-                if (v.Name == "Coal" or v.Name == "Fuel Canister") and v:FindFirstChildWhichIsA("BasePart") then
+                if (v.Name == "Coal" or v.Name == "Fuel Canister" or v.Name == "Oil Barrel") and v:FindFirstChildWhichIsA("BasePart") then
                     foundItems += 1
                     if getSack():GetAttribute("Capacity") > #plr.ItemBag:GetChildren() then
                         pcall(function()
