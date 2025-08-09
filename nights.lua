@@ -61,9 +61,9 @@ end
 
 function removeTraps()
     for i,v in pairs(workspace.Map.Landmarks:GetChildren()) do
-        if string.find(v.Name, "Trap") and v:FindFirstChildOfClass("TouchTransmitter",true) then
+        if string.find(v.Name, "Trap") and v:FindFirstChild("TouchInterest",true) then
             print("Destroyed",v.Name)
-            v:FindFirstChildOfClass("TouchTransmitter",true):Destroy()
+            v:FindFirstChild("TouchInterest",true):Destroy()
         end
     end
 end
