@@ -182,7 +182,7 @@ end)
 Tabs.Main:CreateButton{Title = "Open All Chests", Description = "", Callback = function()
     for i,v in pairs(itemsFolder:GetChildren()) do
         if string.find(v.Name, "Chest") and v:FindFirstChild("Main") then
-            char.HumanoidRootPart.CFrame = v.Main.CFrame
+            char:PivotTo(v:GetPivot())
             task.wait(.2)
             remote("RequestOpenItemChest",{v})
             task.wait(.2)
