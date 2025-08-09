@@ -199,7 +199,7 @@ Tabs.Items:CreateButton{Title = "Get All Ammo", Description = "", Callback = fun
             char:PivotTo(v:GetPivot())
             task.wait(.2)
             remote("RequestConsumeItem", {v})
-            task.wait(.1)
+            task.wait(.2)
         end
     end
 
@@ -225,7 +225,7 @@ Tabs.Items:CreateButton{Title = "Equip Armor/Weapon", Description = "", Callback
         else
             remote("RequestHotbarItem", {armorTool})
         end
-        task.wait(.1)
+        task.wait(.2)
         char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
     end
 end}
@@ -246,7 +246,7 @@ Tabs.Items:CreateButton{Title = "Store Item", Description = "", Callback = funct
         char:PivotTo(item:GetPivot())
         task.wait(.2)
         remote("RequestBagStoreItem", {getSack(), item})
-        task.wait(.1)
+        task.wait(.2)
         char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
     end
 end}
