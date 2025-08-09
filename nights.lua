@@ -5,6 +5,10 @@ local Tabs = {
     Main = Window:CreateTab{
         Title = "Main",
         Icon = "phosphor-users-bold"
+    },
+    Items = Window:CreateTab{
+        Title = "Items",
+        Icon = "phosphor-users-bold"
     }
 }
 local Options = Library.Options
@@ -15,8 +19,13 @@ local inv = plr.Inventory
 
 local selectedWeapon = "Old Axe"
 local selectedEnemy = "Bunny"
+local selectedItem = ""
+local selectedArmorTool = ""
 local killDistance = 12
 local itemsFolder = workspace.Items
+
+
+-- FUNCTIONS
 
 function remote(name, args)
     local rem = game.ReplicatedStorage.RemoteEvents:FindFirstChild(name)
@@ -62,11 +71,31 @@ end
 function removeTraps()
     for i,v in pairs(workspace.Map.Landmarks:GetChildren()) do
         if string.find(v.Name, "Trap") and v:FindFirstChild("TouchInterest",true) then
-            print("Destroyed",v.Name)
             v:FindFirstChild("TouchInterest",true):Destroy()
         end
     end
 end
+
+local spawnedArmorsTools
+local spawnedItems
+function updateSpawnedItems()
+    local armorsTools = {}
+    local itemsTable = {}
+    
+    for i,v in pairs(itemsFolder:GetChildren()) do
+        if (v:GetAttribute("Interaction") == "Armour" or v:GetAttribute("Interaction") == "Tool") and not table.find(armorsTools, v.Name) then
+            table.insert(armorsTools, v.Name)
+        elseif table.find(armorsTools, v.Name) == nil and table.find(itemsTable, v.Name) == nil then
+            table.insert(itemsTable, v.Name)
+        end
+    end
+
+    spawnedArmorsTools:SetValues(armorsTools)
+    spawnedItems:SetValues(itemsTable)
+end
+
+
+-- CODIGO
 
 Weapons = Tabs.Main:CreateDropdown("ItemsList", {Title = "Weapon List", Values = {}, Multi = false, Default = "Old Axe",})
 Weapons:OnChanged(function(Value)
@@ -162,8 +191,72 @@ Tabs.Main:CreateButton{Title = "Open All Chests", Description = "", Callback = f
     char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,3,0)
 end}
 
-workspace.Characters.ChildAdded:Connect(updateEnemies)
-workspace.Characters.ChildRemoved:Connect(updateEnemies)
+-- ITEMS TAB
+
+Tabs.Items:CreateButton{Title = "Get All Ammo", Description = "", Callback = function()
+    for i,v in pairs(itemsFolder:GetChildren()) do
+        if string.find(v.Name, " Ammo") then
+            char:PivotTo(v:GetPivot())
+            task.wait(.2)
+            remote("RequestConsumeItem", {v})
+            task.wait(.1)
+        end
+    end
+
+    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+end}
+
+spawnedArmorsTools = Tabs.Items:CreateDropdown("ArmorsToolsList", {Title = "Armors/Weapons List", Values = {}, Multi = false, Default = "",})
+spawnedArmorsTools:OnChanged(function(Value)
+    selectedArmorTool = Value
+end)
+
+Tabs.Items:CreateButton{Title = "Teleport to Armor/Weapon", Description = "", Callback = function()
+    char:PivotTo(itemsFolder[selectedArmorTool]:GetPivot())
+end}
+Tabs.Items:CreateButton{Title = "Equip Armor/Weapon", Description = "", Callback = function()
+    local armorTool = itemsFolder:FindFirstChild(selectedArmorTool)
+
+    if armorTool then
+        char:PivotTo(armorTool:GetPivot())
+        task.wait(.2)
+        if armorTool:GetAttribute("Interaction") == "Armour" then
+            remote("RequestEquipArmour", {armorTool})
+        else
+            remote("RequestHotbarItem", {armorTool})
+        end
+        task.wait(.1)
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+    end
+end}
+
+spawnedItems = Tabs.Items:CreateDropdown("ItemsList", {Title = "Items List", Values = {}, Multi = false, Default = "",})
+spawnedItems:OnChanged(function(Value)
+    selectedItem = Value
+end)
+updateSpawnedItems()
+
+Tabs.Items:CreateButton{Title = "Teleport to Item", Description = "", Callback = function()
+    char:PivotTo(itemsFolder[selectedItem]:GetPivot())
+end}
+Tabs.Items:CreateButton{Title = "Store Item", Description = "", Callback = function()
+    local item = itemsFolder:FindFirstChild(selectedItem)
+
+    if item then
+        char:PivotTo(item:GetPivot())
+        task.wait(.2)
+        remote("RequestBagStoreItem", {getSack(), item})
+        task.wait(.1)
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+    end
+end}
+
+spawn(function()
+    while task.wait(1) do
+        updateEnemies()
+        updateSpawnedItems()
+    end
+end)
 inv.ChildAdded:Connect(updateWeapons)
 inv.ChildRemoved:Connect(updateWeapons)
 Window:SelectTab(1)
