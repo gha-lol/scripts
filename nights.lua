@@ -76,6 +76,38 @@ function removeTraps()
     end
 end
 
+function bringItem(item, pos, tentativas)
+    if tentativas > 2 then return end
+
+    local dragging = item:FindFirstChild("DraggingAttachment", true)
+    if dragging then
+        remote("RequestStartDraggingItem", {item})
+
+        local align = Instance.new("AlignPosition")
+        align.Parent = dragging.Parent
+        align.Mode = Enum.PositionAlignmentMode.OneAttachment
+        align.Attachment0 = dragging
+        align.Responsiveness = 99e99
+        align.MaxForce = 99e99
+        align.MaxVelocity = 99e99
+        align.MaxAxesForce = Vector3.new(999e999, 999e999, 999e999)
+        align.Position = pos
+
+        task.delay(.5, function()
+            remote("RequestStartDraggingItem", {item})
+        end)
+    else
+        local lastPos = char.HumanoidRootPart.CFrame
+        
+        char:PivotTo(item:GetPivot())
+        task.wait(.3)
+
+        char.HumanoidRootPart.CFrame = lastPos
+        print(tentativas)
+        if tentativas then tentativas += 1 bringItem(item, pos, tentativas) else bringItem(item, pos, 1) end
+    end
+end
+
 local spawnedArmorsTools
 local spawnedItems
 function updateSpawnedItems()
@@ -290,6 +322,21 @@ Tabs.Items:CreateButton{Title = "Store Item", Description = "", Callback = funct
         remote("RequestBagStoreItem", {getSack(), item})
         task.wait(.2)
         char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,10,0)
+    end
+end}
+Tabs.Items:CreateButton{Title = "Bring Item", Description = "", Callback = function()
+    local item = itemsFolder:FindFirstChild(selectedItem)
+        
+    if item then
+        bringItem(item, char.HumanoidRootPart.Position)
+    end
+end}
+Tabs.Items:CreateButton{Title = "Bring All Items", Description = "", Callback = function()
+    for i,v in pairs(itemsFolder:GetChildren()) do
+        if v.Name == selectedItem then
+            bringItem(v, char.HumanoidRootPart.Position)
+            task.wait(.2)
+        end
     end
 end}
 
