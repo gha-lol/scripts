@@ -184,7 +184,7 @@ autoUpCampfire:OnChanged(function()
     end
 
     pcall(function()
-        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,10,0)
     end)
 end)
 
@@ -214,10 +214,9 @@ Tabs.Items:CreateButton{Title = "Get All Lost Children", Description = "", Callb
             task.wait(.2)
             remote("RequestBagStoreItem", {getSack(), v})
             task.wait(.2)
-            char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
         end
     end
-    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,10,0)
 end}
 
 Tabs.Items:CreateButton{Title = "Open All Chests", Description = "", Callback = function()
@@ -242,7 +241,7 @@ Tabs.Items:CreateButton{Title = "Get All Ammo", Description = "", Callback = fun
         end
     end
 
-    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,10,0)
 end}
 
 Tabs.Items:CreateParagraph("Aligned Paragraph3", {Title = "Armors/Weapons Only", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
@@ -267,7 +266,7 @@ Tabs.Items:CreateButton{Title = "Equip Armor/Weapon", Description = "", Callback
             remote("RequestHotbarItem", {armorTool})
         end
         task.wait(.2)
-        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,10,0)
     end
 end}
 
@@ -290,7 +289,7 @@ Tabs.Items:CreateButton{Title = "Store Item", Description = "", Callback = funct
         task.wait(.2)
         remote("RequestBagStoreItem", {getSack(), item})
         task.wait(.2)
-        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+        char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,10,0)
     end
 end}
 
