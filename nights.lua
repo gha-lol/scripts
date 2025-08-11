@@ -98,6 +98,14 @@ function bringItem(item, pos, tentativas)
 
         task.delay(.5, function()
             remote("RequestStartDraggingItem", {item})
+            task.wait(3)
+            align.Responsiveness = 0
+            align.MaxForce = 0
+            align.MaxVelocity = 0
+            align.MaxAxesForce = Vector3.new(0,0,0)
+            align:Destroy()
+            task.wait(.5)
+            remote("StopDraggingItem", {item})
         end)
     end
 end
