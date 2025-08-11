@@ -295,6 +295,21 @@ Tabs.Items:CreateButton{Title = "Equip Armor/Weapon", Description = "", Callback
         char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,10,0)
     end
 end}
+Tabs.Items:CreateButton{Title = "Bring Armor/Weapon", Description = "", Callback = function()
+    local item = itemsFolder:FindFirstChild(selectedArmorTool)
+        
+    if item then
+        bringItem(item, char.HumanoidRootPart.Position)
+    end
+end}
+Tabs.Items:CreateButton{Title = "Bring All Armors/Weapons", Description = "", Callback = function()
+    for i,v in pairs(itemsFolder:GetChildren()) do
+        if v.Name == selectedArmorTool then
+            bringItem(v, char.HumanoidRootPart.Position)
+            task.wait(.1)
+        end
+    end
+end}
 
 Tabs.Items:CreateParagraph("Aligned Paragraph4", {Title = "Items Only", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
