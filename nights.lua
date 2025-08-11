@@ -187,6 +187,22 @@ autoUpCampfire:OnChanged(function()
     end)
 end)
 
+Tabs.Main:CreateParagraph("Aligned Paragraph3", {Title = "Kill Aura", Content = "Uses weapon selected on Auto Kill", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local killAuraToggle = Tabs.Main:CreateToggle("killAuraToggle", {Title = "Auto Kill", Default = false})
+killAuraToggle:OnChanged(function()
+    _G.katt = Options.killAuraToggle.Value
+    while _G.katt do task.wait()
+        for i,v in pairs(workspace.Characters:GetChildren()) do
+            local part = v.PrimaryPart or v:FindFirstChildOfClass("BasePart")
+            if part and plr:DistanceFromCharacter(v.Position) <= 50 then
+                remote("EquipItemHandle", {"FireAllClients", inv[selectedWeapon]})
+                remote("ToolDamageObject", {v, inv[selectedWeapon], "2_" .. tostring(plr.UserId), part.CFrame})
+            end
+        end
+    end
+end)
+
 
 -- ITEMS TAB
 
@@ -215,6 +231,8 @@ Tabs.Items:CreateButton{Title = "Get All Ammo", Description = "", Callback = fun
     char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
 end}
 
+Tabs.Items:CreateParagraph("Aligned Paragraph3", {Title = "Armors/Weapons Only", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
 spawnedArmorsTools = Tabs.Items:CreateDropdown("ArmorsToolsList", {Title = "Armors/Weapons List", Values = {}, Multi = false, Default = "",})
 spawnedArmorsTools:OnChanged(function(Value)
     selectedArmorTool = Value
@@ -238,6 +256,8 @@ Tabs.Items:CreateButton{Title = "Equip Armor/Weapon", Description = "", Callback
         char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
     end
 end}
+
+Tabs.Items:CreateParagraph("Aligned Paragraph4", {Title = "Items Only", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 spawnedItems = Tabs.Items:CreateDropdown("ItemsList", {Title = "Items List", Values = {}, Multi = false, Default = "",})
 spawnedItems:OnChanged(function(Value)
