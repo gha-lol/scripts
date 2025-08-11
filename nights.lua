@@ -209,7 +209,7 @@ end)
 
 Tabs.Items:CreateButton{Title = "Get All Lost Children", Description = "", Callback = function()
     for i,v in pairs(workspace.Characters:GetChildren()) do
-        if string.find(v.Name, "Lost Child" then
+        if string.find(v.Name, "Lost Child") then
             char:PivotTo(v:GetPivot())
             task.wait(.2)
             remote("RequestBagStoreItem", {getSack(), v})
