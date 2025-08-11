@@ -77,8 +77,11 @@ function removeTraps()
 end
 
 function bringItem(item, pos, tentativas)
-    if tentativas and tentativas > 2 then return end
-
+    local lastPos = char.HumanoidRootPart.CFrame
+    char:PivotTo(item:GetPivot())
+    task.wait(.1)
+    char.HumanoidRootPart.CFrame = lastPos
+    
     local dragging = item:FindFirstChild("DraggingAttachment", true)
     if dragging then
         remote("RequestStartDraggingItem", {item})
@@ -96,15 +99,6 @@ function bringItem(item, pos, tentativas)
         task.delay(.5, function()
             remote("RequestStartDraggingItem", {item})
         end)
-    else
-        local lastPos = char.HumanoidRootPart.CFrame
-        
-        char:PivotTo(item:GetPivot())
-        task.wait(.3)
-
-        char.HumanoidRootPart.CFrame = lastPos
-        print(tentativas)
-        if tentativas then tentativas += 1 bringItem(item, pos, tentativas) else bringItem(item, pos, 1) end
     end
 end
 
