@@ -77,7 +77,7 @@ function removeTraps()
 end
 
 function bringItem(item, pos, tentativas)
-    if tentativas > 2 then return end
+    if tentativas and tentativas > 2 then return end
 
     local dragging = item:FindFirstChild("DraggingAttachment", true)
     if dragging then
