@@ -117,6 +117,7 @@ end})
 
 local Input = Tabs.Main:CreateInput("InputDistance", {Title = "Type Distance", Default = tostring(killDistance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(Value)
     killDistance = Value
+    Slider:SetValue(Value)
 end})
 
 local autoKillToggle = Tabs.Main:CreateToggle("autoKillToggle", {Title = "Auto Kill", Default = false})
@@ -189,7 +190,7 @@ end)
 
 Tabs.Main:CreateParagraph("Aligned Paragraph3", {Title = "Kill Aura", Content = "Uses weapon selected on Auto Kill", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-local killAuraToggle = Tabs.Main:CreateToggle("killAuraToggle", {Title = "Auto Kill", Default = false})
+local killAuraToggle = Tabs.Main:CreateToggle("killAuraToggle", {Title = "Kill Aura", Default = false})
 killAuraToggle:OnChanged(function()
     _G.katt = Options.killAuraToggle.Value
     while _G.katt do task.wait()
@@ -205,6 +206,19 @@ end)
 
 
 -- ITEMS TAB
+
+Tabs.Items:CreateButton{Title = "Get All Lost Children", Description = "", Callback = function()
+    for i,v in pairs(workspace.Characters:GetChildren()) do
+        if string.find(v.Name, "Lost Child" then
+            char:PivotTo(v:GetPivot())
+            task.wait(.2)
+            remote("RequestBagStoreItem", {getSack(), v})
+            task.wait(.2)
+            char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+        end
+    end
+    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,4,0)
+end}
 
 Tabs.Items:CreateButton{Title = "Open All Chests", Description = "", Callback = function()
     for i,v in pairs(itemsFolder:GetChildren()) do
