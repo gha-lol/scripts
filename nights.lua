@@ -228,7 +228,7 @@ Tabs.Items:CreateButton{Title = "Open All Chests", Description = "", Callback = 
             task.wait(.2)
         end
     end
-    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,3,0)
+    char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,10,0)
 end}
 
 Tabs.Items:CreateButton{Title = "Get All Ammo", Description = "", Callback = function()
