@@ -9,6 +9,10 @@ local Tabs = {
     Items = Window:CreateTab{
         Title = "Items",
         Icon = "phosphor-users-bold"
+    },
+    Teleport = Window:CreateTab{
+        Title = "Teleport",
+        Icon = "phosphor-users-bold"
     }
 }
 local Options = Library.Options
@@ -355,6 +359,28 @@ Tabs.Items:CreateButton{Title = "Bring All Items", Description = "", Callback = 
             task.wait(.2)
         end
     end
+end}
+
+
+-- TELEPORT
+
+local selectedTp = "Stronghold"
+local teleDropdown
+teleDropdown = Tabs.Teleport:CreateDropdown("tpBruh", {Title = "Places", Values = {}, Multi = false, Default = selectedTp,})
+teleDropdown:OnChanged(function(Value)
+    selectedTp = Value
+end)
+
+Tabs.Teleport:CreateButton{Title = "Teleport to Place", Description = "", Callback = function()
+    char:PivotTo(workspace.Map.Landmarks[selectedTp]:GetPivot())
+end}
+
+Tabs.Teleport:CreateButton{Title = "Update Places", Description = "", Callback = function()
+    local tabb = {}
+    for i,v in pairs(workspace.Map.Landmarks:GetChildren()) do
+        table.insert(tabb, v.Name)
+    end
+    teleDropdown:SetValue(tabb)
 end}
 
 spawn(function()
