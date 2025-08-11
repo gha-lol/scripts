@@ -1,5 +1,5 @@
 local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
-local Window = Library:CreateWindow{Title = "noitesss", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(530, 325), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
+local Window = Library:CreateWindow{Title = "noitesss", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(830, 525), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
 
 local Tabs = {
     Main = Window:CreateTab{
@@ -21,7 +21,7 @@ local selectedWeapon = "Old Axe"
 local selectedEnemy = "Bunny"
 local selectedItem = ""
 local selectedArmorTool = ""
-local killDistance = 12
+local killDistance = 30
 local itemsFolder = workspace.Items
 
 
@@ -97,7 +97,9 @@ end
 
 -- CODIGO
 
-Weapons = Tabs.Main:CreateDropdown("ItemsList", {Title = "Weapon List", Values = {}, Multi = false, Default = "Old Axe",})
+Tabs.Main:CreateParagraph("Aligned Paragraph", {Title = "Auto Kill", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+Weapons = Tabs.Main:CreateDropdown("WeaponsList", {Title = "Weapon List", Values = {}, Multi = false, Default = "Old Axe",})
 Weapons:OnChanged(function(Value)
     selectedWeapon = Value
 end)
@@ -109,7 +111,11 @@ Enemies:OnChanged(function(Value)
 end)
 updateEnemies()
 
-local Slider = Tabs.Main:CreateSlider("Distance", {Title = "Distance", Description = "Distance from enemy", Default = killDistance, Min = 0, Max = 17, Rounding = 1, Callback = function(Value)
+local Slider = Tabs.Main:CreateSlider("Distance", {Title = "Distance", Description = "Distance from enemy", Default = killDistance, Min = 10, Max = 50, Rounding = 1, Callback = function(Value)
+    killDistance = Value
+end})
+
+local Input = Tabs.Main:CreateInput("InputDistance", {Title = "Type Distance", Default = tostring(killDistance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(Value)
     killDistance = Value
 end})
 
@@ -128,6 +134,8 @@ autoKillToggle:OnChanged(function()
         end)
     end
 end)
+
+Tabs.Main:CreateParagraph("Aligned Paragraph2", {Title = "Auto Campfire", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local autoUpCampfire = Tabs.Main:CreateToggle("autoUpCampfire", {Title = "Auto Upgrade Campfire", Default = false})
 autoUpCampfire:OnChanged(function()
@@ -179,7 +187,10 @@ autoUpCampfire:OnChanged(function()
     end)
 end)
 
-Tabs.Main:CreateButton{Title = "Open All Chests", Description = "", Callback = function()
+
+-- ITEMS TAB
+
+Tabs.Items:CreateButton{Title = "Open All Chests", Description = "", Callback = function()
     for i,v in pairs(itemsFolder:GetChildren()) do
         if string.find(v.Name, "Chest") and v:FindFirstChild("Main") then
             char:PivotTo(v:GetPivot())
@@ -190,8 +201,6 @@ Tabs.Main:CreateButton{Title = "Open All Chests", Description = "", Callback = f
     end
     char.HumanoidRootPart.CFrame = workspace.Map.Campground.MainFire.Center.CFrame * CFrame.new(0,3,0)
 end}
-
--- ITEMS TAB
 
 Tabs.Items:CreateButton{Title = "Get All Ammo", Description = "", Callback = function()
     for i,v in pairs(itemsFolder:GetChildren()) do
