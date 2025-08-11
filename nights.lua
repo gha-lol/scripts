@@ -196,7 +196,7 @@ killAuraToggle:OnChanged(function()
     while _G.katt do task.wait()
         for i,v in pairs(workspace.Characters:GetChildren()) do
             local part = v.PrimaryPart or v:FindFirstChildOfClass("BasePart")
-            if part and plr:DistanceFromCharacter(part.Position) <= 50 then
+            if part and plr:DistanceFromCharacter(part.Position) <= 50 and not string.find(v.Name, "Lost Child") then
                 remote("EquipItemHandle", {"FireAllClients", inv[selectedWeapon]})
                 remote("ToolDamageObject", {v, inv[selectedWeapon], "2_" .. tostring(plr.UserId), part.CFrame})
             end
