@@ -94,14 +94,18 @@ autofarmToggle:OnChanged(function()
                 plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,distance,0)
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
 
-                --[[if plr.Movesets.Moveset.Value ~= "None" then
+                if plr.Movesets.Moveset.Value ~= "None" then
                     if tick() - lastBreath > 1 then
                         lastBreath = tick()
                         rs.Events.Breathing:FireServer("BeginHamonBreathing")
                     end
 
-                    rs.Remotes.Attack:FireServer("Skill", 
-                end]]
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, game)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, game)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, game)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, game)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "B", false, game)
+                end
                 
                 rs.Remotes.Attack:FireServer("M1", plr.Movesets.Sword.Value, false)
             end)
