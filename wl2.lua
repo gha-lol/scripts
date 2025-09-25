@@ -133,6 +133,7 @@ questsDropdown:OnChanged(function(Value)
 end)
 
 local questTab = {}
+table.insert(questTab, "FinalSelection")
 for i,v in pairs(workspace.TalkNPC:GetChildren()) do
     if v:FindFirstChild("Info") and v.Info.Type.Value == "QuestGiver" then
         table.insert(questTab, v.Name)
