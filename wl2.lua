@@ -107,7 +107,7 @@ end)
 
 local questTab = {}
 for i,v in pairs(workspace.TalkNPC:GetChildren()) do
-    if v.Info.Type.Value == "QuestGiver" then
+    if v:FindFirstChild("Info") and v.Info.Type.Value == "QuestGiver" then
         table.insert(questTab, v.Name)
     end
 end
