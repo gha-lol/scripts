@@ -59,14 +59,8 @@ function noClip()
 end
 
 function charRespawn()
-    if not plr.Character then
-        plr.CharacterAdded:Wait()
-        task.wait(2)
-    elseif plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health <= 0 then
-        repeat task.wait() until plr.Character == nil
-        plr.CharacterAdded:Wait()
-        task.wait(2)
-    end
+    plr.CharacterAdded:Wait()
+    task.wait(2)
 end
 
 Tabs.Main:CreateInput("InputDistance", {Title = "Type Distance", Default = tostring(distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
