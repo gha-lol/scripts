@@ -81,8 +81,8 @@ autofarmToggle:OnChanged(function()
     _G.autofarm = Options.autofarmToggle.Value
     local mob
     
-    if _G.autofarm then noClip() end
-    
+    if _G.autofarm then spawn(function() noClip() end) end
+    print("e")
     while _G.autofarm do task.wait()
         if mob and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
             pcall(function()
