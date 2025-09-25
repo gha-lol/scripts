@@ -85,15 +85,15 @@ autofarmToggle:OnChanged(function()
     print("e")
     while _G.autofarm do task.wait()
         if mob and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
-            --pcall(function()
-                if plr.Character.EquippedItem.Value == "None" then
+            pcall(function()
+                if plr.Character.EquipedItem.Value == "None" then
                     rs.Remotes.Sheath:FireServer(plr.Character, "Equip")
                 end
                 
                 plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,-distance,0)
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
                 rs.Remotes.Attack:FireServer("M1", plr.Movesets.Sword.Value, false)
-            --end)
+            end)
         else
             mob = getMob()
         end
