@@ -58,7 +58,7 @@ function noClip()
 end
 
 Tabs.Main:CreateInput("InputDistance", {Title = "Type Distance", Default = tostring(distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(Value)
-    distance = value
+    distance = tonumber(value)
 end})
 
 local mobsDropdown = Tabs.Main:CreateDropdown("mobsDropdown", {Title = "Mob List", Values = {}, Multi = false, Default = "",})
