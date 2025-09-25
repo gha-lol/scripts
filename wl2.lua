@@ -23,7 +23,7 @@ local rs = game.ReplicatedStorage
 _G.autofarm = false
 _G.autoquest = false
 local moneyToGet = 0
-local distance = 8
+local distance = 10
 local selectedMob = "Demon"
 local selectedQuest = "Quest Dummy 1"
 
@@ -90,7 +90,7 @@ autofarmToggle:OnChanged(function()
                     rs.Remotes.Sheath:FireServer(plr.Character, "Equip")
                 end
                 
-                plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,-distance,0)
+                plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,distance,0)
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
                 rs.Remotes.Attack:FireServer("M1", plr.Movesets.Sword.Value, false)
             end)
