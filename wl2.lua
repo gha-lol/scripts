@@ -26,6 +26,7 @@ local moneyToGet = 0
 local distance = 10
 local selectedMob = "Demon"
 local selectedQuest = "Quest Dummy 1"
+local lastBreath = tick()
 
 
 -- MAIN
@@ -57,7 +58,7 @@ function noClip()
     end)
 end
 
-Tabs.Main:CreateInput("InputDistance", {Title = "Type Distance", Default = tostring(distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(Value)
+Tabs.Main:CreateInput("InputDistance", {Title = "Type Distance", Default = tostring(distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
     distance = tonumber(value)
 end})
 
@@ -82,7 +83,7 @@ autofarmToggle:OnChanged(function()
     local mob
     
     if _G.autofarm then spawn(function() noClip() end) end
-    print("e")
+    
     while _G.autofarm do task.wait()
         if mob and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
             pcall(function()
@@ -92,6 +93,16 @@ autofarmToggle:OnChanged(function()
                 
                 plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,distance,0)
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
+
+                --[[if plr.Movesets.Moveset.Value ~= "None" then
+                    if tick() - lastBreath > 1 then
+                        lastBreath = tick()
+                        rs.Events.Breathing:FireServer("BeginHamonBreathing")
+                    end
+
+                    rs.Remotes.Attack:FireServer("Skill", 
+                end]]
+                
                 rs.Remotes.Attack:FireServer("M1", plr.Movesets.Sword.Value, false)
             end)
         else
@@ -132,7 +143,7 @@ Tabs.Misc:CreateButton{Title = "Get All Items", Description = "", Callback = fun
     end
 end}
 
-Tabs.Misc:CreateInput("InputMoney", {Title = "Money Amount", Default = "0", Placeholder = "Number", Numeric = true, Finished = false, Callback = function(Value)
+Tabs.Misc:CreateInput("InputMoney", {Title = "Money Amount", Default = "0", Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
     moneyToGet = value
 end})
 
