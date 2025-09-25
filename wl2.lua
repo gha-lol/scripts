@@ -58,6 +58,17 @@ function noClip()
     end)
 end
 
+function charRespawn()
+    if not plr.Character then
+        plr.CharacterAdded:Wait()
+        task.wait(2)
+    elseif plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health <= 0 then
+        repeat task.wait() until plr.Character == nil
+        plr.CharacterAdded:Wait()
+        task.wait(2)
+    end
+end
+
 Tabs.Main:CreateInput("InputDistance", {Title = "Type Distance", Default = tostring(distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
     distance = tonumber(value)
 end})
@@ -85,32 +96,39 @@ autofarmToggle:OnChanged(function()
     if _G.autofarm then spawn(function() noClip() end) end
     
     while _G.autofarm do task.wait()
-        if mob and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
-            pcall(function()
-                if plr.Character.EquipedItem.Value == "None" then
-                    rs.Remotes.Sheath:FireServer(plr.Character, "Equip")
-                end
-                
-                plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,distance,0)
-                plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
-
-                if plr.Movesets.Moveset.Value ~= "None" then
-                    if tick() - lastBreath > 1 then
-                        lastBreath = tick()
-                        rs.Events.Breathing:FireServer("BeginHamonBreathing")
+        if plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character.Humanoid.Health > 0 then
+            if mob and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") and mob.Humanoid.Health > 0 then
+                pcall(function()
+                    if plr.Character.EquipedItem.Value == "None" then
+                        rs.Remotes.Sheath:FireServer(plr.Character, "Equip")
                     end
-
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, game)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, game)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, game)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, game)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, "B", false, game)
-                end
-                
-                rs.Remotes.Attack:FireServer("M1", plr.Movesets.Sword.Value, false)
-            end)
+                    if plr.Backpack:FindFirstChild(plr.Movesets.Moveset.Value) then
+                        plr.Character.Humanoid:EquipTool(plr.Backpack:FindFirstChild(plr.Movesets.Moveset.Value))
+                    end
+                    
+                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,distance,0)
+                    plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
+    
+                    if plr.Movesets.Moveset.Value ~= "None" then
+                        if tick() - lastBreath > 1 then
+                            lastBreath = tick()
+                            rs.Events.Breathing:FireServer("BeginHamonBreathing")
+                        end
+    
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, game)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "X", false, game)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "C", false, game)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "V", false, game)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "B", false, game)
+                    end
+                    
+                    rs.Remotes.Attack:FireServer("M1", plr.Movesets.Sword.Value, false)
+                end)
+            else
+                mob = getMob()
+            end
         else
-            mob = getMob()
+            charRespawn()
         end
     end
 end)
