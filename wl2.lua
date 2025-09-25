@@ -146,7 +146,7 @@ autoQuestToggle:OnChanged(function()
     _G.autoquest = Options.autoQuestToggle.Value
     
     while _G.autoquest do task.wait(.2)
-        if plr.Quest.QuestName.Value == "None" then
+        if plr.Quest.QuestName.Value == "None" or plr.Quest.QuestName.Value == "Final Selection Part 2" then
             rs.Events.QuestTake:FireServer(selectedQuest)
         end
     end
