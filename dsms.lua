@@ -138,11 +138,10 @@ function checkMerchant()
     for i,v in pairs(workspace:GetChildren()) do
         if string.find(v.Name, "Merchant") and v.Name ~= "Merchant" then
             returner = v
+            foundServer = true
             break
         end
     end
-    
-    foundServer = true
     
     return returner
 end
@@ -154,9 +153,9 @@ function selectEnter(button)
     game:GetService("VirtualInputManager"):SendKeyEvent(false, "Return", false, game)
 end
 
-local diagMenu = plr.PlayerGui.DialogueMain
+local diagMenu = plr.PlayerGui:WaitForChild("DialogueMain")
 
-local automerchantToggle = Tabs.Main:CreateToggle("automerchantToggle", {Title = "Auto Farm", Default = false})
+local automerchantToggle = Tabs.Main:CreateToggle("automerchantToggle", {Title = "Auto Merchant", Default = false})
 automerchantToggle:OnChanged(function()
     _G.automerchant = Options.automerchantToggle.Value
     local merchant = checkMerchant()
@@ -168,7 +167,7 @@ automerchantToggle:OnChanged(function()
             selectEnter(diagMenu["Dialogue"]["Answer1"])
             selectEnter(diagMenu["Dialogue2"]["Answer1"])
             selectEnter(diagMenu["Dialogue3"]["Answer1"])
-        elseif not foundServer then
+        elseif foundServer == false then
             for i,v in pairs(workspace.EventEncounters["Lost Woods1"]:GetChildren()) do
                 plr.Character.HumanoidRootPart.CFrame = v.CFrame
                 task.wait(.2)
