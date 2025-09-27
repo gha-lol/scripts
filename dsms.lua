@@ -19,7 +19,7 @@ local Options = Library.Options
 
 local plr = game.Players.LocalPlayer
 local liveFolder = workspace.Live
-local lastCheck = tick() - 10
+local lastCheck = nil
 local distance = 10
 
 _G.autofarm = false
@@ -83,7 +83,7 @@ autofarmToggle:OnChanged(function()
     if _G.autofarm then spawn(function() noClip() end) end
     
     while _G.autofarm do task.wait()
-        if tick() - lastCheck >= 2 then
+        if tick() - (lastCheck or 0) >= 2 then
             for i,v in pairs(game.Players:GetChildren()) do
                 if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Name ~= plr.Name then
                     if (workspace.Environment["Booskap\196\177s\196\177"].AlocButton.Position - v.Character.HumanoidRootPart.Position).Magnitude <= 450 then
