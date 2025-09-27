@@ -21,12 +21,24 @@ local plr = game.Players.LocalPlayer
 local liveFolder = workspace.Live
 local lastCheck = nil
 local distance = 10
-local m2 = false
+local foundServer = false
 
 _G.autofarm = false
+_G.automerchant = false
+
+if plr.PlayerGui.FirstMenu.Enabled == true then
+    game:GetService("GuiService").SelectedObject = plr.PlayerGui.FirstMenu.Play.PlayButton
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "Return", false, game)
+    task.wait()
+    game:GetService("VirtualInputManager"):SendKeyEvent(false, "Return", false, game)
+    
+    repeat task.wait(.1) until plr.Character
+end
 
 
--- MAIN
+-- =-=-=-=-=-= MAIN =-=-=-=-=-=
+
+-- AUTO ALOC
 
 function noClip()
     local stepped
@@ -72,13 +84,8 @@ function m1()
         plr.Character.Humanoid:EquipTool(nichirin)
     end
 
-    if m2 then
-        nichirin.RemoteEvent:FireServer("M2")
-        nichirin.RemoteEvent:FireServer("Hitbox", "", "M2")
-    else
-        nichirin.RemoteEvent:FireServer("M1")
-        nichirin.RemoteEvent:FireServer("Hitbox", 1, "M1")
-    end
+    nichirin.RemoteEvent:FireServer("M1")
+    nichirin.RemoteEvent:FireServer("Hitbox", 1, "M1")
 end
 
 local autofarmToggle = Tabs.Main:CreateToggle("autofarmToggle", {Title = "Auto Farm", Default = false})
@@ -122,7 +129,71 @@ autofarmToggle:OnChanged(function()
     end
 end)
 
-local m2Toggle = Tabs.Main:CreateToggle("m2Toggle", {Title = "Use M2", Default = false})
-m2Toggle:OnChanged(function()
-    m2 = Options.m2Toggle.Value
+
+-- AUTO MERCHANT
+
+function checkMerchant()
+    local returner
+    
+    for i,v in pairs(workspace:GetChildren()) do
+        if string.find(v.Name, "Merchant") and v.Name ~= "Merchant" then
+            returner = v
+            break
+        end
+    end
+    
+    foundServer = true
+    
+    return returner
+end
+
+function selectEnter(button)
+    game:GetService("GuiService").SelectedObject = button
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "Return", false, game)
+    task.wait()
+    game:GetService("VirtualInputManager"):SendKeyEvent(false, "Return", false, game)
+end
+
+local diagMenu = plr.PlayerGui.DialogueMain
+
+local automerchantToggle = Tabs.Main:CreateToggle("automerchantToggle", {Title = "Auto Farm", Default = false})
+automerchantToggle:OnChanged(function()
+    _G.automerchant = Options.automerchantToggle.Value
+    local merchant = checkMerchant()
+
+    while _G.automerchant do task.wait()
+        if merchant then
+            plr.Character.HumanoidRootPart.CFrame = merchant.HumanoidRootPart.CFrame
+            fireproximityprompt(merchant.Torso.ProximityPrompt)
+            selectEnter(diagMenu["Dialogue"]["Answer1"])
+            selectEnter(diagMenu["Dialogue2"]["Answer1"])
+            selectEnter(diagMenu["Dialogue3"]["Answer1"])
+        elseif not foundServer then
+            for i,v in pairs(workspace.EventEncounters["Lost Woods1"]:GetChildren()) do
+                plr.Character.HumanoidRootPart.CFrame = v.CFrame
+                task.wait(.2)
+            end
+            
+            merchant = checkMerchant()
+            
+            selectEnter(diagMenu["Dialogue"]["Answer2"])
+            selectEnter(diagMenu["Dialogue2"]["Answer2"])
+            selectEnter(diagMenu["Dialogue3"]["Answer2"])
+        else
+            if #game.Players:GetChildren() > 2 then
+                for i,v in pairs(game.Players:GetChildren()) do
+                    if v.Name ~= plr.Name then
+                        game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
+                        task.wait(10)
+                        break
+                    end
+                end
+            end
+            
+            for i=1,10 do
+                game:GetService("TeleportService"):Teleport(game.PlaceId)
+                task.wait(3)
+            end
+        end
+    end
 end)
