@@ -151,6 +151,7 @@ function selectEnter(button)
     game:GetService("VirtualInputManager"):SendKeyEvent(true, "Return", false, game)
     task.wait()
     game:GetService("VirtualInputManager"):SendKeyEvent(false, "Return", false, game)
+    task.wait(.1)
 end
 
 local diagMenu = plr.PlayerGui:WaitForChild("DialogueMain")
