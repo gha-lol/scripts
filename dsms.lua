@@ -172,8 +172,10 @@ automerchantToggle:OnChanged(function()
                 plr.Character.HumanoidRootPart.CFrame = v.CFrame
                 task.wait(.2)
             end
+            task.wait(.5)
             
             merchant = checkMerchant()
+            if not merchant then foundServer = true end
             
             selectEnter(diagMenu["Dialogue"]["Answer2"])
             selectEnter(diagMenu["Dialogue2"]["Answer2"])
