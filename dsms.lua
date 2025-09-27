@@ -170,7 +170,8 @@ automerchantToggle:OnChanged(function()
         elseif foundServer == false then
             for i,v in pairs(workspace.EventEncounters["Lost Woods1"]:GetChildren()) do
                 plr.Character.HumanoidRootPart.CFrame = v.CFrame
-                task.wait(.2)
+                task.wait(.5)
+                if v:FindFirstChild("Attachment") then break end
             end
             task.wait(.5)
             
@@ -181,7 +182,7 @@ automerchantToggle:OnChanged(function()
             selectEnter(diagMenu["Dialogue2"]["Answer2"])
             selectEnter(diagMenu["Dialogue3"]["Answer2"])
         else
-            if #game.Players:GetChildren() > 2 then
+            if #game.Players:GetChildren() > 1 then
                 for i,v in pairs(game.Players:GetChildren()) do
                     if v.Name ~= plr.Name then
                         game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
