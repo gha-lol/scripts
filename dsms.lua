@@ -159,6 +159,7 @@ local automerchantToggle = Tabs.Main:CreateToggle("automerchantToggle", {Title =
 automerchantToggle:OnChanged(function()
     _G.automerchant = Options.automerchantToggle.Value
     local merchant = checkMerchant()
+    local lastTp
 
     while _G.automerchant do task.wait()
         if merchant then
@@ -171,7 +172,11 @@ automerchantToggle:OnChanged(function()
             for i,v in pairs(workspace.EventEncounters["Lost Woods1"]:GetChildren()) do
                 plr.Character.HumanoidRootPart.CFrame = v.CFrame
                 task.wait(.5)
-                if v:FindFirstChild("Attachment") then break end
+                if lastTp then
+                    if lastTp:FindFirstChild("Attachment") then break end
+                else
+                    lastTp = v
+                end
             end
             task.wait(.5)
             
