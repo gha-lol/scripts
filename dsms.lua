@@ -53,8 +53,10 @@ function getMob()
     
     if liveFolder.BossMinions:FindFirstChildOfClass("Model") and checkAlive(liveFolder.BossMinions:FindFirstChildOfClass("Model")) then
         returner = liveFolder.BossMinions:FindFirstChildOfClass("Model")
+        distance = 7
     elseif liveFolder.Bosses:FindFirstChild("Akaza") and checkAlive(liveFolder.Bosses:FindFirstChild("Akaza")) then
         returner = liveFolder.Bosses:FindFirstChild("Akaza")
+        distance = 9
     end
     
     return returner
