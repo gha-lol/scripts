@@ -19,6 +19,7 @@ local Options = Library.Options
 
 local plr = game.Players.LocalPlayer
 local liveFolder = workspace.Live
+local lastCheck = tick() - 10
 local distance = 10
 
 _G.autofarm = false
@@ -82,6 +83,23 @@ autofarmToggle:OnChanged(function()
     if _G.autofarm then spawn(function() noClip() end) end
     
     while _G.autofarm do task.wait()
+        if tick() - lastCheck >= 2 then
+            for i,v in pairs(game.Players:GetChildren()) do
+                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                    if (workspace.Environment["Booskap\196\177s\196\177"].AlocButton.Position - v.HumanoidRootPart.Position).Magnitude <= 450 then
+                        _G.autofarm = false
+                        
+                        game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
+                        task.wait(10)
+                        for i=1,10 do
+                            game:GetService("TeleportService"):Teleport(game.PlaceId)
+                            task.wait(3)
+                        end
+                    end
+                end
+            end
+        end
+      
         if liveFolder.BossMinions:FindFirstChildOfClass("Model") == nil and liveFolder.Bosses:FindFirstChild("Akaza") == nil then
             plr.Character.HumanoidRootPart.CFrame = workspace.Environment["Booskap\196\177s\196\177"].AlocButton.CFrame
             task.wait(1)
