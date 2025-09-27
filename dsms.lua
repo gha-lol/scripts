@@ -21,6 +21,7 @@ local plr = game.Players.LocalPlayer
 local liveFolder = workspace.Live
 local lastCheck = nil
 local distance = 10
+local m2 = false
 
 _G.autofarm = false
 
@@ -70,9 +71,14 @@ function m1()
         nichirin = plr.Backpack:FindFirstChild("Nichirin") or plr.Backpack:FindFirstChild("Old Nichirin")
         plr.Character.Humanoid:EquipTool(nichirin)
     end
-    
-    nichirin.RemoteEvent:FireServer("M1")
-    nichirin.RemoteEvent:FireServer("Hitbox", 1, "M1")
+
+    if m2 then
+        nichirin.RemoteEvent:FireServer("M2")
+        nichirin.RemoteEvent:FireServer("Hitbox", "", "M2")
+    else
+        nichirin.RemoteEvent:FireServer("M1")
+        nichirin.RemoteEvent:FireServer("Hitbox", 1, "M1")
+    end
 end
 
 local autofarmToggle = Tabs.Main:CreateToggle("autofarmToggle", {Title = "Auto Farm", Default = false})
@@ -114,4 +120,9 @@ autofarmToggle:OnChanged(function()
             end
         end
     end
+end)
+
+local m2Toggle = Tabs.Main:CreateToggle("m2Toggle", {Title = "Use M2", Default = false})
+m2Toggle:OnChanged(function()
+    m2 = Options.m2Toggle.Value
 end)
