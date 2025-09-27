@@ -85,8 +85,8 @@ autofarmToggle:OnChanged(function()
     while _G.autofarm do task.wait()
         if tick() - lastCheck >= 2 then
             for i,v in pairs(game.Players:GetChildren()) do
-                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-                    if (workspace.Environment["Booskap\196\177s\196\177"].AlocButton.Position - v.HumanoidRootPart.Position).Magnitude <= 450 then
+                if v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Name ~= plr.Name then
+                    if (workspace.Environment["Booskap\196\177s\196\177"].AlocButton.Position - v.Character.HumanoidRootPart.Position).Magnitude <= 450 then
                         _G.autofarm = false
                         
                         game:GetService("StarterGui"):SetCore("PromptBlockPlayer", v)
