@@ -214,9 +214,10 @@ autosunToggle:OnChanged(function()
     if _G.autofarm then spawn(function() noClip() end) end
     
     while _G.autofarm do task.wait()
-        mob = workspace.Live.Npcs:FindFirstChild("MoonEnemy") or workspace.Live.Npcs:FindFirstChild("Shura")
+        mob = workspace.Live.Npcs:FindFirstChild("Shura") or workspace.Live.Npcs:FindFirstChild("MoonEnemy")
         if mob then
-            plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,9,0)
+            if v.Name == "Shura" then distance = 10 else distance = 9 end
+            plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,distance,0)
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
             
             m1()
