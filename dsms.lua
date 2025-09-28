@@ -26,7 +26,7 @@ local foundServer = false
 _G.autofarm = false
 _G.automerchant = false
 
-if plr.PlayerGui.FirstMenu.Enabled == true then
+if plr.PlayerGui:FindFirstChild("FirstMenu") and plr.PlayerGui.FirstMenu.Enabled == true then
     game:GetService("GuiService").SelectedObject = plr.PlayerGui.FirstMenu.Play.PlayButton
     game:GetService("VirtualInputManager"):SendKeyEvent(true, "Return", false, game)
     task.wait()
