@@ -216,7 +216,7 @@ autosunToggle:OnChanged(function()
     while _G.autofarm do task.wait()
         mob = workspace.Live.Npcs:FindFirstChild("Shura") or workspace.Live.Npcs:FindFirstChild("MoonEnemy")
         if mob then
-            if v.Name == "Shura" then distance = 10 else distance = 9 end
+            if plr.Character.Humanoid.Health <= 50 then distance = 30 elseif v.Name == "Shura" then distance = 10 else distance = 9 end
             plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,distance,0)
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
             
