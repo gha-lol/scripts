@@ -77,10 +77,10 @@ function getMob()
 end
 
 function m1()
-    local nichirin = plr.Character:FindFirstChild("Nichirin") or plr.Character:FindFirstChild("Old Nichirin")
+    local nichirin = plr.Character:FindFirstChild("Nichirin") or plr.Character:FindFirstChild("Old Nichirin") or plr.Character:FindFirstChild("Training Nichirin")
     
     if not nichirin then
-        nichirin = plr.Backpack:FindFirstChild("Nichirin") or plr.Backpack:FindFirstChild("Old Nichirin")
+        nichirin = plr.Backpack:FindFirstChild("Nichirin") or plr.Backpack:FindFirstChild("Old Nichirin") or plr.Character:FindFirstChild("Training Nichirin")
         plr.Character.Humanoid:EquipTool(nichirin)
     end
 
@@ -202,6 +202,24 @@ automerchantToggle:OnChanged(function()
                 game:GetService("TeleportService"):Teleport(game.PlaceId)
                 task.wait(3)
             end
+        end
+    end
+end)
+
+local autosunToggle = Tabs.Main:CreateToggle("autosunToggle", {Title = "Auto Sun", Default = false})
+autosunToggle:OnChanged(function()
+    _G.autofarm = Options.autosunToggle.Value
+    local mob
+    
+    if _G.autofarm then spawn(function() noClip() end) end
+    
+    while _G.autofarm do task.wait()
+        mob = workspace.Live.Npcs:FindFirstChild("MoonEnemy") or workspace.Live.Npcs:FindFirstChild("Shura")
+        if mob then
+            plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0,9,0)
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, mob.HumanoidRootPart.Position)
+            
+            m1()
         end
     end
 end)
