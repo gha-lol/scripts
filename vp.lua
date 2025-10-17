@@ -67,7 +67,7 @@ function useHaki()
     end
 end
 
-function wandereich()
+function wandereich(mob)
     useHaki()
     if plr.MissionData.Active.Value == false then
         pcall(function()
@@ -123,6 +123,7 @@ function wandereich()
             end
         end
     end
+    return mob
 end
 
 local autofarmToggle = Tabs.Main:CreateToggle("autofarmToggle", {Title = "Auto Farm", Default = false})
@@ -173,7 +174,7 @@ wanderToggle:OnChanged(function()
     local mob
     
     while _G.wanderFarm do task.wait()
-        wandereich()
+        mob = wandereich(mob)
     end
 end)
 
@@ -216,6 +217,7 @@ tudoToggle:OnChanged(function()
         _G.oreFarm = false
         -- COLOCAR OS TOGGLES NO OFF
     end
+    local mobb
     
     while _G.tudoAuto do task.wait()
         useHaki()
@@ -249,7 +251,7 @@ tudoToggle:OnChanged(function()
                 end
             end
         elseif _G.repTudo then
-            wandereich()
+            mobb = wandereich(mobb)
         end
     end
 end)
