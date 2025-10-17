@@ -63,6 +63,7 @@ end
 function useHaki()
     if plr.Character and not plr.Character:FindFirstChild("HakiActive") then
         serverSide({"Server", "Misc", "Haki", true})
+        task.wait(.2)
     end
 end
 
