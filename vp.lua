@@ -67,6 +67,64 @@ function useHaki()
     end
 end
 
+function wandereich()
+    useHaki()
+    if plr.MissionData.Active.Value == false then
+        pcall(function()
+            plr.Character.HumanoidRootPart.CFrame = workspace.Npc.Quest["Mission 3"].HumanoidRootPart.CFrame * CFrame.new(0,0,-1)
+            task.wait(.5)
+            
+            workspace.Npc.Quest["Mission 3"].ProximityPrompt:InputHoldBegin()
+            task.wait(workspace.Npc.Quest["Mission 3"].ProximityPrompt.HoldDuration)
+            workspace.Npc.Quest["Mission 3"].ProximityPrompt:InputHoldEnd()
+        end)
+        
+    else
+        if string.find(plr.MissionData["Quest Title"].Value, "Destroy Core") then
+            if workspace.Main.Wardenreich["Core Of Wardenreich"]:FindFirstChild("Core Of Wardenreich") then
+                pcall(function()
+                    plr.Character.HumanoidRootPart.CFrame = workspace.Main.Wardenreich["Core Of Wardenreich"]["Core Of Wardenreich"].HumanoidRootPart.CFrame * CFrame.new(0,0,1)
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                    
+                    attack()
+                end)
+            end
+            
+        elseif string.find(plr.MissionData["Quest Title"].Value, "Reiatsu Aura") then
+            plr.Character.HumanoidRootPart.CFrame = workspace.Main["Mission Quest 3"]["1"].Aura.CFrame
+            task.wait(.5)
+            
+            workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt:InputHoldBegin()
+            task.wait(workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt.HoldDuration)
+            workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt:InputHoldEnd()
+            task.wait(.1)
+            
+        elseif string.find(plr.MissionData["Quest Title"].Value, "Quincy") then
+            if mob and checkAlive(mob) and mob.Name == "Quincy [Lv.5000]" then
+                pcall(function()
+                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                    
+                    attack()
+                end)
+            else
+                mob = getMob(workspace.Main.Wardenreich.Quincy)
+            end
+        elseif string.find(plr.MissionData["Quest Title"].Value, "Uryu") then
+            if mob and checkAlive(mob) and mob.Name == "Uryu [Lv.???]" then
+                pcall(function()
+                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                    
+                    attack()
+                end)
+            else
+                mob = getMob(workspace.Main.Wardenreich.Uryu)
+            end
+        end
+    end
+end
+
 local autofarmToggle = Tabs.Main:CreateToggle("autofarmToggle", {Title = "Auto Farm", Default = false})
 autofarmToggle:OnChanged(function()
     _G.autofarm = Options.autofarmToggle.Value
@@ -115,64 +173,25 @@ wanderToggle:OnChanged(function()
     local mob
     
     while _G.wanderFarm do task.wait()
-        useHaki()
-        if plr.MissionData.Active.Value == false then
-            plr.Character.HumanoidRootPart.CFrame = workspace.Npc.Quest["Mission 3"].HumanoidRootPart.CFrame * CFrame.new(0,0,-1)
-            task.wait(.5)
-            
-            workspace.Npc.Quest["Mission 3"].ProximityPrompt:InputHoldBegin()
-            task.wait(workspace.Npc.Quest["Mission 3"].ProximityPrompt.HoldDuration)
-            workspace.Npc.Quest["Mission 3"].ProximityPrompt:InputHoldEnd()
-            
-        else
-            if string.find(plr.MissionData["Quest Title"].Value, "Destroy Core") then
-                if workspace.Main.Wardenreich["Core Of Wardenreich"]:FindFirstChild("Core Of Wardenreich") then
-                    pcall(function()
-                        plr.Character.HumanoidRootPart.CFrame = workspace.Main.Wardenreich["Core Of Wardenreich"]["Core Of Wardenreich"].HumanoidRootPart.CFrame * CFrame.new(0,0,1)
-                        plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                        
-                        attack()
-                    end)
-                end
-                
-            elseif string.find(plr.MissionData["Quest Title"].Value, "Reiatsu Aura") then
-                plr.Character.HumanoidRootPart.CFrame = workspace.Main["Mission Quest 3"]["1"].Aura.CFrame
-                task.wait(.5)
-                
-                workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt:InputHoldBegin()
-                task.wait(workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt.HoldDuration)
-                workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt:InputHoldEnd()
-                task.wait(.1)
-                
-            elseif string.find(plr.MissionData["Quest Title"].Value, "Quincy") then
-                if mob and checkAlive(mob) and mob.Name == "Quincy [Lv.5000]" then
-                    pcall(function()
-                        plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
-                        plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                        
-                        attack()
-                    end)
-                else
-                    mob = getMob(workspace.Main.Wardenreich.Quincy)
-                end
-            elseif string.find(plr.MissionData["Quest Title"].Value, "Uryu") then
-                if mob and checkAlive(mob) and mob.Name == "Uryu [Lv.???]" then
-                    pcall(function()
-                        plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
-                        plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                        
-                        attack()
-                    end)
-                else
-                    mob = getMob(workspace.Main.Wardenreich.Uryu)
-                end
-            end
-        end
+        wandereich()
     end
 end)
 
 
 --=-=-=-= TAB 2 -=-=-=-=--
+
+function killMob(mob, bool, cf)
+    if not cf then cf = CFrame.new(0,0,5) end
+    
+    repeat task.wait()
+        pcall(function()
+            plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * cf
+            plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+            
+            attack(bool)
+        end)
+    until mob == nil or mob and checkAlive(mob) == false
+end
 
 Tabs.Tudo:CreateToggle("dioTudoToggle", {Title = "Kill Dio", Default = false}):OnChanged(function()
     _G.dioTudo = Options.dioTudoToggle.Value
@@ -200,29 +219,11 @@ tudoToggle:OnChanged(function()
     
     while _G.tudoAuto do task.wait()
         useHaki()
-        if _G.dioTudo and workspace.Main["The World Over Heaven"]:FindFirstChildOfClass("Model") then
-            local mob = getMob(workspace.Main["The World Over Heaven"])
+        if _G.dioTudo and workspace.Main["The World Over Heaven"]:FindFirstChildOfClass("Model") and workspace.Main["The World Over Heaven"]:FindFirstChildOfClass("Model"):FindFirstChild("Humanoid") and workspace.Main["The World Over Heaven"]:FindFirstChildOfClass("Model").Humanoid.Health > 0 then
+            killMob(getMob(workspace.Main["The World Over Heaven"]), false)
             
-            repeat task.wait()
-                pcall(function()
-                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
-                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                    
-                    attack()
-                end)
-            until mob == nil or mob and checkAlive(mob) == false
-            
-        elseif _G.fallenTudo and workspace.Main["Fallen Angel"]:FindFirstChildOfClass("Model") then
-            local mob = getMob(workspace.Main["Fallen Angel"])
-            
-            repeat task.wait()
-                pcall(function()
-                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
-                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                    
-                    attack()
-                end)
-            until mob == nil or mob and checkAlive(mob) == false
+        elseif _G.fallenTudo and workspace.Main["Fallen Angel"]:FindFirstChildOfClass("Model") and workspace.Main["Fallen Angel"]:FindFirstChildOfClass("Model"):FindFirstChild("Humanoid") and workspace.Main["Fallen Angel"]:FindFirstChildOfClass("Model").Humanoid.Health > 0 then
+            killMob(getMob(workspace.Main["Fallen Angel"]), false)
             
         elseif _G.eclipseTudo and workspace.Map["Blood Island"].Spawned.Value then
             if plr.MissionData.Active.Value == false then
@@ -235,18 +236,10 @@ tudoToggle:OnChanged(function()
                     workspace.Npc.Schierke.ProximityPrompt:InputHoldEnd()
                     task.wait(.2)
                 end)
+                
             else
                 if string.find(plr.MissionData["Quest Title"].Value, "Guts") or string.find(plr.MissionData["Quest Title"].Value, "Falcon") then
-                    local mob = getMob(workspace.Main)
-            
-                    repeat task.wait()
-                        pcall(function()
-                            plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
-                            plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                            
-                            attack(true)
-                        end)
-                    until mob == nil or mob and checkAlive(mob) == false
+                    killMob(getMob(workspace.Main), true)
             
                 else
                     pcall(function()
@@ -256,9 +249,7 @@ tudoToggle:OnChanged(function()
                 end
             end
         elseif _G.repTudo then
-            -- script
+            wandereich()
         end
     end
 end)
-
--- LEMBRAR DE COLOCAR PCALL FUNCTION NO AUTO WANDENREICH
