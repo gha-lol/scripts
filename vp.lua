@@ -225,13 +225,15 @@ tudoToggle:OnChanged(function()
             
         elseif _G.eclipseTudo and workspace.Map["Blood Island"].Spawned.Value then
             if plr.MissionData.Active.Value == false then
-                plr.Character.HumanoidRootPart.CFrame = workspace.Npc.Schierke.HumanoidRootPart.CFrame * CFrame.new(0,0,-1)
-                task.wait(.5)
-                
-                workspace.Npc.Schierke.ProximityPrompt:InputHoldBegin()
-                task.wait(workspace.Npc.Schierke.ProximityPrompt.HoldDuration)
-                workspace.Npc.Schierke.ProximityPrompt:InputHoldEnd()
-                task.wait(.2)
+                pcall(function()
+                    plr.Character.HumanoidRootPart.CFrame = workspace.Npc.Schierke.HumanoidRootPart.CFrame * CFrame.new(0,0,-1)
+                    task.wait(.5)
+                    
+                    workspace.Npc.Schierke.ProximityPrompt:InputHoldBegin()
+                    task.wait(workspace.Npc.Schierke.ProximityPrompt.HoldDuration)
+                    workspace.Npc.Schierke.ProximityPrompt:InputHoldEnd()
+                    task.wait(.2)
+                end)
             else
                 if string.find(plr.MissionData["Quest Title"].Value, "Guts") or string.find(plr.MissionData["Quest Title"].Value, "Falcon") then
                     local mob = getMob(workspace.Main)
