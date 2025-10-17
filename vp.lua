@@ -5,11 +5,24 @@ local Tabs = {
     Main = Window:CreateTab{
         Title = "Main",
         Icon = "phosphor-users-bold"
+    },
+    Tudo = Window:CreateTab{
+        Title = "All-in-one",
+        Icon = "phosphor-users-bold"
     }
 }
 local Options = Library.Options
 
 local plr = game.Players.LocalPlayer
+
+if not _G.antiafkk then
+    _G.antiafkk = true
+    
+    game.Players.LocalPlayer.Idled:Connect(function()
+        game:GetService("VirtualUser"):CaptureController()
+        game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+    end)
+end
 
 function checkAlive(mob)
     local returner = false
@@ -24,13 +37,33 @@ function getMob(par)
     local getFrom = par or workspace.Main
     
     for i,v in pairs(getFrom:GetChildren()) do
-        if v:IsA("Model") and v.Name ~= plr.Name and checkAlive(v) then
+        if v:IsA("Model") and game.Players:FindFirstChild(v.Name) == nil and v.Name ~= "Dummy" and v.Name ~= "Dummy2" and checkAlive(v) and not string.find(v.Name, "'s Soldier") then
             returner = v
             break
         end
     end
     
     return returner
+end
+
+function serverSide(args)
+    game.ReplicatedStorage.Remotes.Serverside:FireServer(unpack(args))
+end
+
+function attack(bool)
+    serverSide({"Server", "Special", "M1s", 1, "Akaza"})
+    
+    if bool then
+        for i=1,5 do
+            serverSide({"Server", "Special", "Move"..tostring(i), nil, "Akaza", plr.Character.HumanoidRootPart.CFrame})
+        end
+    end
+end
+
+function useHaki()
+    if plr.Character and not plr.Character:FindFirstChild("HakiActive") then
+        serverSide({"Server", "Misc", "Haki", true})
+    end
 end
 
 local autofarmToggle = Tabs.Main:CreateToggle("autofarmToggle", {Title = "Auto Farm", Default = false})
@@ -43,7 +76,9 @@ autofarmToggle:OnChanged(function()
             pcall(function()
                 plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
                 plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                game.ReplicatedStorage.Remotes.Serverside:FireServer("Server", "Special", "M1s", 1, "Akaza")
+                
+                useHaki()
+                attack()
             end)
         else
             mob = getMob()
@@ -79,23 +114,30 @@ wanderToggle:OnChanged(function()
     local mob
     
     while _G.wanderFarm do task.wait()
+        useHaki()
         if plr.MissionData.Active.Value == false then
             plr.Character.HumanoidRootPart.CFrame = workspace.Npc.Quest["Mission 3"].HumanoidRootPart.CFrame * CFrame.new(0,0,-1)
             task.wait(.5)
+            
             workspace.Npc.Quest["Mission 3"].ProximityPrompt:InputHoldBegin()
             task.wait(workspace.Npc.Quest["Mission 3"].ProximityPrompt.HoldDuration)
             workspace.Npc.Quest["Mission 3"].ProximityPrompt:InputHoldEnd()
+            
         else
             if string.find(plr.MissionData["Quest Title"].Value, "Destroy Core") then
                 if workspace.Main.Wardenreich["Core Of Wardenreich"]:FindFirstChild("Core Of Wardenreich") then
-                    plr.Character.HumanoidRootPart.CFrame = workspace.Main.Wardenreich["Core Of Wardenreich"]["Core Of Wardenreich"].HumanoidRootPart.CFrame * CFrame.new(0,0,1)
-                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                    game.ReplicatedStorage.Remotes.Serverside:FireServer("Server", "Special", "M1s", 1, "Akaza")
+                    pcall(function()
+                        plr.Character.HumanoidRootPart.CFrame = workspace.Main.Wardenreich["Core Of Wardenreich"]["Core Of Wardenreich"].HumanoidRootPart.CFrame * CFrame.new(0,0,1)
+                        plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                        
+                        attack()
+                    end)
                 end
                 
             elseif string.find(plr.MissionData["Quest Title"].Value, "Reiatsu Aura") then
                 plr.Character.HumanoidRootPart.CFrame = workspace.Main["Mission Quest 3"]["1"].Aura.CFrame
                 task.wait(.5)
+                
                 workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt:InputHoldBegin()
                 task.wait(workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt.HoldDuration)
                 workspace.Main["Mission Quest 3"]["1"].Aura.ProximityPrompt:InputHoldEnd()
@@ -106,7 +148,8 @@ wanderToggle:OnChanged(function()
                     pcall(function()
                         plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
                         plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                        game.ReplicatedStorage.Remotes.Serverside:FireServer("Server", "Special", "M1s", 1, "Akaza")
+                        
+                        attack()
                     end)
                 else
                     mob = getMob(workspace.Main.Wardenreich.Quincy)
@@ -116,7 +159,8 @@ wanderToggle:OnChanged(function()
                     pcall(function()
                         plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
                         plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                        game.ReplicatedStorage.Remotes.Serverside:FireServer("Server", "Special", "M1s", 1, "Akaza")
+                        
+                        attack()
                     end)
                 else
                     mob = getMob(workspace.Main.Wardenreich.Uryu)
@@ -125,3 +169,92 @@ wanderToggle:OnChanged(function()
         end
     end
 end)
+
+
+--=-=-=-= TAB 2 -=-=-=-=--
+
+Tabs.Tudo:CreateToggle("dioTudoToggle", {Title = "Kill Dio", Default = false}):OnChanged(function()
+    _G.dioTudo = Options.dioTudoToggle.Value
+end)
+Tabs.Tudo:CreateToggle("fallenTudoToggle", {Title = "Kill Fallen Knight", Default = false}):OnChanged(function()
+    _G.fallenTudo = Options.fallenTudoToggle.Value
+end)
+Tabs.Tudo:CreateToggle("eclipseTudoToggle", {Title = "Auto Eclipse", Default = false}):OnChanged(function()
+    _G.eclipseTudo = Options.eclipseTudoToggle.Value
+end)
+Tabs.Tudo:CreateToggle("repTudoToggle", {Title = "Auto Wandereich", Default = false}):OnChanged(function()
+    _G.repTudo = Options.repTudoToggle.Value
+end)
+
+local tudoToggle = Tabs.Tudo:CreateToggle("tudoToggle", {Title = "Auto Everything", Default = false})
+tudoToggle:OnChanged(function()
+    _G.tudoAuto = Options.tudoToggle.Value
+    
+    if _G.tudoAuto then
+        _G.autofarm = false
+        _G.wanderFarm = false
+        _G.oreFarm = false
+        -- COLOCAR OS TOGGLES NO OFF
+    end
+    
+    while _G.tudoAuto do task.wait()
+        useHaki()
+        if _G.dioTudo and workspace.Main["The World Over Heaven"]:FindFirstChildOfClass("Model") then
+            local mob = getMob(workspace.Main["The World Over Heaven"])
+            
+            repeat task.wait()
+                pcall(function()
+                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                    
+                    attack()
+                end)
+            until mob == nil or mob and checkAlive(mob) == false
+            
+        elseif _G.fallenTudo and workspace.Main["Fallen Angel"]:FindFirstChildOfClass("Model") then
+            local mob = getMob(workspace.Main["Fallen Angel"])
+            
+            repeat task.wait()
+                pcall(function()
+                    plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
+                    plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                    
+                    attack()
+                end)
+            until mob == nil or mob and checkAlive(mob) == false
+            
+        elseif _G.eclipseTudo and workspace.Map["Blood Island"].Spawned.Value then
+            if plr.MissionData.Active.Value == false then
+                plr.Character.HumanoidRootPart.CFrame = workspace.Npc.Schierke.HumanoidRootPart.CFrame * CFrame.new(0,0,-1)
+                task.wait(.5)
+                
+                workspace.Npc.Schierke.ProximityPrompt:InputHoldBegin()
+                task.wait(workspace.Npc.Schierke.ProximityPrompt.HoldDuration)
+                workspace.Npc.Schierke.ProximityPrompt:InputHoldEnd()
+            else
+                if string.find(plr.MissionData["Quest Title"].Value, "Guts") or string.find(plr.MissionData["Quest Title"].Value, "Femto") then
+                    local mob = getMob(workspace.Main)
+            
+                    repeat task.wait()
+                        pcall(function()
+                            plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
+                            plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                            
+                            attack()
+                        end)
+                    until mob == nil or mob and checkAlive(mob) == false
+            
+                else
+                    pcall(function()
+                        plr.Character.Head:Destroy()
+                        plr.CharacterAdded:Wait()
+                    end)
+                end
+            end
+        elseif _G.repTudo then
+            -- script
+        end
+    end
+end)
+
+-- LEMBRAR DE COLOCAR PCALL FUNCTION NO AUTO WANDENREICH
