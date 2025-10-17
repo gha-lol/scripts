@@ -231,8 +231,9 @@ tudoToggle:OnChanged(function()
                 workspace.Npc.Schierke.ProximityPrompt:InputHoldBegin()
                 task.wait(workspace.Npc.Schierke.ProximityPrompt.HoldDuration)
                 workspace.Npc.Schierke.ProximityPrompt:InputHoldEnd()
+                task.wait(.2)
             else
-                if string.find(plr.MissionData["Quest Title"].Value, "Guts") or string.find(plr.MissionData["Quest Title"].Value, "Femto") then
+                if string.find(plr.MissionData["Quest Title"].Value, "Guts") or string.find(plr.MissionData["Quest Title"].Value, "Falcon") then
                     local mob = getMob(workspace.Main)
             
                     repeat task.wait()
@@ -240,7 +241,7 @@ tudoToggle:OnChanged(function()
                             plr.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0,0,5)
                             plr.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
                             
-                            attack()
+                            attack(true)
                         end)
                     until mob == nil or mob and checkAlive(mob) == false
             
