@@ -17,8 +17,8 @@ plr.PlayerGui.ChildAdded:Connect(function(es)
             table.clear(numOrder)
         else
             local cleaned = e.Holder.Main.DialogueText.ContentText:gsub("...", "")
-            local cleaned = e.Holder.Main.DialogueText.ContentText:gsub("..", "")
-            local cleaned = e.Holder.Main.DialogueText.ContentText:gsub(".", "")
+            local cleaned = cleaned:gsub("..", "")
+            local cleaned = cleaned:gsub(".", "")
             local num = tonumber(cleaned)
             
             if num then
