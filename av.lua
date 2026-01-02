@@ -2,7 +2,10 @@ local numOrder = {}
 local plr = game.Players.LocalPlayer
 
 plr.PlayerGui.ChildAdded:Connect(function(es)
-    if e.Name == "DialoguePopup" then
+    if es.Name == "DialoguePopup" then
+        repeat task.wait() until es.Holder.Main.DialogueText.ContentText ~= ""
+        local e = es:Clone()
+            
         if e.Holder.Main.DialogueText.ContentText == "I..." or e.Holder.Main.DialogueText.ContentText == "I" or e.Holder.Main.DialogueText.ContentText == "I.." or e.Holder.Main.DialogueText.ContentText == "I." then
             warn("No bruh")
             for i,v in pairs(numOrder) do
