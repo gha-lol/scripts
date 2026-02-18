@@ -81,6 +81,7 @@ function getTitan(bool)
             end
         else
             if checkAlive(v) and v.Name == "Titan" and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < closest then
+                closest = plr:DistanceFromCharacter(v.HumanoidRootPart.Position)
                 returner = v
             end
         end
