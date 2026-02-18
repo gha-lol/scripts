@@ -38,6 +38,11 @@ align.Responsiveness = 200
 align.Attachment0 = char.HumanoidRootPart.RootAttachment
 align.Attachment1 = part.Attachment
 
+plr.CharacterAdded:Connect(function()
+    char = plr.Character
+    align.Attachment0 = char:WaitForChild("HumanoidRootPart"):WaitForChild("RootAttachment")
+end)
+
 
 -- Functions
 
@@ -129,5 +134,8 @@ autofarmToggle:OnChanged(function()
     end
 end)
 
+Tabs.Main:CreateInput("InputSpeed", {Title = "Fly Speed", Default = tostring(align.MaxVelocity), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+    align.MaxVelocity = tonumber(value)
+end})
 
 -- MISC
