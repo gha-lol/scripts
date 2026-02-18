@@ -119,7 +119,7 @@ end)
 
 --Main
 
-if game.PlaceId ~= 6372690231 then
+if game.PlaceId ~= 6372960231 then
 
     titansFolder = workspace.Entities.Titans
         
