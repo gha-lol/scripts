@@ -100,20 +100,6 @@ function getTitan(bool)
 end
 
 
--- Hooks
-
-local namecall
-namecall = hookmetamethod(game,"__namecall",function(self,...)
-    local args = {...}
-    local method = getnamecallmethod():lower()
-    if self.Name == "GearSpinFinished" and _G.dupe and not checkcaller() then
-        warn("aaa")
-        return
-    end
-    return namecall(self,...)
-end)
-
-
 -- Script
 
 
@@ -166,7 +152,3 @@ end
 
 -- MISC
 
-local dupeToggle = Tabs.Misc:CreateToggle("dupeToggle", {Title = "Dupe", Default = false})
-dupeToggle:OnChanged(function()
-    _G.dupe = Options.dupeToggle.Value
-end)
