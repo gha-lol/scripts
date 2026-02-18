@@ -107,6 +107,7 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
     local args = {...}
     local method = getnamecallmethod():lower()
     if self.Name == "GearSpinFinished" and _G.dupe and not checkcaller() then
+        warn("aaa")
         return
     end
     return namecall(self,...)
