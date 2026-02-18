@@ -43,7 +43,7 @@ align.Attachment1 = part.Attachment
 
 function noClip()
     for i,v in pairs(plr.Character:GetDescendants()) do
-        if v:IsA("BasePart") and v.CanCollide = true then
+        if v:IsA("BasePart") and v.CanCollide == true then
             v.CanCollide = false
         end
     end
@@ -104,6 +104,7 @@ autofarmToggle:OnChanged(function()
     local titan
     
     while _G.autofarm do task.wait()
+        noClip()
         if titansFolder:FindFirstChild("Beast Titan") then
             
         elseif titansFolder:FindFirstChild("ColossalTitan") then
