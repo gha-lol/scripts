@@ -16,7 +16,7 @@ local Options = Library.Options
 local plr = game.Players.LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
 
-local titansFolder = workspace.Entities.Titans or nil
+local titansFolder
 
 _G.autofarm = false
 _G.dupe = false
@@ -117,41 +117,47 @@ end)
 -- Script
 
 
-local autofarmToggle = Tabs.Main:CreateToggle("autofarmToggle", {Title = "Auto Farm", Default = false})
-autofarmToggle:OnChanged(function()
-    _G.autofarm = Options.autofarmToggle.Value
-    
-    local titan
-    
-    while _G.autofarm do task.wait()
-        noClip()
-        if titansFolder:FindFirstChild("Beast Titan") then
-            
-        elseif titansFolder:FindFirstChild("ColossalTitan") then
-            killTitan(titansFolder.ColossalTitan, 700)
-            break
-        elseif titansFolder:FindFirstChild("Female Titan") then
-            killTitan(titansFolder["Female Titan"], 700)
-            break
-        else
-            if titan and checkAlive(titan) then
-                part.CFrame = titan.Head.CFrame * CFrame.new(0,10,0)
+--Main
+
+if game.PlaceId ~= 6372690231 then
+
+    titansFolder = workspace.Entities.Titans
+        
+    local autofarmToggle = Tabs.Main:CreateToggle("autofarmToggle", {Title = "Auto Farm", Default = false})
+    autofarmToggle:OnChanged(function()
+        _G.autofarm = Options.autofarmToggle.Value
+        
+        local titan
+        
+        while _G.autofarm do task.wait()
+            noClip()
+            if titansFolder:FindFirstChild("Beast Titan") then
                 
-                for i,v in pairs(getTitan(true)) do
-                    killTitan(v)
-                end
-                task.wait(.05)
+            elseif titansFolder:FindFirstChild("ColossalTitan") then
+                killTitan(titansFolder.ColossalTitan, 700)
+                break
+            elseif titansFolder:FindFirstChild("Female Titan") then
+                killTitan(titansFolder["Female Titan"], 700)
+                break
             else
-                titan = getTitan()
+                if titan and checkAlive(titan) then
+                    part.CFrame = titan.Head.CFrame * CFrame.new(0,10,0)
+                    
+                    for i,v in pairs(getTitan(true)) do
+                        killTitan(v)
+                    end
+                    task.wait(.05)
+                else
+                    titan = getTitan()
+                end
             end
         end
-    end
-end)
-
-Tabs.Main:CreateInput("InputSpeed", {Title = "Fly Speed", Default = tostring(align.MaxVelocity), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
-    align.MaxVelocity = tonumber(value)
-end})
-
+    end)
+    
+    Tabs.Main:CreateInput("InputSpeed", {Title = "Fly Speed", Default = tostring(align.MaxVelocity), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+        align.MaxVelocity = tonumber(value)
+    end})
+end
 
 -- MISC
 
