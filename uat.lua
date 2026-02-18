@@ -16,7 +16,7 @@ local Options = Library.Options
 local plr = game.Players.LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
 
-local titansFolder = workspace.Entities.Titans
+local titansFolder = workspace.Entities.Titans or nil
 
 _G.autofarm = false
 _G.dupe = false
