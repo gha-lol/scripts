@@ -19,6 +19,7 @@ local char = plr.Character or plr.CharacterAdded:Wait()
 local titansFolder = workspace.Entities.Titans
 
 _G.autofarm = false
+_G.dupe = false
 
 
 -- Essentials
@@ -100,6 +101,19 @@ function getTitan(bool)
 end
 
 
+-- Hooks
+
+local namecall
+namecall = hookmetamethod(game,"__namecall",function(self,...)
+    local args = {...}
+    local method = getnamecallmethod():lower()
+    if self.Name == "GearSpinFinished" and _G.dupe and not checkcaller() then
+        return
+    end
+    return namecall(self,...)
+end)
+
+
 -- Script
 
 
@@ -138,4 +152,10 @@ Tabs.Main:CreateInput("InputSpeed", {Title = "Fly Speed", Default = tostring(ali
     align.MaxVelocity = tonumber(value)
 end})
 
+
 -- MISC
+
+local dupeToggle = Tabs.Misc:CreateToggle("dupeToggle", {Title = "Dupe", Default = false})
+dupeToggle:OnChanged(function()
+    _G.dupe = Options.dupeToggle.Value
+end)
