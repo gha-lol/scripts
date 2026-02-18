@@ -114,7 +114,7 @@ autofarmToggle:OnChanged(function()
             killTitan(titansFolder["Female Titan"], 700)
             break
         else
-            if titan then
+            if titan and checkAlive(titan) then
                 part.CFrame = titan.Head.CFrame * CFrame.new(0,10,0)
                 
                 for i,v in pairs(getTitan(true)) do
