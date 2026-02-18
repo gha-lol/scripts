@@ -81,7 +81,7 @@ function getTitan(bool)
     
     for i,v in pairs(titansFolder:GetChildren()) do
         if bool then
-            if checkAlive(v) and v.Name == "Titan" and plr:DistanceFromCharacter(v.Head.Position) < 75 then
+            if checkAlive(v) and v.Name == "Titan" and plr:DistanceFromCharacter(v.Head.Position) < 100 then
                 table.insert(tab, v)
             end
         else
@@ -126,7 +126,7 @@ autofarmToggle:OnChanged(function()
                 for i,v in pairs(getTitan(true)) do
                     killTitan(v)
                 end
-                task.wait(.08)
+                task.wait(.05)
             else
                 titan = getTitan()
             end
