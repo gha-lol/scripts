@@ -36,7 +36,6 @@ local align = Instance.new("AlignPosition", part)
 align.MaxForce = 99e99
 align.MaxVelocity = 400
 align.Responsiveness = 200
-align.Attachment0 = char.HumanoidRootPart.RootAttachment
 align.Attachment1 = part.Attachment
 
 plr.CharacterAdded:Connect(function()
@@ -128,6 +127,11 @@ if game.PlaceId ~= 6372960231 then
         _G.autofarm = Options.autofarmToggle.Value
         
         local titan
+        if _G.autofarm then
+            align.Attachment0 = char.HumanoidRootPart.RootAttachment
+        else
+            align.Attachment0 = nil
+        end
         
         while _G.autofarm do task.wait()
             noClip()
