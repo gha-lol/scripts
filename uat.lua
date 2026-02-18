@@ -81,7 +81,7 @@ function getTitan(bool)
     
     for i,v in pairs(titansFolder:GetChildren()) do
         if bool then
-            if checkAlive(v) and v.Name == "Titan" and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < 75 then
+            if checkAlive(v) and v.Name == "Titan" and plr:DistanceFromCharacter(v.Head.Position) < 75 then
                 table.insert(tab, v)
             end
         else
