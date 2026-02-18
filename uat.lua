@@ -72,6 +72,7 @@ end
 function getTitan(bool)
     local returner
     local tab = {}
+    local closest = 999999999
     
     for i,v in pairs(titansFolder:GetChildren()) do
         if bool then
@@ -79,9 +80,8 @@ function getTitan(bool)
                 table.insert(tab, v)
             end
         else
-            if checkAlive(v) and v.Name == "Titan" then
+            if checkAlive(v) and v.Name == "Titan" and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < closest then
                 returner = v
-                break
             end
         end
     end
