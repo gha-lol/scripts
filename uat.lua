@@ -106,7 +106,7 @@ autofarmToggle:OnChanged(function()
             break
         else
             if titan then
-                part.CFrame = titan.Head.CFrame * CFrame.new(10)
+                part.CFrame = titan.Head.CFrame * CFrame.new(0,10,0)
                 
                 for i,v in pairs(getTitan(true)) do
                     killTitan(v)
