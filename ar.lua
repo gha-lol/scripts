@@ -45,16 +45,16 @@ end
 local namecall
 namecall = hookmetamethod(game,"__namecall",function(self,...)
     local args = {...}
-     local method = getnamecallmethod():lower()
-        
+    local method = getnamecallmethod():lower()
+    pcall(function()
     if not checkcaller() and self == Remotes.Unit.Lock and method == "fireserver" then
-        --pcall(function()
+        
             addList(args[1])
             print(args[1])
             print(lastUnits)
-        --end)
-        return namecall(self,...)
+        
     end
+    end)
     return namecall(self,...)
 end)
 
