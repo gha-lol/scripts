@@ -45,8 +45,9 @@ end
 local namecall
 namecall = hookmetamethod(game,"__namecall",function(self,...)
     local args = {...}
-    
-    if self.Name == "Lock" and not checkcaller() then
+     local method = getnamecallmethod():lower()
+        
+    if self.Name == "Lock" and method = "fireserver" and not checkcaller() then
         --pcall(function()
             addList(args[1])
             print(args[1])
