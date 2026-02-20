@@ -32,6 +32,7 @@ function addList(unit)
             for i=2, #lastUnits do
                 lastUnits[i-1] = lastUnits[i]
             end
+            lastUnits[6] = nil
         end
         
         updateAllDropdowns()
@@ -44,10 +45,12 @@ end
 local namecall
 namecall = hookmetamethod(game,"__namecall",function(self,...)
     local args = {...}
-    local method = getnamecallmethod():lower()
+    
     if self.Name == "Lock" and not checkcaller() then
         --pcall(function()
             addList(args[1])
+            print(args[1])
+            print(lastUnits)
         --end)
         return namecall(self,...)
     end
