@@ -49,7 +49,7 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
     pcall(function()
     if not checkcaller() and self == Remotes.Unit.Lock and method == "fireserver" then
         
-            addList(args[1])
+            --addList(args[1])
             print(args[1])
             print(lastUnits)
         
