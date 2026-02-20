@@ -26,7 +26,7 @@ end
 
 function addList(unit)
     if not table.find(lastUnits, unit) then
-        table.insert(unit, lastUnits)
+        table.insert(lastUnits, unit)
         
         if #lastUnits > 5 then
             for i=2, #lastUnits do
