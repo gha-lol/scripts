@@ -20,8 +20,8 @@ local selectedFodderFuse
 -- Functions
 
 function updateAllDropdowns()
-    fuseDropdown1:SetValues(lastUnits)
-    fuseDropdown2:SetValues(lastUnits)
+    fuseDropdown1.Values(lastUnits)
+    fuseDropdown2.Values(lastUnits)
 end
 
 function addList(unit)
