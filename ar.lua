@@ -77,10 +77,12 @@ Tabs.Main:CreateButton{Title = "Fuse Unit", Description = "", Callback = functio
     for i=1,999 do
         table.insert(tab, selectedFodderFuse)
     end
-    
-    for i=1,9999 do
-        Remotes.Unit.Fuse:FireServer(selectedMainFuse, tab)
-    end
+
+    spawn(function()
+        for i=1,9999 do
+            Remotes.Unit.Fuse:FireServer(selectedMainFuse, tab)
+        end
+    end)
 end}
 
 Tabs.Main:CreateButton{Title = "Update Recent Units Table", Description = "", Callback = function()
