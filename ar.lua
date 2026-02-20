@@ -20,13 +20,14 @@ local selectedFodderFuse
 -- Functions
 
 function updateAllDropdowns()
-    fuseDropdown1.Values(lastUnits)
-    fuseDropdown2.Values(lastUnits)
+    fuseDropdown1:SetValues(lastUnits)
+    fuseDropdown2:SetValues(lastUnits)
 end
 
 function addList(unit)
     if not table.find(lastUnits, unit) then
         table.insert(lastUnits, unit)
+        print("aa")
         
         --[[if #lastUnits > 5 then
             for i=2, #lastUnits do
@@ -49,7 +50,7 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
     pcall(function()
     if not checkcaller() and self == Remotes.Unit.Lock and method == "fireserver" then
         
-            addList(args[1])
+        addList(args[1])
         
     end
     end)
@@ -67,12 +68,12 @@ end}
 local parag
 parag = Tabs.Main:CreateParagraph("Aligned Paragraph", {Title = "Fuse Unit", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-fuseDropdown1 = Tabs.Main:CreateDropdown("fuseDropdown1", {Title = "Main Unit", Values = {}, Multi = false, Default = "",})
+fuseDropdown1 = Tabs.Main:CreateDropdown("fuseDropdown1", {Title = "Main Unit", Values = {}, Multi = false, Default = "a",})
 fuseDropdown1:OnChanged(function(Value)
     selectedMainFuse = Value
 end)
 
-fuseDropdown2 = Tabs.Main:CreateDropdown("fuseDropdown2", {Title = "Fodder Unit", Values = {}, Multi = false, Default = "",})
+fuseDropdown2 = Tabs.Main:CreateDropdown("fuseDropdown2", {Title = "Fodder Unit", Values = {}, Multi = false, Default = "a",})
 fuseDropdown2:OnChanged(function(Value)
     selectedFodderFuse = Value
 end)
