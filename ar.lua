@@ -48,8 +48,8 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
     local method = getnamecallmethod():lower()
     pcall(function()
         if not checkcaller() and self == Remotes.Unit.Lock and method == "fireserver" then
-            if not table.find(lastUnits, tostring(arg[1])) then
-                table.insert(lastUnits, tostring(arg[1]))
+            if not table.find(lastUnits, args[1]) then
+                table.insert(lastUnits, args[1])
             end
         end
     end)
