@@ -22,12 +22,13 @@ local selectedFodderFuse
 function updateAllDropdowns()
     fuseDropdown1:SetValues(lastUnits)
     fuseDropdown2:SetValues(lastUnits)
+
+    for i,v in pairs(lastUnits) do print(v)
 end
 
 function addList(unit)
     if not table.find(lastUnits, unit) then
-        table.insert(lastUnits, unit)
-        print("aa")
+        table.insert(lastUnits, tostring(unit))
         
         --[[if #lastUnits > 5 then
             for i=2, #lastUnits do
