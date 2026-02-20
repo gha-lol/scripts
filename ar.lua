@@ -23,7 +23,7 @@ function updateAllDropdowns()
     fuseDropdown1:SetValues(lastUnits)
     fuseDropdown2:SetValues(lastUnits)
 
-    for i,v in pairs(lastUnits) do print(v)
+    for i,v in pairs(lastUnits) do print(v) end
 end
 
 function addList(unit)
