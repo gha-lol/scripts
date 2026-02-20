@@ -22,8 +22,6 @@ local selectedFodderFuse
 function updateAllDropdowns()
     fuseDropdown1:SetValues(lastUnits)
     fuseDropdown2:SetValues(lastUnits)
-
-    for i,v in pairs(lastUnits) do print(v) end
 end
 
 function addList(unit)
@@ -49,22 +47,17 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
     local args = {...}
     local method = getnamecallmethod():lower()
     pcall(function()
-    if not checkcaller() and self == Remotes.Unit.Lock and method == "fireserver" then
-        print(args[1])
-        addList(tostring(args[1]))
-        
-    end
+        if not checkcaller() and self == Remotes.Unit.Lock and method == "fireserver" then
+            if not table.find(lastUnits, tostring(arg[1])) then
+                table.insert(lastUnits, tostring(arg[1]))
+            end
+        end
     end)
     return namecall(self,...)
 end)
 
 
 -- Main
-
-Tabs.Main:CreateButton{Title = "Clear Recent Units Table", Description = "", Callback = function()
-    lastUnits = {}
-    updateAllDropdowns()
-end}
 
 local parag
 parag = Tabs.Main:CreateParagraph("Aligned Paragraph", {Title = "Fuse Unit", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
@@ -88,4 +81,12 @@ Tabs.Main:CreateButton{Title = "Fuse Unit", Description = "", Callback = functio
     for i=1,9999 do
         Remotes.Unit.Fuse:FireServer(selectedMainFuse, tab)
     end
+end}
+
+Tabs.Main:CreateButton{Title = "Update Recent Units Table", Description = "", Callback = function()
+    updateAllDropdowns()
+end}
+Tabs.Main:CreateButton{Title = "Clear Recent Units Table", Description = "", Callback = function()
+    lastUnits = {}
+    updateAllDropdowns()
 end}
