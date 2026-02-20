@@ -62,12 +62,12 @@ end)
 local parag
 parag = Tabs.Main:CreateParagraph("Aligned Paragraph", {Title = "Fuse Unit", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-fuseDropdown1 = Tabs.Main:CreateDropdown("fuseDropdown1", {Title = "Main Unit", Values = {}, Multi = false, Default = "a",})
+fuseDropdown1 = Tabs.Main:CreateDropdown("fuseDropdown1", {Title = "Main Unit", Values = {}, Multi = false, Default = "a"})
 fuseDropdown1:OnChanged(function(Value)
     selectedMainFuse = Value
 end)
 
-fuseDropdown2 = Tabs.Main:CreateDropdown("fuseDropdown2", {Title = "Fodder Unit", Values = {}, Multi = false, Default = "a",})
+fuseDropdown2 = Tabs.Main:CreateDropdown("fuseDropdown2", {Title = "Fodder Unit", Values = {}, Multi = false, Default = "a"})
 fuseDropdown2:OnChanged(function(Value)
     selectedFodderFuse = Value
 end)
