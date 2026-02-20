@@ -84,6 +84,7 @@ Tabs.Main:CreateButton{Title = "Fuse Unit", Description = "", Callback = functio
 end}
 
 Tabs.Main:CreateButton{Title = "Update Recent Units Table", Description = "", Callback = function()
+    for i,v in pairs(unitsTable) do print(v) end
     updateAllDropdowns()
 end}
 Tabs.Main:CreateButton{Title = "Clear Recent Units Table", Description = "", Callback = function()
