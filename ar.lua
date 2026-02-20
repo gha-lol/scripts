@@ -28,12 +28,12 @@ function addList(unit)
     if not table.find(lastUnits, unit) then
         table.insert(lastUnits, unit)
         
-        if #lastUnits > 5 then
+        --[[if #lastUnits > 5 then
             for i=2, #lastUnits do
                 lastUnits[i-1] = lastUnits[i]
             end
             lastUnits[6] = nil
-        end
+        end]]
         
         updateAllDropdowns()
     end
@@ -50,8 +50,6 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
     if not checkcaller() and self == Remotes.Unit.Lock and method == "fireserver" then
         
             --addList(args[1])
-            print(args[1])
-            print(lastUnits)
         
     end
     end)
