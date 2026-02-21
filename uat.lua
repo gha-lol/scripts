@@ -99,6 +99,33 @@ function getTitan(bool)
     end
 end
 
+function killTitans(titan)
+    if titan and checkAlive(titan) then
+        part.CFrame = titan.Head.CFrame * CFrame.new(0,10,0)
+        
+        for i,v in pairs(getTitan(true)) do
+            killTitan(v)
+        end
+        task.wait(.05)
+    else
+        titan = getTitan()
+    end
+    return titan
+end
+
+function goToRockSafezone()
+    local partToTp = nil
+    local distance = 9999999999
+    
+    for i,v in pairs(workspace.RockSafezones:GetChildren()) do
+        if plr:DistanceFromCharacter(v.CantHook.Position) < distance then
+            distance = plr:DistanceFromCharacter(v.CantHook.Position)
+            partToTp = v.CantHook
+        end
+    end
+    
+    part.CFrame = partToTp.CFrame
+end
 
 -- Script
 
@@ -123,7 +150,15 @@ if game.PlaceId ~= 6372960231 then
         while _G.autofarm do task.wait()
             noClip()
             if titansFolder:FindFirstChild("Beast Titan") then
-                
+                if string.find(plr.PlayerGui.TitansLeftGui.TextLabel.Text, "Quick! ") then
+                    if titansFolder["Beast Titan"]:FindFirstChild("Humanoid") and titansFolder["Beast Titan"].Humanoid.Health > 0 and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1] and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1].Animation.AnimationId == "rbxassetid://13662705383" then
+                        goToRockSafezone()
+                    else
+                        titan = killTitans(titan)
+                    end
+                else
+                    killTitans(titansFolder["Beast Titan"])
+                end
             elseif titansFolder:FindFirstChild("ColossalTitan") then
                 killTitan(titansFolder.ColossalTitan, 700)
                 break
@@ -131,16 +166,7 @@ if game.PlaceId ~= 6372960231 then
                 killTitan(titansFolder["Female Titan"], 700)
                 break
             else
-                if titan and checkAlive(titan) then
-                    part.CFrame = titan.Head.CFrame * CFrame.new(0,10,0)
-                    
-                    for i,v in pairs(getTitan(true)) do
-                        killTitan(v)
-                    end
-                    task.wait(.05)
-                else
-                    titan = getTitan()
-                end
+                titan = killTitans(titan)
             end
         end
     end)
@@ -151,4 +177,3 @@ if game.PlaceId ~= 6372960231 then
 end
 
 -- MISC
-
