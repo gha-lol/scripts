@@ -154,7 +154,11 @@ if game.PlaceId ~= 6372960231 then
                     if titansFolder["Beast Titan"]:FindFirstChild("Humanoid") and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1] and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1].Animation.AnimationId == "rbxassetid://13662705383" then
                         goToRockSafezone()
                         local started = tick()
-                        repeat task.wait() noClip() until tick() - started >= 8.5
+                        repeat task.wait(.1) noClip()
+                            for i,v in pairs(getTitan(true, "Titan")) do
+                                killTitan(v)
+                            end
+                        until tick() - started >= 8.5
                     else
                         titan = killTitans(titan)
                     end
