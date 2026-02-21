@@ -153,7 +153,8 @@ if game.PlaceId ~= 6372960231 then
                 if string.find(plr.PlayerGui.TitansLeftGui.TextLabel.Text, "Quick! ") or string.find(plr.PlayerGui.TitansLeftGui.TextLabel.Text, "Hide behind") or string.find(plr.PlayerGui.TitansLeftGui.TextLabel.Text, "Titans Left") then
                     if titansFolder["Beast Titan"]:FindFirstChild("Humanoid") and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1] and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1].Animation.AnimationId == "rbxassetid://13662705383" then
                         goToRockSafezone()
-                        task.wait(9)
+                        local started = tick()
+                        repeat task.wait() noClip() until tick() - started >= 8.5
                     else
                         titan = killTitans(titan)
                     end
