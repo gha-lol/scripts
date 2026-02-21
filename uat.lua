@@ -74,18 +74,18 @@ function checkAlive(titan)
     end
 end
 
-function getTitan(bool)
+function getTitan(bool, whitelist)
     local returner
     local tab = {}
     local closest = 999999999
     
     for i,v in pairs(titansFolder:GetChildren()) do
         if bool then
-            if checkAlive(v) and v.Name == "Titan" and plr:DistanceFromCharacter(v.Head.Position) < 100 then
+            if checkAlive(v) and (v.Name == "Titan" or v.Name == whitelist) and plr:DistanceFromCharacter(v.Head.Position) < 100 then
                 table.insert(tab, v)
             end
         else
-            if checkAlive(v) and v.Name == "Titan" and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < closest then
+            if checkAlive(v) and (v.Name == "Titan" or v.Name == whitelist) and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < closest then
                 closest = plr:DistanceFromCharacter(v.HumanoidRootPart.Position)
                 returner = v
             end
@@ -99,12 +99,12 @@ function getTitan(bool)
     end
 end
 
-function killTitans(titan)
+function killTitans(titan, times)
     if titan and checkAlive(titan) then
         part.CFrame = titan.Head.CFrame * CFrame.new(0,10,0)
         
-        for i,v in pairs(getTitan(true)) do
-            killTitan(v)
+        for i,v in pairs(getTitan(true, titan.Name)) do
+            killTitan(v, times)
         end
         task.wait(.05)
     else
@@ -151,13 +151,14 @@ if game.PlaceId ~= 6372960231 then
             noClip()
             if titansFolder:FindFirstChild("Beast Titan") then
                 if string.find(plr.PlayerGui.TitansLeftGui.TextLabel.Text, "Quick! ") then
-                    if titansFolder["Beast Titan"]:FindFirstChild("Humanoid") and titansFolder["Beast Titan"].Humanoid.Health > 0 and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1] and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1].Animation.AnimationId == "rbxassetid://13662705383" then
+                    if titansFolder["Beast Titan"]:FindFirstChild("Humanoid") and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1] and titansFolder["Beast Titan"].Humanoid:GetPlayingAnimationTracks()[1].Animation.AnimationId == "rbxassetid://13662705383" then
                         goToRockSafezone()
+                        task.wait(5)
                     else
                         titan = killTitans(titan)
                     end
                 else
-                    killTitans(titansFolder["Beast Titan"])
+                    killTitans(titansFolder["Beast Titan"], 600)
                 end
             elseif titansFolder:FindFirstChild("ColossalTitan") then
                 killTitan(titansFolder.ColossalTitan, 700)
