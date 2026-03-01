@@ -1,8 +1,8 @@
 
 _G.testt = true
-_G.enem = ""
 
 local plr = game.Players.LocalPlayer
+local char = plr.Character or plr.CharacterAdded:Wait()
 
 local part = Instance.new("Part", workspace)
 part.Transparency = 1
