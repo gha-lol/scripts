@@ -37,7 +37,9 @@ while _G.testt do task.wait()
     noClip()
     for i,v in pairs(workspace.Live:GetChildren()) do
         if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.Position + Vector3.new(0,-8,0))
+            if plr:DistanceFromCharacter(v.HumanoidRootPart.Position) > 500 then
+                plr.Character.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.Position + Vector3.new(0,-8,0))
+            end
             part.CFrame = CFrame.new(v.HumanoidRootPart.Position + Vector3.new(0,-8,0)) * CFrame.Angles(math.rad(90),0,0)
             break
         end
