@@ -36,7 +36,7 @@ end
 while _G.testt do task.wait()
     noClip()
     for i,v in pairs(workspace.Live:GetChildren()) do
-        if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+        if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 and v.Name ~= "Server" then
             if plr:DistanceFromCharacter(v.HumanoidRootPart.Position) > 500 then
                 plr.Character.HumanoidRootPart.CFrame = CFrame.new(v.HumanoidRootPart.Position + Vector3.new(0,-8,0))
             end
