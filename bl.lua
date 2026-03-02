@@ -159,7 +159,7 @@ autofarmToggle:OnChanged(function()
     while _G.testt do task.wait()
         noClip()
         
-        if enemy and checkAlive(enemy) and string.find(v.Name, selectedTarget) then
+        if enemy and checkAlive(enemy) and string.find(enemy.Name, selectedTarget) then
             if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
                 char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
             end
