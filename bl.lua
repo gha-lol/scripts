@@ -3,23 +3,45 @@ local Window = Library:CreateWindow{Title = "bl", SubTitle = "by gha", TabWidth 
 
 local Tabs = {
     AutoFarm = Window:CreateTab{
-        Title = "Main",
+        Title = "AutoFarm",
         Icon = "phosphor-users-bold"
     },
-    AutoRaid = Window:CreateTab{
-        Title = "Misc",
+    Config = Window:CreateTab{
+        Title = "Config",
+        Icon = "phosphor-users-bold"
+    },
+    File = Window:CreateTab{
+        Title = "File",
         Icon = "phosphor-users-bold"
     }
 }
 local Options = Library.Options
+
+local Service = game:GetService("HttpService")
+local t = {
+    autofarm = false,
+    autoraid = false,
+    selectedTarget = "dahsdshaudahus",
+    keys = {
+        M2 = false,
+        E = false,
+        R = false,
+        Z = false,
+        X = false,
+        C = false,
+        V = false
+    }
+}
+
+if isfile("bl.json") then
+    t = Service:JSONDecode(readfile("bl.json"))
+end
 
 
 -- Variables
 
 local plr = game.Players.LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
-
-local selectedTarget = "ahsduahs9dauhshh"
 
 
 -- Important 
@@ -47,7 +69,7 @@ orient.Attachment1 = part.Attachment
 
 plr.CharacterAdded:Connect(function(cha)
     char = cha
-    if _G.testt then
+    if t.autofarm or t.autoraid then
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
     end
@@ -55,6 +77,10 @@ end)
 
 
 -- Functions
+
+function saveSettings()
+    writefile("bl.json", Service:JSONEncode(t))
+end
 
 function noClip()
     for i,v in pairs(plr.Character:GetDescendants()) do
@@ -88,7 +114,7 @@ function getEnemy(a)
     else
         for i,v in pairs(workspace.Live:GetChildren()) do
             if a.Selected then
-                if string.find(v.Name, selectedTarget) and checkAlive(v) then
+                if string.find(v.Name, t.selectedTarget) and checkAlive(v) then
                     returner = v
                     break
                 end
@@ -110,12 +136,12 @@ end
 
 -- AutoFarm Tab
 
-local autoraidToggle = Tabs.AutoFarm:CreateToggle("autoraidToggle", {Title = "Auto Raid", Default = false})
+local autoraidToggle = Tabs.AutoFarm:CreateToggle("autoraidToggle", {Title = "Auto Raid", Default = t.autoraid})
 autoraidToggle:OnChanged(function()
-    _G.autoraid = Options.autoraidToggle.Value
+    t.autoraid = Options.autoraidToggle.Value
         
     local enemy
-    if _G.autoraid then
+    if t.autoraid then
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
     else
@@ -123,9 +149,9 @@ autoraidToggle:OnChanged(function()
         orient.Attachment0 = nil
     end
     
-    if _G.testt then _G.testt = false end
+    if t.autofarm then t.autofarm = false end
     
-    while _G.autoraid do task.wait()
+    while t.autoraid do task.wait()
         noClip()
         
         if enemy and checkAlive(enemy) then
@@ -141,12 +167,12 @@ autoraidToggle:OnChanged(function()
     end
 end)
 
-local autofarmToggle = Tabs.AutoFarm:CreateToggle("autofarmToggle", {Title = "Auto Farm Selected", Default = false})
+local autofarmToggle = Tabs.AutoFarm:CreateToggle("autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm})
 autofarmToggle:OnChanged(function()
-    _G.testt = Options.autofarmToggle.Value
+    t.autofarm = Options.autofarmToggle.Value
         
     local enemy
-    if _G.testt then
+    if t.autofarm then
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
     else
@@ -154,12 +180,12 @@ autofarmToggle:OnChanged(function()
         orient.Attachment0 = nil
     end
     
-    if _G.autoraid then _G.autoraid = false end
+    if t.autoraid then t.autoraid = false end
     
-    while _G.testt do task.wait()
+    while t.autofarm do task.wait()
         noClip()
         
-        if enemy and checkAlive(enemy) and string.find(enemy.Name, selectedTarget) then
+        if enemy and checkAlive(enemy) and string.find(enemy.Name, t.selectedTarget) then
             if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
                 char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
             end
@@ -172,9 +198,9 @@ autofarmToggle:OnChanged(function()
     end
 end)
 
-selectDropdown = Tabs.AutoFarm:CreateDropdown("selectDropdown", {Title = "Target", Values = {}, Multi = false, Default = ""})
+selectDropdown = Tabs.AutoFarm:CreateDropdown("selectDropdown", {Title = "Target", Values = {}, Multi = false, Default = t.selectedTarget})
 selectDropdown:OnChanged(function(Value)
-    selectedTarget = Value
+    t.selectedTarget = Value
 end)
 selectDropdown:SetValues(getEnemy({All = true}))
 
@@ -183,4 +209,18 @@ Tabs.AutoFarm:CreateButton{Title = "Update Target List", Description = "", Callb
 end}
 
 
--- AutoRaid Tab
+-- Config
+
+for i,v in pairs(t.keys) do
+    local key = Tabs.Config:CreateToggle("key"..tostring(i), {Title = "Use "..tostring(i), Default = v})
+    key:OnChanged(function()
+        t.keys[i] = Options["key"..tostring(i)].Value
+    end)
+end
+
+
+-- File
+
+Tabs.File:CreateButton{Title = "Save Config", Description = "", Callback = function()
+    saveSettings()
+end}
