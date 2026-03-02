@@ -197,12 +197,11 @@ autoraidToggle:OnChanged(function()
     if t.autoraid then
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
+        if t.autofarm then t.autofarm = false end
     else
         align.Attachment0 = nil
         orient.Attachment0 = nil
     end
-    
-    if t.autofarm then t.autofarm = false end
     
     autofarm("autoraid", true, {})
 end)
@@ -215,12 +214,11 @@ autofarmToggle:OnChanged(function()
     if t.autofarm then
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
+        if t.autoraid then t.autoraid = false end
     else
         align.Attachment0 = nil
         orient.Attachment0 = nil
     end
-    
-    if t.autoraid then t.autoraid = false end
     
     autofarm("autofarm", false, {Selected = true})
 end)
