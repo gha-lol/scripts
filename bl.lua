@@ -1,10 +1,10 @@
-if _G.tickLoads then
+--[[if _G.tickLoads then
     if tick() - _G.tickLoads < 10 then
         return
     end
 else
     _G.tickLoads = tick()
-end
+end]]
 
 local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
 local Window = Library:CreateWindow{Title = "bl", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(1000, 750), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
@@ -157,7 +157,7 @@ function autofarm(bool, ignoreName, tab)
     while t[bool] do task.wait()
         if bool == "autoraid" and plr.PlayerGui:FindFirstChild("raidcomplete") then
             task.wait(5)
-            queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
+            queueonteleport('if _G.tickLoads then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
             game.ReplicatedStorage.requests.character.retryraid:FireServer()
             task.wait(20)
         end
