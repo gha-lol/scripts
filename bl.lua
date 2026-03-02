@@ -136,7 +136,7 @@ autoraidToggle:OnChanged(function()
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0)) * CFrame.Angles(math.rad(90),0,0)
             plr.Character:WaitForChild("client_character_controller"):WaitForChild("M1"):FireServer(true,false)
         else
-            enemy = getEnemy()
+            enemy = getEnemy({})
         end
     end
 end)
