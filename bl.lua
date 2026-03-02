@@ -151,7 +151,7 @@ function autofarm(bool, ignoreName, tab)
             task.wait(5)
             queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
             game.ReplicatedStorage.requests.character.retryraid:FireServer()
-            task.wait(5)
+            task.wait(20)
         end
         
         if not workspace.Effects:FindFirstChild("."..plr.Name.."'s Stand") then
