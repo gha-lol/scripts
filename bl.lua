@@ -44,7 +44,7 @@ local plr = game.Players.LocalPlayer
 local char = plr.Character
 
 if char == nil and plr.PlayerGui:FindFirstChild("Main Menu") then
-    game:GetService("GuiService").SelectedObject = plr.PlayerGui["Main Menu"].Buttons["Quick Play"]
+    game:GetService("GuiService").SelectedObject = plr.PlayerGui["Main Menu"].Buttons:WaitForChild("Quick Play")
     game:GetService("VirtualInputManager"):SendKeyEvent(true, "Return", false, game)
     task.wait()
     game:GetService("VirtualInputManager"):SendKeyEvent(false, "Return", false, game)
