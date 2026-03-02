@@ -162,7 +162,7 @@ function autofarm(bool, ignoreName, tab)
             task.wait(20)
         end
         
-        if not workspace.Effects:FindFirstChild("."..plr.Name.."'s Stand") or not char:FindFirstChild("Stand_Weapon") then
+        if not workspace.Effects:FindFirstChild("."..plr.Name.."'s Stand") and not char:FindFirstChild("Stand_Weapon") then
             char["client_character_controller"].SummonStand:FireServer()
             task.wait()
         end
