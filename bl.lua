@@ -79,7 +79,7 @@ function getEnemy(a)
         local aa = {}
         
         for i,v in pairs(workspace.Live:GetChildren()) do
-            if not table.find(aa, v.Name:sub(1, -7)) and not string.find(v.Name, "entity clone") and not game.Players:FindFirstChild(v.Name) and not v.Name == "Server" then
+            if not table.find(aa, v.Name:sub(1, -7)) and not string.find(v.Name, "entity clone") and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" then
                 table.insert(aa, v.Name:sub(1, -7))
             end
         end
@@ -93,7 +93,7 @@ function getEnemy(a)
                     break
                 end
             else
-                if checkAlive(v) and not game.Players:FindFirstChild(v.Name) and not v.Name == "Server" then
+                if checkAlive(v) and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" then
                     returner = v
                     break
                 end
