@@ -186,6 +186,7 @@ autoraidToggle:OnChanged(function()
     
     autofarm("autoraid", true, {})
 end)
+autoraidToggle:SetValue(t.autoraid)
 
 local autofarmToggle = Tabs.AutoFarm:CreateToggle("autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm})
 autofarmToggle:OnChanged(function()
@@ -204,6 +205,7 @@ autofarmToggle:OnChanged(function()
     
     autofarm("autofarm", false, {Selected = true})
 end)
+autofarmToggle:SetValue(t.autofarm)
 
 selectDropdown = Tabs.AutoFarm:CreateDropdown("selectDropdown", {Title = "Target", Values = {}, Multi = false, Default = t.selectedTarget})
 selectDropdown:OnChanged(function(Value)
