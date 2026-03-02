@@ -41,7 +41,24 @@ end
 -- Variables
 
 local plr = game.Players.LocalPlayer
-local char = plr.Character or plr.CharacterAdded:Wait()
+local char = plr.Character
+
+plr.CharacterAdded:Connect(function(cha)
+    char = cha
+    if t.autofarm or t.autoraid then
+        align.Attachment0 = char.HumanoidRootPart.RootAttachment
+        orient.Attachment0 = char.HumanoidRootPart.RootAttachment
+    end
+end)
+
+if char == nil and plr.PlayerGui:FindFirstChild("Main Menu") then
+    game:GetService("GuiService").SelectedObject = plr.PlayerGui["Main Menu"].Buttons["Quick Play"]
+    game:GetService("VirtualInputManager"):SendKeyEvent(true, "Return", false, game)
+    task.wait()
+    game:GetService("VirtualInputManager"):SendKeyEvent(false, "Return", false, game)
+    
+    repeat task.wait(.1) until char
+end
 
 
 -- Important 
@@ -66,14 +83,6 @@ orient.MaxTorque = math.huge
 orient.Responsiveness = 200
 orient.Attachment0 = char.HumanoidRootPart.RootAttachment
 orient.Attachment1 = part.Attachment
-
-plr.CharacterAdded:Connect(function(cha)
-    char = cha
-    if t.autofarm or t.autoraid then
-        align.Attachment0 = char.HumanoidRootPart.RootAttachment
-        orient.Attachment0 = char.HumanoidRootPart.RootAttachment
-    end
-end)
 
 
 -- Functions
