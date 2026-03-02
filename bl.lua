@@ -145,6 +145,12 @@ function autofarm(bool, ignoreName, tab)
     local enemy
   
     while t[bool] do task.wait()
+        if bool == "autoraid" and plr.PlayerGui:FindFirstChild("raidcomplete") then
+            queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
+            game.ReplicatedStorage.requests.character.retryraid:FireServer()
+            task.wait(5)
+        end
+        
         if not workspace.Effects:FindFirstChild("."..plr.Name.."'s Stand") then
             char["client_character_controller"].SummonStand:FireServer()
             task.wait()
@@ -197,7 +203,6 @@ autoraidToggle:OnChanged(function()
     
     autofarm("autoraid", true, {})
 end)
-autoraidToggle:SetValue(t.autoraid)
 
 local autofarmToggle = Tabs.AutoFarm:CreateToggle("autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm})
 autofarmToggle:OnChanged(function()
@@ -216,7 +221,6 @@ autofarmToggle:OnChanged(function()
     
     autofarm("autofarm", false, {Selected = true})
 end)
-autofarmToggle:SetValue(t.autofarm)
 
 selectDropdown = Tabs.AutoFarm:CreateDropdown("selectDropdown", {Title = "Target", Values = {}, Multi = false, Default = t.selectedTarget})
 selectDropdown:OnChanged(function(Value)
@@ -244,3 +248,9 @@ end
 Tabs.File:CreateButton{Title = "Save Config", Description = "", Callback = function()
     saveSettings()
 end}
+
+
+-- Activating Toggles Etc
+task.wait()
+autofarmToggle:SetValue(t.autofarm)
+autoraidToggle:SetValue(t.autoraid)
