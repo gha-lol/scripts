@@ -134,6 +134,11 @@ function autofarm(bool, ignoreName, tab)
     local enemy
   
     while t[bool] do task.wait()
+        if not workspace.Effects:FindFirstChild("."..plr.Name.."'s Stand") then
+            char["client_character_controller"].SummonStand:FireServer()
+            task.wait()
+        end
+
         noClip()
         
         if enemy and checkAlive(enemy) and (ignoreName or string.find(enemy.Name, t.selectedTarget)) then
