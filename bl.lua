@@ -45,10 +45,12 @@ local char = plr.Character
 
 if char == nil and plr.PlayerGui:FindFirstChild("Main Menu") then
     repeat task.wait(.2)
-        game:GetService("GuiService").SelectedObject = plr.PlayerGui["Main Menu"].Buttons:WaitForChild("Quick Play")
-        game:GetService("VirtualInputManager"):SendKeyEvent(true, "Return", false, game)
-        task.wait()
-        game:GetService("VirtualInputManager"):SendKeyEvent(false, "Return", false, game)
+        pcall(function()
+            game:GetService("GuiService").SelectedObject = plr.PlayerGui["Main Menu"].Buttons:WaitForChild("Quick Play")
+            game:GetService("VirtualInputManager"):SendKeyEvent(true, "Return", false, game)
+            task.wait()
+            game:GetService("VirtualInputManager"):SendKeyEvent(false, "Return", false, game)
+        end)
     until plr.Character
 
     char = plr.Character
