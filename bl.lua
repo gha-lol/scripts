@@ -176,6 +176,7 @@ selectDropdown = Tabs.AutoFarm:CreateDropdown("selectDropdown", {Title = "Target
 selectDropdown:OnChanged(function(Value)
     selectedTarget = Value
 end)
+selectDropdown:SetValues(getEnemy({All = true}))
 
 Tabs.AutoFarm:CreateButton{Title = "Update Target List", Description = "", Callback = function()
     selectDropdown:SetValues(getEnemy({All = true}))
