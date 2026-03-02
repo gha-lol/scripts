@@ -148,7 +148,7 @@ function autofarm(bool, ignoreName, tab)
   
     while t[bool] do task.wait()
         if bool == "autoraid" and plr.PlayerGui:FindFirstChild("raidcomplete") then
-            task.wait(2)
+            task.wait(5)
             queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
             game.ReplicatedStorage.requests.character.retryraid:FireServer()
             task.wait(5)
