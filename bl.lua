@@ -130,6 +130,34 @@ function getEnemy(a)
     return returner
 end
 
+function autofarm(bool, ignoreName, tab)
+    local enemy
+  
+    while t[bool] do task.wait()
+        noClip()
+        
+        if enemy and checkAlive(enemy) and [ignoreName or string.find(enemy.Name, t.selectedTarget)] then
+            if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
+                char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
+            end
+            
+            part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0)) * CFrame.Angles(math.rad(90),0,0)
+            
+            for i,v in pairs(t.keys) do
+                if i ~= "M2" and v then
+                    char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                elseif i == "M2" and v then
+                    char["client_character_controller"]["M2"]:FireServer(true,false)
+                end
+            end
+            
+            char["client_character_controller"]["M1"]:FireServer(true,false)
+        else
+            enemy = getEnemy(tab)
+        end
+    end
+end
+
 
 -- Script
 
@@ -151,20 +179,7 @@ autoraidToggle:OnChanged(function()
     
     if t.autofarm then t.autofarm = false end
     
-    while t.autoraid do task.wait()
-        noClip()
-        
-        if enemy and checkAlive(enemy) then
-            if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
-                char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
-            end
-            
-            part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0)) * CFrame.Angles(math.rad(90),0,0)
-            plr.Character:WaitForChild("client_character_controller"):WaitForChild("M1"):FireServer(true,false)
-        else
-            enemy = getEnemy({})
-        end
-    end
+    autofarm("autoraid", true, {})
 end)
 
 local autofarmToggle = Tabs.AutoFarm:CreateToggle("autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm})
@@ -182,20 +197,7 @@ autofarmToggle:OnChanged(function()
     
     if t.autoraid then t.autoraid = false end
     
-    while t.autofarm do task.wait()
-        noClip()
-        
-        if enemy and checkAlive(enemy) and string.find(enemy.Name, t.selectedTarget) then
-            if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
-                char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
-            end
-            
-            part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0)) * CFrame.Angles(math.rad(90),0,0)
-            plr.Character:WaitForChild("client_character_controller"):WaitForChild("M1"):FireServer(true,false)
-        else
-            enemy = getEnemy({Selected = true})
-        end
-    end
+    autofarm("autofarm", false, {Selected = true})
 end)
 
 selectDropdown = Tabs.AutoFarm:CreateDropdown("selectDropdown", {Title = "Target", Values = {}, Multi = false, Default = t.selectedTarget})
