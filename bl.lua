@@ -136,7 +136,7 @@ function autofarm(bool, ignoreName, tab)
     while t[bool] do task.wait()
         noClip()
         
-        if enemy and checkAlive(enemy) and [ignoreName or string.find(enemy.Name, t.selectedTarget)] then
+        if enemy and checkAlive(enemy) and (ignoreName or string.find(enemy.Name, t.selectedTarget)) then
             if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
                 char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
             end
