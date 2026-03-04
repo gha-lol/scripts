@@ -135,7 +135,7 @@ function autoSell()
     local sellList = {}
     
     for _,tab in pairs(getInventory()) do
-        if tab["Pips"] and allAccessorys[tab.Name] and t.selectedRarity[allAccessorys[tab.Name].Rarity] then
+        if tab["Pips"] and allAccessorys[tab.Name] and t.selectedRarity[allAccessorys[tab.Name].Rarity] and not tab.Locked then
             if not tab["duplicates"] then tab["duplicates"] = 1 end
             table.insert(sellList, tab)
         end
