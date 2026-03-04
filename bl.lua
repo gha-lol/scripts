@@ -126,7 +126,7 @@ function openChests(esperar)
     if esperar then
         repeat task.wait() until workspace.Effects:FindFirstChild(chestsList[1]) or workspace.Effects:FindFirstChild(chestsList[2]) or workspace.Effects:FindFirstChild(chestsList[3])
         
-        repeat task.wait(.2) until not workspace.Effects:FindFirstChild(chestsList[1]) or not workspace.Effects:FindFirstChild(chestsList[2]) or not workspace.Effects:FindFirstChild(chestsList[3])
+        repeat task.wait(.2) until not workspace.Effects:FindFirstChild(chestsList[1]) and not workspace.Effects:FindFirstChild(chestsList[2]) and not workspace.Effects:FindFirstChild(chestsList[3])
     end
 end
 
