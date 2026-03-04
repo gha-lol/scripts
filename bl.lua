@@ -7,7 +7,7 @@ else
 end]]
 
 local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
-local Window = Library:CreateWindow{Title = "bl", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(1000, 750), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
+local Window = Library:CreateWindow{Title = "bl", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(2000, 1200), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
 
 local Tabs = {
     AutoFarm = Window:CreateTab{
@@ -163,7 +163,7 @@ function autoSell()
 end
 
 function autoPoints()
-    while t[autopoints] do task.wait(1)
+    while t.autopoints do task.wait(1)
         if plrData.StatPoints.Value > 0 then
             for i,v in pairs(t.selectedStats) do
                 if plrData[i].Value < v then
