@@ -367,7 +367,7 @@ end)
 
 for i,v in pairs(t.selectedStats) do
     Tabs.Automation:CreateInput("InputStat"..tostring(i), {Title = i, Default = tostring(v), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
-        t[i] = tonumber(value)
+        t.selectedStats[i] = tonumber(value)
     end})
 end
 
