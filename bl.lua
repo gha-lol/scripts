@@ -223,7 +223,8 @@ function autofarm(bool, ignoreName, tab)
         
         if bool == "autoraid" and plr.PlayerGui:FindFirstChild("raidcomplete") then
             task.wait(5)
-            queueonteleport('if _G.tickLoads then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
+            --queueonteleport('if _G.tickLoads then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
+            queueonteleport('function loadScript(skip) if  _G.tickLoads and not skip then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end local s,e = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))() end) if not s then task.wait(1) loadScript(true) end end loadScript()')
             
             if t.autochest then
                 openChests(true)
