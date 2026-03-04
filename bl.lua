@@ -115,7 +115,7 @@ function getInventory()
     return Service:JSONDecode(plr.PlayerData.SlotData.Inventory.Value)
 end
 
-local chestsList = {"Rare Chest", "Common Chest", "Legendary Chest"}
+local chestsList = {"Rare Chest", "Common Chest"--[[, "Legendary Chest"]]}
 function openChests(esperar)
     for _,item in pairs(getInventory()) do
         if table.find(chestsList, item.Name) then
