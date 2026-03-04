@@ -31,6 +31,8 @@ local t = {
     autoraid = false,
     autosell = false,
     autochest = false,
+    distance = 8,
+    position = "Down",
     selectedTarget = "dahsdshaudahus",
     selectedRarity = {
       Common = false,
@@ -194,6 +196,8 @@ end
 
 function autofarm(bool, ignoreName, tab)
     local enemy
+    local posY = -t.distance
+    local cfAng = 90
     
     if t[bool] then
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
@@ -207,6 +211,14 @@ function autofarm(bool, ignoreName, tab)
     end
   
     while t[bool] do task.wait()
+        if t.position == "Top" then
+            posY = t.distance
+            cfAng = -90
+        else
+            posY = -t.distance
+            cfAng = 90
+        end
+        
         if bool == "autoraid" and plr.PlayerGui:FindFirstChild("raidcomplete") then
             task.wait(5)
             queueonteleport('if _G.tickLoads then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
@@ -235,7 +247,7 @@ function autofarm(bool, ignoreName, tab)
                 char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
             end
             
-            part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0)) * CFrame.Angles(math.rad(90),0,0)
+            part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
             
             for i,v in pairs(t.keys) do
                 if i ~= "M2" and v then
@@ -300,7 +312,21 @@ end}
 
 -- Config Tab
 
--- Auto Sell
+-- Global Section
+
+Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Global Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+Tabs.Config:CreateInput("InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+    t.distance = tonumber(value)
+end})
+
+selectTopDown = Tabs.Config:CreateDropdown("selectTopDown", {Title = "Farm Position", Values = {"Top", "Down"}, Multi = false, Default = t.position})
+selectTopDown:OnChanged(function(Value)
+    t.position = Value
+end)
+
+
+-- Auto Sell Section
 
 Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Auto Sell Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
