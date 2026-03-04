@@ -119,7 +119,7 @@ local chestsList = {"Rare Chest", "Common Chest", "Legendary Chest"}
 function openChests(esperar)
     for _,item in pairs(getInventory()) do
         if table.find(chestsList, item.Name) then
-            game.ReplicatedStorage.requests.character.use.item:FireServer(item.Name, {UseAll = true})
+            game.ReplicatedStorage.requests.character.use_item:FireServer(item.Name, {UseAll = true})
         end
     end
     
