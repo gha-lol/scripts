@@ -52,7 +52,9 @@ local t = {
 }
 
 if isfile("bl.json") then
-    t = Service:JSONDecode(readfile("bl.json"))
+    for i,v in pairs(Service:JSONDecode(readfile("bl.json"))) do
+        t[i] = v
+    end
 end
 
 
