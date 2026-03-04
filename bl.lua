@@ -29,7 +29,15 @@ local Service = game:GetService("HttpService")
 local t = {
     autofarm = false,
     autoraid = false,
+    autosell = false,
+    autochest = false,
     selectedTarget = "dahsdshaudahus",
+    selectedRarity = {
+      Common = false,
+      Uncommon = false,
+      Rare = false,
+      Legendary = false
+    },
     keys = {
         M2 = false,
         E = false,
@@ -103,6 +111,39 @@ function saveSettings()
     writefile("bl.json", Service:JSONEncode(t))
 end
 
+function getInventory()
+    return Service:JSONDecode(plr.PlayerData.SlotData.Inventory.Value)
+end
+
+local chestsList = {"Rare Chest", "Common Chest", "Legendary Chest"}
+function openChests(esperar)
+    for _,item in pairs(getInventory()) do
+        if table.find(chestsList, item.Name) then
+            game.ReplicatedStorage.requests.character.use.item:FireServer(item.Name, {UseAll = true})
+        end
+    end
+    
+    if esperar then
+        repeat task.wait() until workspace.Effects:FindFirstChild(chestsList[1]) or workspace.Effects:FindFirstChild(chestsList[2]) or workspace.Effects:FindFirstChild(chestsList[3])
+        
+        repeat task.wait(.2) until not workspace.Effects:FindFirstChild(chestsList[1]) or not workspace.Effects:FindFirstChild(chestsList[2]) or not workspace.Effects:FindFirstChild(chestsList[3])
+    end
+end
+
+function autoSell()
+    local allAccessorys = game.ReplicatedStorage.requests.miscellaneous.get_data:InvokeServer("accessory")
+    local sellList = {}
+    
+    for _,tab in pairs(getInventory()) do
+        if tab["Pips"] and allAccessorys[tab.Name] and t.selectedRarity[allAccessorys[tab.Name].Rarity] then
+            if not tab["duplicates"] then tab["duplicates"] = 1 end
+            table.insert(sellList, tab)
+        end
+    end
+    
+    game.ReplicatedStorage.requests.general.SellItem:FireServer(sellList)
+end
+
 function noClip()
     for i,v in pairs(plr.Character:GetDescendants()) do
         if v:IsA("BasePart") and v.CanCollide == true then
@@ -153,11 +194,31 @@ end
 
 function autofarm(bool, ignoreName, tab)
     local enemy
+    
+    if t[bool] then
+        align.Attachment0 = char.HumanoidRootPart.RootAttachment
+        orient.Attachment0 = char.HumanoidRootPart.RootAttachment
+        
+        if bool == "autofarm" and t.autoraid then t.autoraid = false
+        elseif bool == "autoraid" and t.autofarm then t.autofarm = false end
+    else
+        align.Attachment0 = nil
+        orient.Attachment0 = nil
+    end
   
     while t[bool] do task.wait()
         if bool == "autoraid" and plr.PlayerGui:FindFirstChild("raidcomplete") then
             task.wait(5)
             queueonteleport('if _G.tickLoads then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
+            
+            if t.autochest then
+                openChests(true)
+            end
+            if t.autosell then
+                autoSell()
+                task.wait(3)
+            end
+            
             game.ReplicatedStorage.requests.character.retryraid:FireServer()
             task.wait(20)
         end
@@ -197,37 +258,32 @@ end
 
 -- AutoFarm Tab
 
+-- Raids Section
+
+Tabs.AutoFarm:CreateParagraph("Aligned Paragraph", {Title = "Raids Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
 local autoraidToggle = Tabs.AutoFarm:CreateToggle("autoraidToggle", {Title = "Auto Raid", Default = t.autoraid})
 autoraidToggle:OnChanged(function()
     t.autoraid = Options.autoraidToggle.Value
         
-    local enemy
-    if t.autoraid then
-        align.Attachment0 = char.HumanoidRootPart.RootAttachment
-        orient.Attachment0 = char.HumanoidRootPart.RootAttachment
-        if t.autofarm then t.autofarm = false end
-    else
-        align.Attachment0 = nil
-        orient.Attachment0 = nil
+    if game.PlaceId ~= 14890802310 then
+        autofarm("autoraid", true, {})
     end
-    
-    autofarm("autoraid", true, {})
 end)
+
+local autochestToggle = Tabs.AutoFarm:CreateToggle("autochestToggle", {Title = "Auto Open Chest", Default = t.autochest})
+autochestToggle:OnChanged(function()
+    t.autochest = Options.autochestToggle.Value
+end)
+
+-- Main Game Section
+
+Tabs.AutoFarm:CreateParagraph("Aligned Paragraph", {Title = "Main Game Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local autofarmToggle = Tabs.AutoFarm:CreateToggle("autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm})
 autofarmToggle:OnChanged(function()
     t.autofarm = Options.autofarmToggle.Value
         
-    local enemy
-    if t.autofarm then
-        align.Attachment0 = char.HumanoidRootPart.RootAttachment
-        orient.Attachment0 = char.HumanoidRootPart.RootAttachment
-        if t.autoraid then t.autoraid = false end
-    else
-        align.Attachment0 = nil
-        orient.Attachment0 = nil
-    end
-    
     autofarm("autofarm", false, {Selected = true})
 end)
 
@@ -242,7 +298,28 @@ Tabs.AutoFarm:CreateButton{Title = "Update Target List", Description = "", Callb
 end}
 
 
--- Config
+-- Config Tab
+
+-- Auto Sell
+
+Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Auto Sell Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local autosellToggle = Tabs.Config:CreateToggle("autosellToggle", {Title = "Auto Sell", Default = t.autosell})
+autosellToggle:OnChanged(function()
+    t.autosell = Options.autosellToggle.Value
+end)
+
+for i,v in pairs(t.selectedRarity) do
+    local key = Tabs.Config:CreateToggle("rarity"..tostring(i), {Title = "Sell "..tostring(i), Default = v})
+    key:OnChanged(function()
+        t.selectedRarity[i] = Options["rarity"..tostring(i)].Value
+    end)
+end
+
+
+-- Skills Section
+
+Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Skills Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 for i,v in pairs(t.keys) do
     local key = Tabs.Config:CreateToggle("key"..tostring(i), {Title = "Use "..tostring(i), Default = v})
@@ -263,3 +340,5 @@ end}
 task.wait()
 autofarmToggle:SetValue(t.autofarm)
 autoraidToggle:SetValue(t.autoraid)
+autochestToogle:SetValue(t.autochest)
+autosellToggle:SetValue(t.autosell)
