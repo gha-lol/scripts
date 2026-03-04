@@ -340,5 +340,5 @@ end}
 task.wait()
 autofarmToggle:SetValue(t.autofarm)
 autoraidToggle:SetValue(t.autoraid)
-autochestToogle:SetValue(t.autochest)
+autochestToggle:SetValue(t.autochest)
 autosellToggle:SetValue(t.autosell)
