@@ -14,6 +14,10 @@ local Tabs = {
         Title = "AutoFarm",
         Icon = "phosphor-users-bold"
     },
+    Automation = Window:CreateTab{
+        Title = "Automation",
+        Icon = "phosphor-users-bold"
+    },
     Config = Window:CreateTab{
         Title = "Config",
         Icon = "phosphor-users-bold"
@@ -31,9 +35,18 @@ local t = {
     autoraid = false,
     autosell = false,
     autochest = false,
+    autopoints = false,
     distance = 8,
     position = "Down",
     selectedTarget = "dahsdshaudahus",
+    selectedStats = {
+      DefenseStat = 0,
+      DestructiveEnergyStat = 0,
+      DestructivePowerStat = 0,
+      PowerStat = 0,
+      StrengthStat = 0,
+      WeaponStat = 0
+    },
     selectedRarity = {
       Common = false,
       Uncommon = false,
@@ -41,13 +54,13 @@ local t = {
       Legendary = false
     },
     keys = {
-        M2 = false,
-        E = false,
-        R = false,
-        Z = false,
-        X = false,
-        C = false,
-        V = false
+      M2 = false,
+      E = false,
+      R = false,
+      Z = false,
+      X = false,
+      C = false,
+      V = false
     }
 }
 
@@ -62,6 +75,7 @@ end
 
 local plr = game.Players.LocalPlayer
 local char = plr.Character
+local plrData = plr.PlayerData.SlotData
 
 if char == nil and plr.PlayerGui:FindFirstChild("Main Menu") then
     repeat task.wait(.2)
@@ -116,7 +130,7 @@ function saveSettings()
 end
 
 function getInventory()
-    return Service:JSONDecode(plr.PlayerData.SlotData.Inventory.Value)
+    return Service:JSONDecode(plrData.Inventory.Value)
 end
 
 local chestsList = {"Rare Chest", "Common Chest"--[[, "Legendary Chest"]]}
@@ -146,6 +160,26 @@ function autoSell()
     end
     
     game.ReplicatedStorage.requests.general.SellItem:FireServer(sellList)
+end
+
+function autoPoints()
+    while t[autopoints] do task.wait(1)
+        if plrData.StatPoints.Value > 0 then
+            for i,v in pairs(t.selectedStats) do
+                if plrData[i].Value < v then
+                    local numero = 0
+                    
+                    if plrData.StatPoints.Value + plrData[i].Value > v then
+                        numero = v - plrData[i].Value
+                    else
+                        numero = plrData.StatPoints.Value
+                    end
+                    
+                    game.ReplicatedStorage.requests.character.increase_stat:FireServer(i,numero)
+                end
+            end
+        end
+    end
 end
 
 function noClip()
@@ -291,6 +325,11 @@ autochestToggle:OnChanged(function()
     t.autochest = Options.autochestToggle.Value
 end)
 
+local autosellToggle = Tabs.AutoFarm:CreateToggle("autosellToggle", {Title = "Auto Sell", Default = t.autosell})
+autosellToggle:OnChanged(function()
+    t.autosell = Options.autosellToggle.Value
+end)
+
 -- Main Game Section
 
 Tabs.AutoFarm:CreateParagraph("Aligned Paragraph", {Title = "Main Game Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
@@ -313,6 +352,26 @@ Tabs.AutoFarm:CreateButton{Title = "Update Target List", Description = "", Callb
 end}
 
 
+-- Automation Tab
+
+-- Auto Points Section
+
+Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Auto Points Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local autopointsToggle = Tabs.Automation:CreateToggle("autopointsToggle", {Title = "Auto Points", Default = t.autopoints})
+autopointsToggle:OnChanged(function()
+    t.autopoints = Options.autopointsToggle.Value
+        
+    autoPoints()
+end)
+
+for i,v in pairs(t.selectedStats) do
+    Tabs.Automation:CreateInput("InputStat"..tostring(i), {Title = i, Default = tostring(v), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+        t[i] = tonumber(value)
+    end})
+end
+
+
 -- Config Tab
 
 -- Global Section
@@ -332,11 +391,6 @@ end)
 -- Auto Sell Section
 
 Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Auto Sell Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
-
-local autosellToggle = Tabs.Config:CreateToggle("autosellToggle", {Title = "Auto Sell", Default = t.autosell})
-autosellToggle:OnChanged(function()
-    t.autosell = Options.autosellToggle.Value
-end)
 
 for i,v in pairs(t.selectedRarity) do
     local key = Tabs.Config:CreateToggle("rarity"..tostring(i), {Title = "Sell "..tostring(i), Default = v})
