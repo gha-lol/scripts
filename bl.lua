@@ -420,12 +420,12 @@ for i,v in pairs(dropss) do
         
         if v == "Trait" then
             pcall(function()
-                descTrait:SetValue("Description: "..getData({Send = "trait", Desc = Value}))
+                descTrait:SetValue(getData({Send = "trait", Desc = Value}))
             end)
         end
     end)
     if v == "Trait" then
-        descTrait = Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Description: N/A", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+        descTrait = Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Description:", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
     end
 end
 
