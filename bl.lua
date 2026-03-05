@@ -324,6 +324,7 @@ function autofarm(bool, ignoreName, tab)
     local cfAng = 90
     
     if t[bool] then
+        if bool == "autoraid" and game.PlaceId == 14890802310 then return end
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
         
@@ -334,7 +335,6 @@ function autofarm(bool, ignoreName, tab)
         orient.Attachment0 = nil
     end
   
-    if bool == "autoraid" and game.PlaceId == 14890802310 then return end
     while t[bool] do task.wait()
         if t.position == "Top" then
             posY = t.distance
@@ -448,11 +448,13 @@ Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Auto Arrow Sectio
 local autoarrowToggle = Tabs.Automation:CreateToggle("autoarrowToggle", {Title = "Auto Arrow", Default = t.autoarrow})
 autoarrowToggle:OnChanged(function()
     t.autoarrow = Options.autoarrowToggle.Value
-        
-    local e = autoArrow()
-    if not e then
-        t.autoarrow = false
-        autoarrowToggle:SetValue(false)
+
+    if game.PlaceId == 14890802310 then
+        local e = autoArrow()
+        if not e then
+            t.autoarrow = false
+            autoarrowToggle:SetValue(false)
+        end
     end
 end)
 
