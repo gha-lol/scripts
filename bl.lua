@@ -414,7 +414,7 @@ for i,v in pairs(dropss) do
         tabb = {"Any", "S", "A", "B", "C"}
     end
   
-    local selectTopDown = Tabs.Config:CreateDropdown("selectadsdasd"..v, {Title = v, Values = tabb, Multi = false, Default = "Any"})
+    local selectTopDown = Tabs.Automation:CreateDropdown("selectadsdasd"..v, {Title = v, Values = tabb, Multi = false, Default = "Any"})
     selectTopDown:OnChanged(function(Value)
         noSave[v] = Value
         
