@@ -30,15 +30,22 @@ local Tabs = {
 local Options = Library.Options
 
 local Service = game:GetService("HttpService")
+local noSave = {Identifier = 0}
 local t = {
     autofarm = false,
     autoraid = false,
     autosell = false,
     autochest = false,
     autopoints = false,
+    autoarrow = false,
     distance = 8,
     position = "Down",
     selectedTarget = "dahsdshaudahus",
+    arrowConfig = {
+      shiny = false,
+      stands = {}
+      
+    },
     selectedStats = {
       DefenseStat = 0,
       DestructiveEnergyStat = 0,
@@ -75,7 +82,9 @@ end
 
 local plr = game.Players.LocalPlayer
 local char = plr.Character
+
 local plrData = plr.PlayerData.SlotData
+local get_data = game.ReplicatedStorage.requests.miscellaneous.get_data
 
 if char == nil and plr.PlayerGui:FindFirstChild("Main Menu") then
     repeat task.wait(.2)
@@ -148,8 +157,31 @@ function openChests(esperar)
     end
 end
 
+function getData(arg)
+    local dataTab = get_data:InvokeServer(arg.Send)
+    local returner = {}
+    
+    if arg.Send == "stand" then
+        for i,v in pairs(dataTab) do
+            table.insert(returner, v.Name)
+        end
+    elseif arg.Send == "trait" then
+        if arg.Desc then
+            if dataTab[arg.Desc] then
+                returner = dataTab[arg.Desc].Description
+            end
+        else
+            for i,v in pairs(dataTab) do
+                table.insert(returner, i)
+            end
+        end
+    end
+    
+    return returner
+end
+
 function autoSell()
-    local allAccessorys = game.ReplicatedStorage.requests.miscellaneous.get_data:InvokeServer("accessory")
+    local allAccessorys = get_data:InvokeServer("accessory")
     local sellList = {}
     
     for _,tab in pairs(getInventory()) do
@@ -246,6 +278,7 @@ function autofarm(bool, ignoreName, tab)
         orient.Attachment0 = nil
     end
   
+    if bool == "autoraid" and game.PlaceId == 14890802310 then return end
     while t[bool] do task.wait()
         if t.position == "Top" then
             posY = t.distance
@@ -315,9 +348,7 @@ local autoraidToggle = Tabs.AutoFarm:CreateToggle("autoraidToggle", {Title = "Au
 autoraidToggle:OnChanged(function()
     t.autoraid = Options.autoraidToggle.Value
         
-    if game.PlaceId ~= 14890802310 then
-        autofarm("autoraid", true, {})
-    end
+    autofarm("autoraid", true, {})
 end)
 
 local autochestToggle = Tabs.AutoFarm:CreateToggle("autochestToggle", {Title = "Auto Open Chest", Default = t.autochest})
@@ -353,6 +384,76 @@ end}
 
 
 -- Automation Tab
+
+-- Auto Arrow Section
+
+Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Auto Arrow Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local autoarrowToggle = Tabs.Automation:CreateToggle("autoarrowToggle", {Title = "Auto Arrow", Default = t.autoarrow})
+autoarrowToggle:OnChanged(function()
+    t.autoarrow = Options.autoarrowToggle.Value
+        
+    autoArrow()
+end)
+
+local stopshinyToggle = Tabs.Automation:CreateToggle("stopshinyToggle", {Title = "Stop on Shiny", Default = t.arrowConfig.shiny})
+stopshinyToggle:OnChanged(function()
+    t.arrowConfig.shiny = Options.stopshinyToggle.Value
+end)
+
+local dropss = {"Stand", "Trait", "Strength", "Specialty", "Speed"}
+local descTrait
+
+for i,v in pairs(dropss) do
+    local tabb = {}
+    if v == "Stand" then
+        tabb = {"Any", table.unpack(getData({Send = "stand"}))}
+    elseif v == "Trait" then
+        tabb = {"Any", table.unpack(getData({Send = "trait"}))}
+    else
+        tabb = {"Any", "S", "A", "B", "C"}
+    end
+  
+    local selectTopDown = Tabs.Config:CreateDropdown("selectadsdasd"..v, {Title = v, Values = tabb, Multi = false, Default = "Any"})
+    selectTopDown:OnChanged(function(Value)
+        noSave[v] = Value
+        
+        if v == "Trait" then
+            pcall(function()
+                descTrait:SetValue("Description: "..getData({Send = "trait", Desc = Value}))
+            end)
+        end
+    end)
+    if v == "Trait" then
+        descTrait = Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Description: N/A", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+    end
+end
+
+Tabs.Automation:CreateButton{Title = "Add Stand", Description = "", Callback = function()
+    table.insert(t.arrowConfig.stands, {Stand = noSave.Stand, Trait = noSave.Trait, Strength = noSave.Strength, Specialty = noSave.Specialty, Speed = noSave.Speed, Identifier = math.random(1,999999)})
+end}
+
+Tabs.Automation:CreateButton{Title = "Print All Stands", Description = "", Callback = function()
+    for i,v in pairs(t.arrowConfig.stands) do
+        print("---------")
+        print("Stand "..tostring(i))
+        for k,l in pairs(v) do
+            print(k,l)
+        end
+    end
+end}
+
+Tabs.Automation:CreateInput("InputIndenadsdsa", {Title = "Input Identifier", Default = tostring(0), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+    noSave.Identifier = tonumber(value)
+end})
+
+Tabs.Automation:CreateButton{Title = "Delete Stand", Description = "", Callback = function()
+    for i,v in pairs(t.arrowConfig.stands) do
+        if v.Identifier == noSave.Identifier then
+            v = nil
+        end
+    end
+end}
 
 -- Auto Points Section
 
