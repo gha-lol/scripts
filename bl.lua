@@ -195,7 +195,7 @@ function autoSell()
 end
 
 function autoPoints()
-    while t.autopoints do task.wait(1)
+    while t.autopoints do
         if plrData.StatPoints.Value > 0 then
             for i,v in pairs(t.selectedStats) do
                 if plrData[i].Value < v then
@@ -211,7 +211,63 @@ function autoPoints()
                 end
             end
         end
+    task.wait(1) end
+end
+
+local gradeNum = {
+    S = 5,
+    A = 4,
+    B = 3,
+    C = 2
+}
+
+function checkStand()
+    local returner = false
+    local equipped = Service:JSONDecode(plrData.Stand.Value)
+    
+    if equipped.Skin and t.arrowConfig.shiny then
+        returner = true
+    else
+        for _,standd in pairs(t.arrowConfig.stands) do
+            local matches = 0
+            local numChecks = 5
+            --if (v.Stand == "Any" or equipped.Name == v.Stand) and (v.Trait == "Any" or equipped.Trait == v.Trait)
+            for i,v in pairs(standd) do
+                if v ~= "Any" and i ~= "Identifier" then
+                    if i == "Name" or i == "Trait" then
+                        if equipped[i] == v then
+                            matches += 1
+                        end
+                    else
+                        if equipped[i] >= gradeNum[v] then
+                            matches += 1
+                        end
+                    end
+                elseif v == "Any" then
+                    numChecks -= 1
+                end
+            end
+            
+            if matches == numChecks then returner = true break end
+        end
     end
+    
+    return returner
+end
+
+function autoArrow()
+    while t.autoarrow do task.wait()
+        if not checkStand() then
+            local before = plrData.Stand.Value
+            
+            repeat task.wait(.5)
+                game.ReplicatedStorage.requests.character.use_item:FireServer("Stand Arrow")
+            until plrData.Stand.Value ~= before
+        else
+            break
+        end
+    end
+    return false
 end
 
 function noClip()
@@ -393,7 +449,11 @@ local autoarrowToggle = Tabs.Automation:CreateToggle("autoarrowToggle", {Title =
 autoarrowToggle:OnChanged(function()
     t.autoarrow = Options.autoarrowToggle.Value
         
-    autoArrow()
+    local e = autoArrow()
+    if not e then
+        t.autoarrow = false
+        autoarrowToggle:SetValue(false)
+    end
 end)
 
 local stopshinyToggle = Tabs.Automation:CreateToggle("stopshinyToggle", {Title = "Stop on Shiny", Default = t.arrowConfig.shiny})
@@ -430,7 +490,7 @@ for i,v in pairs(dropss) do
 end
 
 Tabs.Automation:CreateButton{Title = "Add Stand", Description = "", Callback = function()
-    table.insert(t.arrowConfig.stands, {Stand = noSave.Stand, Trait = noSave.Trait, Strength = noSave.Strength, Specialty = noSave.Specialty, Speed = noSave.Speed, Identifier = math.random(1,999999)})
+    table.insert(t.arrowConfig.stands, {Name = noSave.Stand, Trait = noSave.Trait, Strength = noSave.Strength, Specialty = noSave.Specialty, Speed = noSave.Speed, Identifier = math.random(1,999)})
 end}
 
 Tabs.Automation:CreateButton{Title = "Print All Stands", Description = "", Callback = function()
