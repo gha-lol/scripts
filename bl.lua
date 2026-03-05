@@ -450,7 +450,8 @@ end})
 Tabs.Automation:CreateButton{Title = "Delete Stand", Description = "", Callback = function()
     for i,v in pairs(t.arrowConfig.stands) do
         if v.Identifier == noSave.Identifier then
-            v = nil
+            table.remove(t.arrowConfig.stands, i)
+            break
         end
     end
 end}
