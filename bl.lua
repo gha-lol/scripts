@@ -144,13 +144,15 @@ end
 
 local chestsList = {"Rare Chest", "Common Chest"--[[, "Legendary Chest"]]}
 function openChests(esperar)
+    local opened = false
     for _,item in pairs(getInventory()) do
         if table.find(chestsList, item.Name) then
+            opened = true
             game.ReplicatedStorage.requests.character.use_item:FireServer(item.Name, {UseAll = true})
         end
     end
     
-    if esperar then
+    if esperar and opened then
         repeat task.wait() until workspace.Effects:FindFirstChild(chestsList[1]) or workspace.Effects:FindFirstChild(chestsList[2]) --or workspace.Effects:FindFirstChild(chestsList[3])
         
         repeat task.wait(.2) until not workspace.Effects:FindFirstChild(chestsList[1]) and not workspace.Effects:FindFirstChild(chestsList[2]) --and not workspace.Effects:FindFirstChild(chestsList[3])
