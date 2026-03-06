@@ -236,7 +236,7 @@ function checkStand()
             --if (v.Stand == "Any" or equipped.Name == v.Stand) and (v.Trait == "Any" or equipped.Trait == v.Trait)
             for i,v in pairs(standd) do
                 if v ~= "Any" and i ~= "Identifier" then
-                    if (i == "Name" or i == "Trait") and equipped[i] == v or equipped[i] >= gradeNum[v] then
+                    if (i == "Name" or i == "Trait") and equipped[i] == v or i ~= "Name" and i ~= "Trait" and equipped[i] >= gradeNum[v] then
                         matches += 1
                     end
                 elseif v == "Any" then
