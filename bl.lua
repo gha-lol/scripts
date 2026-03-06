@@ -257,7 +257,7 @@ function autoArrow()
             
         repeat task.wait(.5)
             game.ReplicatedStorage.requests.character.use_item:FireServer("Stand Arrow")
-        until plrData.Stand.Value ~= before
+        until plrData.Stand.Value ~= before or t.autoarrow == false
     end
     
     while t.autoarrow do task.wait()
