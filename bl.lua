@@ -276,7 +276,7 @@ function autoArrow()
             
             game.StarterGui:SetCore("SendNotification", {
                 Title = "Stand Gotten!",
-                Text = "Stand: " .. equipped.Name .. "\n" .. "Skin: " .. skin,
+                Text = "Stand: " .. equipped.Name .. "\n" .. "Skin: " .. skin .. "\n" .. "Trait: " .. equipped.Trait,
                 Duration = 999,
                 Callback = autoArrowBindable,
                 Button1 = "Keep",
