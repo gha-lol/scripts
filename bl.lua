@@ -236,14 +236,8 @@ function checkStand()
             --if (v.Stand == "Any" or equipped.Name == v.Stand) and (v.Trait == "Any" or equipped.Trait == v.Trait)
             for i,v in pairs(standd) do
                 if v ~= "Any" and i ~= "Identifier" then
-                    if i == "Name" or i == "Trait" then
-                        if equipped[i] == v then
-                            matches += 1
-                        end
-                    else
-                        if equipped[i] >= gradeNum[v] then
-                            matches += 1
-                        end
+                    if (i == "Name" or i == "Trait") and equipped[i] == v or equipped[i] >= gradeNum[v] then
+                        matches += 1
                     end
                 elseif v == "Any" then
                     numChecks -= 1
@@ -258,15 +252,44 @@ function checkStand()
 end
 
 function autoArrow()
+    local function useArrow()
+        local before = plrData.Stand.Value
+            
+        repeat task.wait(.5)
+            game.ReplicatedStorage.requests.character.use_item:FireServer("Stand Arrow")
+        until plrData.Stand.Value ~= before
+    end
+    
     while t.autoarrow do task.wait()
         if not checkStand() then
-            local before = plrData.Stand.Value
-            
-            repeat task.wait(.5)
-                game.ReplicatedStorage.requests.character.use_item:FireServer("Stand Arrow")
-            until plrData.Stand.Value ~= before
+            useArrow()
         else
-            break
+            local choose
+            local equipped = Service:JSONDecode(plrData.Stand.Value)
+            local skin = equipped.Skin or "None"
+            local autoArrowBindable = Instance.new("BindableFunction")
+            
+            autoArrowBindable.OnInvoke = function(txt)
+                choose = txt
+                autoArrowBindable:Destroy()
+            end
+            
+            game.StarterGui:SetCore("SendNotification", {
+                Title = "Stand Gotten!",
+                Text = "Stand: " .. equipped.Name .. "\n" .. "Skin: " .. skin,
+                Duration = 999,
+                Callback = autoArrowBindable,
+                Button1 = "Keep",
+                Button2 = "Roll"
+            })
+          
+            repeat task.wait() until choose
+            
+            if choose == "Keep" then
+                break
+            else
+                useArrow()
+            end
         end
     end
     return false
