@@ -511,7 +511,7 @@ autofarmToggle:OnChanged(function()
     autofarm("autofarm", false, {Selected = true})
 end)
 
-selectDropdown = Tabs.AutoFarm:CreateDropdown("selectDropdown", {Title = "Target", Values = {}, Multi = false, Default = t.selectedTarget})
+selectDropdown = Tabs.AutoFarm:CreateDropdown("selectDropdown", {Title = "Target", Values = {}, Searchable = true, Multi = false, Default = t.selectedTarget})
 selectDropdown:OnChanged(function(Value)
     t.selectedTarget = Value
 end)
@@ -646,7 +646,7 @@ end
 
 Tabs.Teleport:CreateParagraph("Aligned Paragraph", {Title = "Npcs Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-npcTpDown = Tabs.Teleport:CreateDropdown("npcTpDown", {Title = "Npc", Values = getNpc({All = true}), Multi = false, Default = noSave.selectedTpNpc})
+npcTpDown = Tabs.Teleport:CreateDropdown("npcTpDown", {Title = "Npc", Values = getNpc({All = true}), Searchable = true, Multi = false, Default = noSave.selectedTpNpc})
 npcTpDown:OnChanged(function(Value)
     noSave.selectedTpNpc = Value
 end)
@@ -661,7 +661,7 @@ Tabs.Teleport:CreateParagraph("Aligned Paragraph", {Title = "Bus Section", Conte
 
 local busTable = {}
 for i=1,20 do table.insert(busTable, tostring(i)) end
-busDown = Tabs.Teleport:CreateDropdown("busDown", {Title = "Bus Stop", Values = busTable, Multi = false, Default = "1"})
+busDown = Tabs.Teleport:CreateDropdown("busDown", {Title = "Bus Stop", Values = busTable, Searchable = true, Multi = false, Default = "1"})
 busDown:OnChanged(function(Value)
     noSave.selectedBus = Value
 end)
