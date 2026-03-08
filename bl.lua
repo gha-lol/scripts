@@ -18,6 +18,14 @@ local Tabs = {
         Title = "Automation",
         Icon = "phosphor-users-bold"
     },
+    Teleport = Window:CreateTab{
+        Title = "Teleport",
+        Icon = "phosphor-users-bold"
+    },
+    AutoArrowConfig = Window:CreateTab{
+        Title = "Auto Arrow Config",
+        Icon = "phosphor-users-bold"
+    },
     Config = Window:CreateTab{
         Title = "Config",
         Icon = "phosphor-users-bold"
@@ -30,7 +38,7 @@ local Tabs = {
 local Options = Library.Options
 
 local Service = game:GetService("HttpService")
-local noSave = {Identifier = 0}
+local noSave = {Identifier = 0, selectedBus = "1", selectedTpNpc = "Chumbo"}
 local t = {
     autofarm = false,
     autoraid = false,
@@ -141,6 +149,23 @@ end
 
 function getInventory()
     return Service:JSONDecode(plrData.Inventory.Value)
+end
+
+function getNpc(tab)
+    local returner
+    
+    if tab.All then
+        returner = {}
+        for _,d in pairs({workspace.Npcs, game.ReplicatedStorage.assets.npc_cache}) do
+            for i,v in pairs(d:GetChildren()) do
+                table.insert(returner, v.Name)
+            end  
+        end
+    elseif tab.Name then
+        returner = workspace.Npcs:FindFirstChild(tab.Name) or game.ReplicatedStorage.assets.npc_cache:FindFirstChild(tab.Name)
+    end
+  
+    return
 end
 
 local chestsList = {"Rare Chest", "Common Chest"--[[, "Legendary Chest"]]}
@@ -613,6 +638,37 @@ for i,v in pairs(t.selectedStats) do
         t.selectedStats[i] = tonumber(value)
     end})
 end
+
+
+-- Teleport Tab
+
+-- Npc Section
+
+Tabs.Teleport:CreateParagraph("Aligned Paragraph", {Title = "Npcs Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+npcTpDown = Tabs.Teleport:CreateDropdown("npcTpDown", {Title = "Npc", Values = getNpc({All = true}), Multi = false, Default = noSave.selectedTpNpc})
+npcTpDown:OnChanged(function(Value)
+    noSave[selectedTpNpc] = Value
+end)
+
+Tabs.Teleport:CreateButton{Title = "Teleport to Npc", Description = "", Callback = function()
+    char:PivotTo(getNpc({Name = noSave.selectedTpNpc}):GetPivot())
+end}
+
+-- Bus Section
+
+Tabs.Teleport:CreateParagraph("Aligned Paragraph", {Title = "Bus Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local busTable = {}
+for i=1,20 do table.insert(busTable, tostring(i)) end
+busDown = Tabs.Teleport:CreateDropdown("busDown", {Title = "Bus Stop", Values = busTable, Multi = false, Default = "1"})
+busDown:OnChanged(function(Value)
+    noSave[selectedBus] = Value
+end)
+
+Tabs.Teleport:CreateButton{Title = "Teleport to Bus Stop", Description = "", Callback = function()
+    char:PivotTo(workspace.Map["Bus Stops"][noSave[selectedBus]]:GetPivot())
+end}
 
 
 -- Config Tab
