@@ -38,14 +38,11 @@ local t = {
     autochest = false,
     autopoints = false,
     autoarrow = false,
+    autoshop = false,
     distance = 8,
     position = "Down",
     selectedTarget = "dahsdshaudahus",
-    arrowConfig = {
-      shiny = false,
-      stands = {}
-      
-    },
+    selectedShop = "Jotaro Kujo",
     selectedStats = {
       DefenseStat = 0,
       DestructiveEnergyStat = 0,
@@ -59,6 +56,10 @@ local t = {
       Uncommon = false,
       Rare = false,
       Legendary = false
+    },
+    arrowConfig = {
+      shiny = false,
+      stands = {}
     },
     keys = {
       M2 = false,
@@ -180,6 +181,37 @@ function getData(arg)
     end
     
     return returner
+end
+
+function autoShop()
+    local function buy(thing)
+        local times = 1
+        if thing == "Legendary Chest" then times = 3 end
+        
+        for i=1,times do
+            game.ReplicatedStorage.requests.character.raid_shop:FireServer(thing, t.selectedShop)
+        end
+    end
+  
+    while t.autoshop do task.wait(5)
+        local decoded = Service:JSONDecode(plrData.RaidShopPurchases.Value)
+        local shop = decoded[decoded.Version][t.selectedShop]
+        
+        if shop then
+            for i,v in pairs({["Legendary Chest"] = 3, ["Lucky Arrow"] = 1}) do
+                if shop[i] then
+                    if shop[i] < v then
+                        buy(i)
+                    end
+                else
+                    buy(i)
+                end
+            end
+        else
+            buy("Lucky Arrow")
+            buy("Legendary Chest")
+        end
+    end
 end
 
 function autoSell()
@@ -466,6 +498,27 @@ end}
 
 -- Automation Tab
 
+-- Auto Shop Section
+
+Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Auto Shop Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local autoshopToggle = Tabs.Automation:CreateToggle("autoshopToggle", {Title = "Auto Shop", Default = t.autoshop})
+autoshopToggle:OnChanged(function()
+    t.autoshop = Options.autoshopToggle.Value
+
+    autoShop()
+end)
+
+local allShops = {}
+for i,v in pairs(Service:JSONDecode(plrData.RaidTokens.Value)) do
+    table.insert(allShops, i)
+end
+
+local autoshopDrop = Tabs.Automation:CreateDropdown("autoshopDrop", {Title = "Shop To Buy", Values = allShops, Multi = false, Default = t.selectedShop})
+autoshopDrop:OnChanged(function(Value)
+    t.selectedShop = Value
+end)
+
 -- Auto Arrow Section
 
 Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Auto Arrow Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
@@ -614,3 +667,4 @@ autofarmToggle:SetValue(t.autofarm)
 autoraidToggle:SetValue(t.autoraid)
 autochestToggle:SetValue(t.autochest)
 autosellToggle:SetValue(t.autosell)
+autoshopToggle:SetValue(t.autoshop)
