@@ -165,7 +165,7 @@ function getNpc(tab)
         returner = workspace.Npcs:FindFirstChild(tab.Name) or game.ReplicatedStorage.assets.npc_cache:FindFirstChild(tab.Name)
     end
   
-    return
+    return returner
 end
 
 local chestsList = {"Rare Chest", "Common Chest"--[[, "Legendary Chest"]]}
