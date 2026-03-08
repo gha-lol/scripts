@@ -193,7 +193,7 @@ function autoShop()
         end
     end
   
-    while t.autoshop do task.wait(5)
+    while t.autoshop do
         local decoded = Service:JSONDecode(plrData.RaidShopPurchases.Value)
         local shop = decoded[decoded.Version][t.selectedShop]
         
@@ -211,6 +211,7 @@ function autoShop()
             buy("Lucky Arrow")
             buy("Legendary Chest")
         end
+        task.wait(5)
     end
 end
 
