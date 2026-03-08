@@ -220,7 +220,9 @@ function autoShop()
   
     while t.autoshop do
         local decoded = Service:JSONDecode(plrData.RaidShopPurchases.Value)
-        local shop = decoded[decoded.Version][t.selectedShop]
+        local shop = decoded[decoded.Version]
+
+        if shop then shop = decoded[decoded.Version][t.selectedShop] end
         
         if shop then
             for i,v in pairs({["Legendary Chest"] = 3, ["Lucky Arrow"] = 1}) do
