@@ -648,7 +648,7 @@ Tabs.Teleport:CreateParagraph("Aligned Paragraph", {Title = "Npcs Section", Cont
 
 npcTpDown = Tabs.Teleport:CreateDropdown("npcTpDown", {Title = "Npc", Values = getNpc({All = true}), Multi = false, Default = noSave.selectedTpNpc})
 npcTpDown:OnChanged(function(Value)
-    noSave[selectedTpNpc] = Value
+    noSave.selectedTpNpc = Value
 end)
 
 Tabs.Teleport:CreateButton{Title = "Teleport to Npc", Description = "", Callback = function()
@@ -663,11 +663,11 @@ local busTable = {}
 for i=1,20 do table.insert(busTable, tostring(i)) end
 busDown = Tabs.Teleport:CreateDropdown("busDown", {Title = "Bus Stop", Values = busTable, Multi = false, Default = "1"})
 busDown:OnChanged(function(Value)
-    noSave[selectedBus] = Value
+    noSave.selectedBus = Value
 end)
 
 Tabs.Teleport:CreateButton{Title = "Teleport to Bus Stop", Description = "", Callback = function()
-    char:PivotTo(workspace.Map["Bus Stops"][noSave[selectedBus]]:GetPivot())
+    char:PivotTo(workspace.Map["Bus Stops"][noSave.selectedBus]:GetPivot())
 end}
 
 
