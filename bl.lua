@@ -720,10 +720,10 @@ Tabs.File:CreateButton{Title = "Save Config", Description = "", Callback = funct
 end}
 
 
---[[ Activating Toggles Etc
+-- Activating Toggles Etc
 task.wait()
 autofarmToggle:SetValue(t.autofarm)
 autoraidToggle:SetValue(t.autoraid)
 autochestToggle:SetValue(t.autochest)
 autosellToggle:SetValue(t.autosell)
-autoshopToggle:SetValue(t.autoshop)]]
+autoshopToggle:SetValue(t.autoshop)
