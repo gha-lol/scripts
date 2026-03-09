@@ -134,7 +134,7 @@ orient.Attachment1 = part.Attachment
 
 plr.CharacterAdded:Connect(function(cha)
     char = cha
-    if t.autofarm or t.autoraid then
+    if t.autofarm or t.autoraid and game.PlaceId ~= 14890802310 then
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
     end
@@ -459,16 +459,18 @@ function autofarm(bool, ignoreName, tab)
             end
             
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
-            
-            for i,v in pairs(t.keys) do
-                if i ~= "M2" and v then
-                    char["client_character_controller"].Skill:FireServer(tostring(i),true)
-                elseif i == "M2" and v then
-                    char["client_character_controller"]["M2"]:FireServer(true,false)
+
+            if not enemy:FindFirstChild("IFrame") then
+                for i,v in pairs(t.keys) do
+                    if i ~= "M2" and v then
+                        char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                    elseif i == "M2" and v then
+                        char["client_character_controller"]["M2"]:FireServer(true,false)
+                    end
                 end
+                
+                char["client_character_controller"]["M1"]:FireServer(true,false)
             end
-            
-            char["client_character_controller"]["M1"]:FireServer(true,false)
         else
             enemy = getEnemy(tab)
         end
