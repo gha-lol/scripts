@@ -288,7 +288,7 @@ function checkStand()
     local returner = false
     local equipped = Service:JSONDecode(plrData.Stand.Value)
     
-    if equipped.Skin and t.arrowConfig.shiny and not t.ignoreSkinRarity[getData({Send="stand_skin"})[equipped.Name][equipped.Skin]] then
+    if equipped.Skin and t.arrowConfig.shiny and not t.arrowConfig.ignoreSkinRarity[getData({Send="stand_skin"})[equipped.Name][equipped.Skin]] then
         returner = true
     else
         for _,standd in pairs(t.arrowConfig.stands) do
