@@ -670,7 +670,7 @@ end}
 Tabs.Teleport:CreateParagraph("Aligned Paragraph", {Title = "Bus Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local busTable = {}
-for i=1,20 do table.insert(busTable, tostring(i)) end
+for i=1,19 do table.insert(busTable, tostring(i)) end
 busDown = Tabs.Teleport:CreateDropdown("busDown", {Title = "Bus Stop", Values = busTable, Searchable = true, Multi = false, Default = "1"})
 busDown:OnChanged(function(Value)
     noSave.selectedBus = Value
@@ -725,6 +725,21 @@ end
 
 Tabs.File:CreateButton{Title = "Save Config", Description = "", Callback = function()
     saveSettings()
+end}
+
+Tabs.File:CreateButton{Title = "Print Save Table", Description = "", Callback = function()
+    for i,v in pairs(t) do
+        local pp = v
+        local isTab = false
+        if typeof(v) == "table" then pp = "" isTab = true end
+        print(i .. ": " .. tostring(pp))
+
+        if isTab then
+            for k,l in pairs(v) do
+                print("  ",k,l)
+            end
+        end
+    end
 end}
 
 
