@@ -1,11 +1,3 @@
---[[if _G.tickLoads then
-    if tick() - _G.tickLoads < 10 then
-        return
-    end
-else
-    _G.tickLoads = tick()
-end]]
-
 local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
 local Window = Library:CreateWindow{Title = "bl", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(1500, 900), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
 
@@ -67,7 +59,8 @@ local t = {
     },
     arrowConfig = {
       shiny = false,
-      stands = {}
+      stands = {},
+      ignoreSkinRarity = {Common = false, Rare = false}
     },
     keys = {
       M2 = false,
@@ -82,7 +75,13 @@ local t = {
 
 if isfile("bl.json") then
     for i,v in pairs(Service:JSONDecode(readfile("bl.json"))) do
-        t[i] = v
+        if typeof(v) == "table" then
+            for k,l in pairs(v) do
+                t[i][k] = l
+            end
+        else
+            t[i] = v
+        end
     end
 end
 
@@ -193,6 +192,8 @@ function getData(arg)
         for i,v in pairs(dataTab) do
             table.insert(returner, v.Name)
         end
+    elseif arg.Send == "stand_skin" then
+        returner = dataTab
     elseif arg.Send == "trait" then
         if arg.Desc then
             if dataTab[arg.Desc] then
@@ -287,7 +288,7 @@ function checkStand()
     local returner = false
     local equipped = Service:JSONDecode(plrData.Stand.Value)
     
-    if equipped.Skin and t.arrowConfig.shiny then
+    if equipped.Skin and t.arrowConfig.shiny and not t.ignoreSkinRarity[getData({Send="stand_skin"})[equipped.Name][equipped.Skin]] then
         returner = true
     else
         for _,standd in pairs(t.arrowConfig.stands) do
@@ -569,6 +570,11 @@ end)
 local stopshinyToggle = Tabs.Automation:CreateToggle("stopshinyToggle", {Title = "Stop on Shiny", Default = t.arrowConfig.shiny})
 stopshinyToggle:OnChanged(function()
     t.arrowConfig.shiny = Options.stopshinyToggle.Value
+end)
+
+local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = {}})
+ignoreSkinRarityDown:OnChanged(function(Value)
+    t.arrowConfig.ignoreSkinRarity = Value
 end)
 
 local dropss = {"Stand", "Trait", "Strength", "Specialty", "Speed"}
