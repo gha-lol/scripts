@@ -573,7 +573,7 @@ stopshinyToggle:OnChanged(function()
 end)
 
 local skinignore = t.arrowConfig.ignoreSkinRarity
-for i,v in pairs(skinignore) do if i == "Legendary" or i == "Secret" then table.remove(skinignore, i) end end
+skinignore["Legendary"] = nil  skinignore["Secret"] = nil
 local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = skinignore})
 ignoreSkinRarityDown:OnChanged(function(Value)
     Value["Legendary"] = false
