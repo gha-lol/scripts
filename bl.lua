@@ -574,6 +574,8 @@ end)
 
 local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = {}})
 ignoreSkinRarityDown:OnChanged(function(Value)
+    Value["Legendary"] = false
+    Value["Secret"] = false
     t.arrowConfig.ignoreSkinRarity = Value
 end)
 
