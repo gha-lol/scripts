@@ -60,7 +60,7 @@ local t = {
     arrowConfig = {
       shiny = false,
       stands = {},
-      ignoreSkinRarity = {Common = false, Rare = false}
+      ignoreSkinRarity = {Common = false, Rare = false, Legendary = false, Secret = false}
     },
     keys = {
       M2 = false,
@@ -572,7 +572,9 @@ stopshinyToggle:OnChanged(function()
     t.arrowConfig.shiny = Options.stopshinyToggle.Value
 end)
 
-local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = {}})
+local skinignore = t.arrowConfig.ignoreSkinRarity
+for i,v in pairs(skinignore) do if i == "Legendary" or i == "Secret" then table.remove(skinignore, i) end end
+local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = skinignore})
 ignoreSkinRarityDown:OnChanged(function(Value)
     Value["Legendary"] = false
     Value["Secret"] = false
