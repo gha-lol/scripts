@@ -705,7 +705,7 @@ local noVfx = Tabs.Config:CreateToggle("noVfx", {Title = "No VFX", Default = t.n
 noVfx:OnChanged(function()
     t.noVfx = Options["noVfx"].Value
     
-    if Options["noVfx"].Value then
+    if t.noVfx then
         pcall(function()
             game:GetService("ReplicatedStorage").requests.general.vfx:Destroy()
         end)
