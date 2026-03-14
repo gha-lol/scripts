@@ -39,6 +39,7 @@ local t = {
     autopoints = false,
     autoarrow = false,
     autoshop = false,
+    noVfx = false,
     distance = 8,
     position = "Down",
     selectedTarget = "dahsdshaudahus",
@@ -698,6 +699,17 @@ end})
 selectTopDown = Tabs.Config:CreateDropdown("selectTopDown", {Title = "Farm Position", Values = {"Top", "Down"}, Multi = false, Default = t.position})
 selectTopDown:OnChanged(function(Value)
     t.position = Value
+end)
+
+local noVfx = Tabs.Config:CreateToggle("noVfx", {Title = "No VFX", Default = t.noVfx})
+noVfx:OnChanged(function()
+    t.noVfx = Options["noVfx"].Value
+    
+    if Options["noVfx"].Value then
+        pcall(function()
+            game:GetService("ReplicatedStorage").requests.general.vfx:Destroy()
+        end)
+    end
 end)
 
 
