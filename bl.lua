@@ -151,6 +151,18 @@ function getInventory()
     return Service:JSONDecode(plrData.Inventory.Value)
 end
 
+function changeVfx()
+    local a = getconnections(game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent)
+
+    for _,v in pairs(a) do
+        if t.noVfx then
+            v:Disable()
+        else
+            v:Enable()
+        end
+    end
+end
+
 function getNpc(tab)
     local returner
     
@@ -705,11 +717,7 @@ local noVfx = Tabs.Config:CreateToggle("noVfx", {Title = "No VFX", Default = t.n
 noVfx:OnChanged(function()
     t.noVfx = Options["noVfx"].Value
     
-    if t.noVfx then
-        pcall(function()
-            game:GetService("ReplicatedStorage").requests.general.vfx:Destroy()
-        end)
-    end
+    changeVfx()
 end)
 
 
@@ -766,3 +774,4 @@ autoraidToggle:SetValue(t.autoraid)
 autochestToggle:SetValue(t.autochest)
 autosellToggle:SetValue(t.autosell)
 autoshopToggle:SetValue(t.autoshop)
+noVfx:SetValue(t.noVfx)
