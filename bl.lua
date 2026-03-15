@@ -40,6 +40,7 @@ local t = {
     autoarrow = false,
     autoshop = false,
     noVfx = false,
+    blackscreen = false,
     distance = 8,
     position = "Down",
     selectedTarget = "dahsdshaudahus",
@@ -149,6 +150,24 @@ end
 
 function getInventory()
     return Service:JSONDecode(plrData.Inventory.Value)
+end
+
+local allScreens = {}
+function blackScreen()
+    if t.blackscreen then
+        for _,v in pairs(allScreens) do v:Destroy() end
+        local a = Instance.new("ScreenGui", plr.PlayerGui)
+		a.IgnoreGuiInset = true
+		local b = Instance.new("Frame", a)
+		b.Size = UDim2.new(2,0,2,0)
+		b.Position = UDim2.new(0,0,0,0)
+		b.BackgroundColor3 = Color3.new(0,0,0)
+		b.ZIndex = -100
+        
+        table.insert(allScreens, a)
+    else
+        for _,v in pairs(allScreens) do v:Destroy() end
+    end
 end
 
 function changeVfx()
@@ -720,6 +739,13 @@ noVfx:OnChanged(function()
     changeVfx()
 end)
 
+local blackscreen = Tabs.Config:CreateToggle("blackscreen", {Title = "Black Screen", Default = t.blackscreen})
+blackscreen:OnChanged(function()
+    t.blackscreen = Options["blackscreen"].Value
+    
+    blackScreen()
+end)
+
 
 -- Auto Sell Section
 
@@ -775,3 +801,4 @@ autochestToggle:SetValue(t.autochest)
 autosellToggle:SetValue(t.autosell)
 autoshopToggle:SetValue(t.autoshop)
 noVfx:SetValue(t.noVfx)
+blackscreen:SetValue(t.blackscreen)
