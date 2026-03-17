@@ -513,9 +513,10 @@ function autofarm(bool, ignoreName, tab)
                 bossMaxHealth = enemy.Humanoid.MaxHealth
                 if not lastHealth then lastHealth = enemy.Humanoid.Health end
                 
-                if (bossMaxHealth - lastHealth) <= (bossMaxHealth * .51) then
+                if enemy.Humanoid.Health - lastHealth > 100 and bossMaxHealth <= (bossMaxHealth * .51) then
                     canInsta = true
                 end
+                lastHealth = enemy.Humanoid.Health
             else
                 isBoss = false
             end
@@ -668,6 +669,7 @@ ignoreSkinRarityDown:OnChanged(function(Value)
     Value["Secret"] = false
     t.arrowConfig.ignoreSkinRarity = Value
 end)
+ignoreSkinRarityDown:SetValue(t.arrowConfig.ignoreSkinRarity)
 
 local dropss = {"Stand", "Trait", "Strength", "Specialty", "Speed"}
 local descTrait
