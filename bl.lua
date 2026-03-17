@@ -512,9 +512,9 @@ function autofarm(bool, ignoreName, tab)
             if enemy.Humanoid.MaxHealth > 1400 then
                 isBoss = true
                 bossMaxHealth = enemy.Humanoid.MaxHealth
-                if not lastHealth then lastHealth = enemy.Humanoid.Health end
+                if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
-                if enemy.Humanoid.Health - lastHealth > 100 and bossMaxHealth <= (bossMaxHealth * .51) then
+                if enemy.Humanoid.Health - lastHealth > 100 then
                     canInsta = true
                 end
                 lastHealth = enemy.Humanoid.Health
@@ -662,9 +662,9 @@ stopshinyToggle:OnChanged(function()
     t.arrowConfig.shiny = Options.stopshinyToggle.Value
 end)
 
-local skinignore = t.arrowConfig.ignoreSkinRarity
-skinignore["Legendary"] = nil  skinignore["Secret"] = nil
-local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = {"Common", "Rare"}})
+local skinignore = {}
+for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do if v then table.insert(skinignore, i) end end
+local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = skinignore})
 ignoreSkinRarityDown:OnChanged(function(Value)
     for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do
         t.arrowConfig.ignoreSkinRarity[i] = Value[i] or false
@@ -672,7 +672,6 @@ ignoreSkinRarityDown:OnChanged(function(Value)
     t.arrowConfig.ignoreSkinRarity["Legendary"] = false
     t.arrowConfig.ignoreSkinRarity["Secret"] = false
 end)
-ignoreSkinRarityDown:SetValue(t.arrowConfig.ignoreSkinRarity)
 
 local dropss = {"Stand", "Trait", "Strength", "Specialty", "Speed"}
 local descTrait
@@ -821,7 +820,6 @@ autosellDrop:OnChanged(function(Value)
         t.selectedRarity[i] = Value[i] or false
     end
 end)
-autosellDrop:SetValue(t.selectedRarity)
 
 
 -- Skills Section
@@ -837,7 +835,6 @@ autoskillKeys:OnChanged(function(Value)
         t.keys[i] = Value[i] or false
     end
 end)
-autoskillKeys:SetValue(t.keys)
 
 
 -- File
