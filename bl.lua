@@ -813,8 +813,9 @@ end)
 Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Auto Sell Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local allSellRarities = {}
-for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) end
-local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Searchable = false, Multi = true, Default = nil})
+local activesRarities = {}
+for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) if v == true then table.insert(activesRarities, i) end end
+local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Multi = true, Default = activesRarities})
 autosellDrop:OnChanged(function(Value)
     for i,v in pairs(t.selectedRarity) do
         t.selectedRarity[i] = Value[i] or false
@@ -828,8 +829,9 @@ autosellDrop:SetValue(t.selectedRarity)
 Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Skills Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local allKeyss = {}
-for i,v in pairs(t.keys) do table.insert(allKeyss, i) end
-local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Searchable = false, Multi = true, Default = nil})
+local activeKeyss = {}
+for i,v in pairs(t.keys) do table.insert(allKeyss, i) if v == true then table.insert(activesKeyss, i) end end
+local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Multi = true, Default = activeKeyss})
 autoskillKeys:OnChanged(function(Value)
     for i,v in pairs(t.keys) do
         t.keys[i] = Value[i] or false
