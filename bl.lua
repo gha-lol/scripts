@@ -509,7 +509,7 @@ function autofarm(bool, ignoreName, tab)
             
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
-            if enemy.Humanoid.MaxHealth > 1400 then
+            if enemy.Humanoid.MaxHealth > 1400 and t.instakill then
                 isBoss = true
                 bossMaxHealth = enemy.Humanoid.MaxHealth
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
