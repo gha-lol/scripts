@@ -665,9 +665,11 @@ local skinignore = t.arrowConfig.ignoreSkinRarity
 skinignore["Legendary"] = nil  skinignore["Secret"] = nil
 local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = skinignore})
 ignoreSkinRarityDown:OnChanged(function(Value)
+    for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do
+        t.arrowConfig.ignoreSkinRarity[i] = Value[i] or false
+    end
     Value["Legendary"] = false
     Value["Secret"] = false
-    t.arrowConfig.ignoreSkinRarity = Value
 end)
 ignoreSkinRarityDown:SetValue(t.arrowConfig.ignoreSkinRarity)
 
