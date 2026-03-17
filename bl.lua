@@ -809,10 +809,11 @@ Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Auto Sell Section", C
 
 local allSellRarities = {}
 for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) end
-local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Searchable = false, Multi = true, Default = t.selectedRarity})
+local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Searchable = false, Multi = true, Default = {}})
 autosellDrop:OnChanged(function(Value)
     t.selectedRarity = Value
 end)
+autosellDrop:SetValue(t.selectedRarity)
 
 
 -- Skills Section
@@ -821,10 +822,11 @@ Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Skills Section", Cont
 
 local allKeyss = {}
 for i,v in pairs(t.keys) do table.insert(allKeyss, i) end
-local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Searchable = false, Multi = true, Default = t.keys})
+local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Searchable = false, Multi = true, Default = {}})
 autoskillKeys:OnChanged(function(Value)
     t.keys = Value
 end)
+autoskillKeys:SetValue(t.keys)
 
 
 -- File
