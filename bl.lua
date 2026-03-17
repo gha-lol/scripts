@@ -1,3 +1,4 @@
+
 local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
 local Window = Library:CreateWindow{Title = "bl", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(1500, 900), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
 
@@ -813,7 +814,7 @@ Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Auto Sell Section", C
 
 local allSellRarities = {}
 for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) end
-local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Searchable = false, Multi = true, Default = {}})
+local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Searchable = false, Multi = true, Default = nil})
 autosellDrop:OnChanged(function(Value)
     for i,v in pairs(t.selectedRarity) do
         t.selectedRarity[i] = Value[i] or false
@@ -828,7 +829,7 @@ Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Skills Section", Cont
 
 local allKeyss = {}
 for i,v in pairs(t.keys) do table.insert(allKeyss, i) end
-local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Searchable = false, Multi = true, Default = {}})
+local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Searchable = false, Multi = true, Default = nil})
 autoskillKeys:OnChanged(function(Value)
     for i,v in pairs(t.keys) do
         t.keys[i] = Value[i] or false
