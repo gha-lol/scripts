@@ -517,6 +517,9 @@ function autofarm(bool, ignoreName, tab)
                 
                 if enemy.Humanoid.Health - lastHealth > 50 then
                     canInsta = true
+
+					local bb = tick()
+					repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
                 end
 
 				if enemy.Humanoid.Health < lastHealth then
