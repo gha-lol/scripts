@@ -261,10 +261,11 @@ function autoShop()
         if shop then shop = decoded[decoded.Version][t.selectedShop] end
         
         if shop then
-            for i,v in pairs({["Legendary Chest"] = 3, ["Lucky Arrow"] = 1}) do
+            for i,v in pairs({["Lucky Arrow"] = 1, ["Legendary Chest"] = 3}) do
                 if shop[i] then
                     if shop[i] < v then
                         buy(i)
+						task.wait(1)
                     end
                 else
                     buy(i)
@@ -274,7 +275,7 @@ function autoShop()
             buy("Lucky Arrow")
             buy("Legendary Chest")
         end
-        task.wait(5)
+        task.wait(4)
     end
 end
 
