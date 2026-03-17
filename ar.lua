@@ -16,6 +16,7 @@ local fuseDropdown1
 local fuseDropdown2
 local selectedMainFuse
 local selectedFodderFuse
+local selectedStat = "Damage"
 
 -- Functions
 
@@ -71,6 +72,19 @@ fuseDropdown2 = Tabs.Main:CreateDropdown("fuseDropdown2", {Title = "Fodder Unit"
 fuseDropdown2:OnChanged(function(Value)
     selectedFodderFuse = Value
 end)
+
+statDropdown = Tabs.Main:CreateDropdown("statDropdown", {Title = "Stat", Values = {"Damage", "Cooldown", "Range"}, Multi = false, Default = "Damage"})
+statDropdown:OnChanged(function(Value)
+    selectedStat = Value
+end)
+
+Tabs.Main:CreateButton{Title = "Pass Stat", Description = "", Callback = function()
+    spawn(function()
+        for i=1,9999 do
+            Remotes.StatTransfer.Transfer:FireServer(selectedFodderFuse, selectedMainFuse, {selectedStat})
+        end
+    end)
+end}
 
 Tabs.Main:CreateButton{Title = "Fuse Unit", Description = "", Callback = function()
     local tab = {}
