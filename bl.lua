@@ -513,7 +513,7 @@ function autofarm(bool, ignoreName, tab)
                 bossMaxHealth = enemy.Humanoid.MaxHealth
                 if not lastHealth then lastHealth = enemy.Humanoid.Health end
                 
-                if (MaxHealth - lastHealth) <= (MaxHealth * .51) then
+                if (bossMaxHealth - lastHealth) <= (bossMaxHealth * .51) then
                     canInsta = true
                 end
             else
