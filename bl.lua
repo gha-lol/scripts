@@ -663,7 +663,7 @@ stopshinyToggle:OnChanged(function()
 end)
 
 local skinignore = {}
-for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do if v then table.insert(skinignore, i) end end
+for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do if v == true then table.insert(skinignore, i) end end
 local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = skinignore})
 ignoreSkinRarityDown:OnChanged(function(Value)
     for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do
