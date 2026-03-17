@@ -519,10 +519,9 @@ function autofarm(bool, ignoreName, tab)
                 if enemy.Humanoid.Health - lastHealth > 50 and not canInsta and not repeating then
 					repeating = true
 					spawn(function()
-	                    canInsta = true
-	
-						local bb = tick()
+	                    local bb = tick()
 						repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
+						canInsta = true
 					end)
                 end
 
