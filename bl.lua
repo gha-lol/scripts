@@ -39,6 +39,8 @@ local t = {
     autopoints = false,
     autoarrow = false,
     autoshop = false,
+    instakill = false,
+    holdskill = "Z",
     noVfx = false,
     blackscreen = false,
     distance = 8,
@@ -436,21 +438,34 @@ function getEnemy(a)
     return returner
 end
 
+function setAligns(a)
+    if a then
+        align.Attachment0 = char.HumanoidRootPart.RootAttachment
+        orient.Attachment0 = char.HumanoidRootPart.RootAttachment
+    else
+        align.Attachment0 = nil
+        orient.Attachment0 = nil
+    end
+end
+
 function autofarm(bool, ignoreName, tab)
     local enemy
+    local canInsta = false
+    local isBoss = false
+    local bossMaxHealth = nil
+    local lastHealth = 9999
+    
     local posY = -t.distance
     local cfAng = 90
     
     if t[bool] then
         if bool == "autoraid" and game.PlaceId == 14890802310 then return end
-        align.Attachment0 = char.HumanoidRootPart.RootAttachment
-        orient.Attachment0 = char.HumanoidRootPart.RootAttachment
+        setAligns(true)
         
         if bool == "autofarm" and t.autoraid then t.autoraid = false
         elseif bool == "autoraid" and t.autofarm then t.autofarm = false end
     else
-        align.Attachment0 = nil
-        orient.Attachment0 = nil
+        setAligns(false)
     end
   
     while t[bool] do task.wait()
@@ -493,16 +508,47 @@ function autofarm(bool, ignoreName, tab)
             
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
+            if enemy.Humanoid.MaxHealth > 1400 then
+                isBoss = true
+                bossMaxHealth = enemy.Humanoid.MaxHealth
+                if not lastHealth then lastHealth = enemy.Humanoid.Health end
+                
+                if (MaxHealth - lastHealth) <= (MaxHealth * .51) then
+                    canInsta = true
+                end
+            else
+                isBoss = false
+            end
+
             if not enemy:FindFirstChild("IFrame") then
                 for i,v in pairs(t.keys) do
                     if i ~= "M2" and v then
-                        char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                        if i == t.holdskill and isBoss and t.instakill then
+                            if canInsta then
+                                char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                            end
+                        else
+                            char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                        end
                     elseif i == "M2" and v then
                         char["client_character_controller"]["M2"]:FireServer(true,false)
                     end
                 end
                 
                 char["client_character_controller"]["M1"]:FireServer(true,false)
+            elseif char:FindFirstChild("IFrame") and t.instakill and canInsta then
+                workspace.FallenPartsDestroyHeight = -5000
+                setAligns(false)
+                
+                local oldCf = char.HumanoidRootPart.CFrame
+                local lastTick = tick()
+                
+                repeat task.wait()
+                    char.HumanoidRootPart.CFrame = CFrame.new(0,-550, 0)
+                until tick() - lastTick >= 3
+                
+                char.HumanoidRootPart.CFrame = oldCf
+                setAligns(true)
             end
         else
             enemy = getEnemy(tab)
@@ -525,6 +571,16 @@ autoraidToggle:OnChanged(function()
     t.autoraid = Options.autoraidToggle.Value
         
     autofarm("autoraid", true, {})
+end)
+
+local instakillToggle = Tabs.AutoFarm:CreateToggle("instakillToggle", {Title = "Insta Kill", Default = t.instakill})
+instakillToggle:OnChanged(function()
+    t.instakill = Options.instakillToggle.Value
+end)
+
+holdskillDropdown = Tabs.AutoFarm:CreateDropdown("holdskillDropdown", {Title = "Skill To Hold", Values = {"R", "Z", "X", "C", "V"}, Searchable = false, Multi = false, Default = t.holdskill})
+holdskillDropdown:OnChanged(function(Value)
+    t.holdskill = Value
 end)
 
 local autochestToggle = Tabs.AutoFarm:CreateToggle("autochestToggle", {Title = "Auto Open Chest", Default = t.autochest})
@@ -751,24 +807,24 @@ end)
 
 Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Auto Sell Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-for i,v in pairs(t.selectedRarity) do
-    local key = Tabs.Config:CreateToggle("rarity"..tostring(i), {Title = "Sell "..tostring(i), Default = v})
-    key:OnChanged(function()
-        t.selectedRarity[i] = Options["rarity"..tostring(i)].Value
-    end)
-end
+local allSellRarities = {}
+for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) end
+local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Searchable = false, Multi = true, Default = t.selectedRarity})
+autosellDrop:OnChanged(function(Value)
+    t.selectedRarity = Value
+end)
 
 
 -- Skills Section
 
 Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Skills Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-for i,v in pairs(t.keys) do
-    local key = Tabs.Config:CreateToggle("key"..tostring(i), {Title = "Use "..tostring(i), Default = v})
-    key:OnChanged(function()
-        t.keys[i] = Options["key"..tostring(i)].Value
-    end)
-end
+local allKeyss = {}
+for i,v in pairs(t.keys) do table.insert(allKeyss, i) end
+local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Searchable = false, Multi = true, Default = t.keys})
+autoskillKeys:OnChanged(function(Value)
+    t.keys = Value
+end)
 
 
 -- File
