@@ -830,7 +830,7 @@ Tabs.Config:CreateParagraph("Aligned Paragraph", {Title = "Skills Section", Cont
 
 local allKeyss = {}
 local activeKeyss = {}
-for i,v in pairs(t.keys) do table.insert(allKeyss, i) if v == true then table.insert(activesKeyss, i) end end
+for i,v in pairs(t.keys) do table.insert(allKeyss, i) if v == true then table.insert(activeKeyss, i) end end
 local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Multi = true, Default = activeKeyss})
 autoskillKeys:OnChanged(function(Value)
     for i,v in pairs(t.keys) do
