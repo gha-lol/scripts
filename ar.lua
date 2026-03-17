@@ -80,7 +80,7 @@ end)
 
 Tabs.Main:CreateButton{Title = "Pass Stat", Description = "", Callback = function()
     spawn(function()
-        for i=1,9999 do
+        for i=1,1000 do
             Remotes.StatTransfer.Transfer:FireServer(selectedFodderFuse, selectedMainFuse, {selectedStat})
         end
     end)
