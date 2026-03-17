@@ -811,8 +811,8 @@ local allSellRarities = {}
 for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) end
 local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Searchable = false, Multi = true, Default = {}})
 autosellDrop:OnChanged(function(Value)
-    for i,v in pairs(Value) do
-        t.selectedRarity[i] = v
+    for i,v in pairs(t.selectedRarity) do
+        t.selectedRarity[i] = Value[i] or false
     end
 end)
 autosellDrop:SetValue(t.selectedRarity)
@@ -826,8 +826,8 @@ local allKeyss = {}
 for i,v in pairs(t.keys) do table.insert(allKeyss, i) end
 local autoskillKeys = Tabs.Config:CreateDropdown("autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Searchable = false, Multi = true, Default = {}})
 autoskillKeys:OnChanged(function(Value)
-    for i,v in pairs(Value) do
-        t.keys[i] = v
+    for i,v in pairs(t.keys) do
+        t.keys[i] = Value[i] or false
     end
 end)
 autoskillKeys:SetValue(t.keys)
