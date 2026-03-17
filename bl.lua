@@ -515,7 +515,7 @@ function autofarm(bool, ignoreName, tab)
                 bossMaxHealth = enemy.Humanoid.MaxHealth
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
-                if enemy.Humanoid.Health - lastHealth > 50 then
+                if enemy.Humanoid.Health - lastHealth > 50 and not canInsta then
                     canInsta = true
 
 					local bb = tick()
