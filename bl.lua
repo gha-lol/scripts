@@ -456,6 +456,7 @@ function autofarm(bool, ignoreName, tab)
     local isBoss = false
     local bossMaxHealth = nil
     local lastHealth = 9999
+	local repeating
     
     local posY = -t.distance
     local cfAng = 90
@@ -515,11 +516,14 @@ function autofarm(bool, ignoreName, tab)
                 bossMaxHealth = enemy.Humanoid.MaxHealth
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
-                if enemy.Humanoid.Health - lastHealth > 50 and not canInsta then
-                    canInsta = true
-
-					local bb = tick()
-					repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
+                if enemy.Humanoid.Health - lastHealth > 50 and not canInsta and not repeating then
+					repeating = true
+					spawn(function()
+	                    canInsta = true
+	
+						local bb = tick()
+						repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
+					end)
                 end
 
 				if enemy.Humanoid.Health < lastHealth then
