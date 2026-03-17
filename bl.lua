@@ -573,7 +573,7 @@ function autofarm(bool, ignoreName, tab)
                 
                 repeat task.wait()
                     char.HumanoidRootPart.CFrame = CFrame.new(0,-550, 0)
-                until tick() - lastTick >= 3
+                until tick() - lastTick >= 3 or not checkAlive(enemy) or enemy == nil
                 
                 char.HumanoidRootPart.CFrame = oldCf
                 setAligns(true)
