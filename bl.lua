@@ -535,14 +535,19 @@ function autofarm(bool, ignoreName, tab)
             if not enemy:FindFirstChild("IFrame") then
 				local done = 0
 				local subst = nil
+				local vvalue = false
 				
                 for i,v in pairs(t.keys) do
 					done += 1
 					if done == 1 and isBoss and t.instakill and i ~= t.holdskill then
 						subst = i
+						vvalue = v
+						
 						i = t.holdskill
+						v = true
 					elseif done > 1 and subst and i == t.holdskill then
 						i = subst
+						v = vvalue
 					end
 					
                     if i ~= "M2" and v then
