@@ -90,6 +90,19 @@ if isfile("bl.json") then
     end
 end
 
+if not _G.fphh then
+	_G.fphh = true
+	local ind
+	ind = hookmetamethod(game,"__index",function(self, v)
+		pcall(function()
+			if not checkcaller() and self == workspace and v == "FallenPartsDestroyHeight" then
+				return -500
+			end
+		end)
+		return ind(self,v)
+	end)
+end
+
 
 -- Variables
 
