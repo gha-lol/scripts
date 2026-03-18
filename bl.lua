@@ -94,11 +94,9 @@ if not _G.fphh then
 	_G.fphh = true
 	local ind
 	ind = hookmetamethod(game,"__index",function(self, v)
-		pcall(function()
-			if not checkcaller() and self == workspace and v == "FallenPartsDestroyHeight" then
-				return -500
-			end
-		end)
+		if not checkcaller() and self == workspace and v == "FallenPartsDestroyHeight" then
+			return -500
+		end
 		return ind(self,v)
 	end)
 end
