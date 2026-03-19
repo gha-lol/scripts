@@ -625,7 +625,7 @@ end
 
 Tabs.AutoFarm:CreateParagraph("Aligned Paragraph", {Title = "Raids Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-local autoraidToggle = Tabs.AutoFarm:CreateToggle("autoraidToggle", {Title = "Auto Raid", Default = t.autoraid})
+local autoraidToggle = Tabs.AutoFarm:CreateToggle("autoraidToggle", {Title = "Auto Raid", Default = false})
 autoraidToggle:OnChanged(function()
     t.autoraid = Options.autoraidToggle.Value
         
@@ -656,7 +656,7 @@ end)
 
 Tabs.AutoFarm:CreateParagraph("Aligned Paragraph", {Title = "Main Game Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-local autofarmToggle = Tabs.AutoFarm:CreateToggle("autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm})
+local autofarmToggle = Tabs.AutoFarm:CreateToggle("autofarmToggle", {Title = "Auto Farm Selected", Default = false})
 autofarmToggle:OnChanged(function()
     t.autofarm = Options.autofarmToggle.Value
         
