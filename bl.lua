@@ -1,4 +1,3 @@
-
 local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
 local Window = Library:CreateWindow{Title = "bl", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(1500, 900), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
 
@@ -31,14 +30,13 @@ local Tabs = {
 local Options = Library.Options
 
 local Service = game:GetService("HttpService")
-local noSave = {Identifier = 0, selectedBus = "1", selectedTpNpc = "Chumbo"}
+local noSave = {Identifier = 0, selectedBus = "1", selectedTpNpc = "Chumbo", cds = {}, autoarrow = false}
 local t = {
     autofarm = false,
     autoraid = false,
     autosell = false,
     autochest = false,
     autopoints = false,
-    autoarrow = false,
     autoshop = false,
     instakill = false,
     holdskill = "Z",
@@ -78,29 +76,6 @@ local t = {
     }
 }
 
-if isfile("bl.json") then
-    for i,v in pairs(Service:JSONDecode(readfile("bl.json"))) do
-        if typeof(v) == "table" then
-            for k,l in pairs(v) do
-                t[i][k] = l
-            end
-        else
-            t[i] = v
-        end
-    end
-end
-
-if not _G.fphh then
-	_G.fphh = true
-	local ind
-	ind = hookmetamethod(game,"__index",newcclosure(function(self, v)
-		if not checkcaller() and self == workspace and v == "FallenPartsDestroyHeight" then
-			return -500
-		end
-		return ind(self,v)
-	end))
-end
-
 
 -- Variables
 
@@ -109,6 +84,10 @@ local char = plr.Character
 
 local plrData = plr.PlayerData.SlotData
 local get_data = game.ReplicatedStorage.requests.miscellaneous.get_data
+local allSkills = get_data:InvokeServer("ability")
+
+
+-- Pressing Start
 
 if char == nil and plr.PlayerGui:FindFirstChild("Main Menu") then
     repeat task.wait(.2)
@@ -155,6 +134,33 @@ plr.CharacterAdded:Connect(function(cha)
     end
 end)
 
+if isfile("bl.json") then
+    for i,v in pairs(Service:JSONDecode(readfile("bl.json"))) do
+        if typeof(v) == "table" then
+            for k,l in pairs(v) do
+                t[i][k] = l
+            end
+        else
+            t[i] = v
+        end
+    end
+end
+
+if not _G.fphh then
+  	_G.fphh = true
+  	local ind
+  	ind = hookmetamethod(game,"__index",newcclosure(function(self, v)
+  		  if not checkcaller() and self == workspace and v == "FallenPartsDestroyHeight" then
+  			    return -500
+  		  end
+  	  	return ind(self,v)
+  	end))
+end
+
+game.ReplicatedStorage.requests.character_server_client.communicate.OnClientEvent:Connect(function(tab)
+    noSave.cds = tab.Cooldowns
+end)
+
 
 -- Functions
 
@@ -166,17 +172,31 @@ function getInventory()
     return Service:JSONDecode(plrData.Inventory.Value)
 end
 
+function isCooldown(button)
+    local returner = true
+    local equipped = Service:JSONDecode(plrData.Stand.Value)
+    
+    for i,v in pairs(allSkills) do
+        if tostring(i):match(equipped.Name .. ": ") and v.Keybind == button and not noSave.cds[v.Name] then
+            returner = false
+            break
+        end
+    end
+    
+    return returner
+end
+
 local allScreens = {}
 function blackScreen()
     if t.blackscreen then
         for _,v in pairs(allScreens) do v:Destroy() end
         local a = Instance.new("ScreenGui", plr.PlayerGui)
-		a.IgnoreGuiInset = true
-		local b = Instance.new("Frame", a)
-		b.Size = UDim2.new(2,0,2,0)
-		b.Position = UDim2.new(0,0,0,0)
-		b.BackgroundColor3 = Color3.new(0,0,0)
-		b.ZIndex = -100
+    		a.IgnoreGuiInset = true
+    		local b = Instance.new("Frame", a)
+    		b.Size = UDim2.new(2,0,2,0)
+    		b.Position = UDim2.new(0,0,0,0)
+    		b.BackgroundColor3 = Color3.new(0,0,0)
+    		b.ZIndex = -100
         
         table.insert(allScreens, a)
     else
@@ -365,10 +385,10 @@ function autoArrow()
             
         repeat task.wait(.5)
             game.ReplicatedStorage.requests.character.use_item:FireServer("Stand Arrow")
-        until plrData.Stand.Value ~= before or t.autoarrow == false
+        until plrData.Stand.Value ~= before or noSave.autoarrow == false
     end
     
-    while t.autoarrow do task.wait()
+    while noSave.autoarrow do task.wait()
         if not checkStand() then
             useArrow()
         else
@@ -467,7 +487,7 @@ function autofarm(bool, ignoreName, tab)
     local isBoss = false
     local bossMaxHealth = nil
     local lastHealth = 9999
-	local repeating
+	  local repeating
     
     local posY = -t.distance
     local cfAng = 90
@@ -528,45 +548,45 @@ function autofarm(bool, ignoreName, tab)
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
                 if enemy.Humanoid.Health - lastHealth > 50 and not canInsta and not repeating then
-					repeating = true
-					spawn(function()
-	                    local bb = tick()
-						repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
-						canInsta = true
-					end)
+    					      repeating = true
+          					spawn(function()
+  	                    local bb = tick()
+          						  repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
+          						  canInsta = true
+          					end)
                 end
 
-				if enemy.Humanoid.Health < lastHealth then
-                	lastHealth = enemy.Humanoid.Health
-				end
+        				if enemy.Humanoid.Health < lastHealth then
+                  	lastHealth = enemy.Humanoid.Health
+        				end
             else
                 isBoss = false
             end
 
             if not enemy:FindFirstChild("IFrame") then
-				local done = 0
-				local subst = nil
-				local vvalue = false
-				
+        				local done = 0
+        				local subst = nil
+        				local vvalue = false
+    				
                 for i,v in pairs(t.keys) do
-					done += 1
-					if done == 1 and isBoss and t.instakill and i ~= t.holdskill then
-						subst = i
-						vvalue = v
-						
-						i = t.holdskill
-						v = true
-					elseif done > 1 and subst and i == t.holdskill then
-						i = subst
-						v = vvalue
-					end
+					          done += 1
+          					if done == 1 and isBoss and t.instakill and i ~= t.holdskill then
+            				    subst = i
+            						vvalue = v
+      						
+            						i = t.holdskill
+            						v = true
+          					elseif done > 1 and subst and i == t.holdskill then
+            						i = subst
+            						v = vvalue
+          					end
 					
                     if i ~= "M2" and v then
                         if i == t.holdskill and isBoss and t.instakill then
                             if canInsta then
                                 char["client_character_controller"].Skill:FireServer(tostring(i),true)
                             end
-                        else
+                        elseif not isCooldown(i) then
                             char["client_character_controller"].Skill:FireServer(tostring(i),true)
                         end
                     elseif i == "M2" and v then
@@ -681,14 +701,14 @@ end)
 
 Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Auto Arrow Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-local autoarrowToggle = Tabs.Automation:CreateToggle("autoarrowToggle", {Title = "Auto Arrow", Default = t.autoarrow})
+local autoarrowToggle = Tabs.Automation:CreateToggle("autoarrowToggle", {Title = "Auto Arrow", Default = noSave.autoarrow})
 autoarrowToggle:OnChanged(function()
-    t.autoarrow = Options.autoarrowToggle.Value
+    noSave.autoarrow = Options.autoarrowToggle.Value
 
     if game.PlaceId == 14890802310 then
         local e = autoArrow()
         if not e then
-            t.autoarrow = false
+            noSave.autoarrow = false
             autoarrowToggle:SetValue(false)
         end
     end
