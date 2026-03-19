@@ -487,7 +487,7 @@ function autofarm(bool, ignoreName, tab)
     local isBoss = false
     local bossMaxHealth = nil
     local lastHealth = 9999
-	  local repeating
+    local repeating
     
     local posY = -t.distance
     local cfAng = 90
@@ -548,38 +548,38 @@ function autofarm(bool, ignoreName, tab)
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
                 if enemy.Humanoid.Health - lastHealth > 50 and not canInsta and not repeating then
-    					      repeating = true
-          					spawn(function()
-  	                    local bb = tick()
-          						  repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
-          						  canInsta = true
-          					end)
+                    repeating = true
+                    spawn(function()
+                        local bb = tick()
+                        repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
+                        canInsta = true
+                    end)
                 end
 
-        				if enemy.Humanoid.Health < lastHealth then
-                  	lastHealth = enemy.Humanoid.Health
-        				end
+                if enemy.Humanoid.Health < lastHealth then
+                    lastHealth = enemy.Humanoid.Health
+                end
             else
                 isBoss = false
             end
 
             if not enemy:FindFirstChild("IFrame") then
-        				local done = 0
-        				local subst = nil
-        				local vvalue = false
+                local done = 0
+                local subst = nil
+                local vvalue = false
     				
                 for i,v in pairs(t.keys) do
-					          done += 1
-          					if done == 1 and isBoss and t.instakill and i ~= t.holdskill then
-            				    subst = i
-            						vvalue = v
+                    done += 1
+                    if done == 1 and isBoss and t.instakill and i ~= t.holdskill then
+                        subst = i
+                        vvalue = v
       						
-            						i = t.holdskill
-            						v = true
+                        i = t.holdskill
+                        v = true
           					elseif done > 1 and subst and i == t.holdskill then
-            						i = subst
-            						v = vvalue
-          					end
+                        i = subst
+                        v = vvalue
+                    end
 					
                     if i ~= "M2" and v then
                         if i == t.holdskill and isBoss and t.instakill then
