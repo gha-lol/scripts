@@ -275,7 +275,11 @@ function getData(arg)
     return returner
 end
 
+local isAutoShop = false
 function autoShop()
+    if isAutoShop then return end
+    isAutoShop = true
+
     local function buy(thing)
         local times = 1
         if thing == "Legendary Chest" then times = 3 end
@@ -308,6 +312,7 @@ function autoShop()
         end
         task.wait(4)
     end
+    isAutoShop = false
 end
 
 function autoSell()
@@ -324,7 +329,11 @@ function autoSell()
     game.ReplicatedStorage.requests.general.SellItem:FireServer(sellList)
 end
 
+local isAutoPoints = false
 function autoPoints()
+    if isAutoPoints then return end
+    isAutoPoints = true
+
     while t.autopoints do
         if plrData.StatPoints.Value > 0 then
             for i,v in pairs(t.selectedStats) do
@@ -342,6 +351,7 @@ function autoPoints()
             end
         end
     task.wait(1) end
+    isAutoPoints = false
 end
 
 local gradeNum = {
@@ -379,7 +389,11 @@ function checkStand()
     return returner
 end
 
+local isAutoArrow = false
 function autoArrow()
+    if isAutoArrow then return end
+    isAutoArrow = true
+
     local function useArrow()
         local before = plrData.Stand.Value
             
@@ -420,6 +434,7 @@ function autoArrow()
             end
         end
     end
+    isAutoArrow = false
     return false
 end
 
@@ -481,7 +496,11 @@ function setAligns(a)
     end
 end
 
+local isAutoFarming = false
 function autofarm(bool, ignoreName, tab)
+    if isAutoFarming then return end
+    isAutoFarming = true
+
     local enemy
     local canInsta = false
     local isBoss = false
@@ -613,6 +632,7 @@ function autofarm(bool, ignoreName, tab)
             enemy = getEnemy(tab)
         end
     end
+    isAutoFarming = false
 end
 
 
@@ -901,17 +921,23 @@ Tabs.File:CreateButton{Title = "Save Config", Description = "", Callback = funct
 end}
 
 Tabs.File:CreateButton{Title = "Print Save Table", Description = "", Callback = function()
-    for i,v in pairs(t) do
+    local function printTable(i,v, spc)
         local pp = v
         local isTab = false
+        local spac = spc .. "  "
+
         if typeof(v) == "table" then pp = "" isTab = true end
-        print(i .. ": " .. tostring(pp))
+        print(spac .. i .. ": " .. tostring(pp))
 
         if isTab then
             for k,l in pairs(v) do
-                print("  ",k,l)
+                printTable(k,l,spac)
             end
         end
+    end
+
+    for i,v in pairs(t) do
+        printTable(i,v, "")
     end
 end}
 
