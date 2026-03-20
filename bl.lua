@@ -66,7 +66,8 @@ local t = {
       Common = false,
       Uncommon = false,
       Rare = false,
-      Legendary = false
+      Legendary = false,
+      Mythical = false
     },
     arrowConfig = {
       shiny = false,
