@@ -14,10 +14,6 @@ local Tabs = {
         Title = "Teleport",
         Icon = "phosphor-users-bold"
     },
-    AutoArrowConfig = Window:CreateTab{
-        Title = "Auto Arrow Config",
-        Icon = "phosphor-users-bold"
-    },
     Config = Window:CreateTab{
         Title = "Config",
         Icon = "phosphor-users-bold"
@@ -498,6 +494,16 @@ end
 
 local isAutoFarming = false
 function autofarm(bool, ignoreName, tab)
+    if t[bool] then
+        if bool == "autoraid" and game.PlaceId == 14890802310 then return end
+        setAligns(true)
+        
+        if bool == "autofarm" and t.autoraid then t.autoraid = false task.wait(1)
+        elseif bool == "autoraid" and t.autofarm then t.autofarm = false task.wait(1) end
+    else
+        setAligns(false)
+    end
+    
     if isAutoFarming then return end
     isAutoFarming = true
 
@@ -510,16 +516,6 @@ function autofarm(bool, ignoreName, tab)
     
     local posY = -t.distance
     local cfAng = 90
-    
-    if t[bool] then
-        if bool == "autoraid" and game.PlaceId == 14890802310 then return end
-        setAligns(true)
-        
-        if bool == "autofarm" and t.autoraid then t.autoraid = false
-        elseif bool == "autoraid" and t.autofarm then t.autofarm = false end
-    else
-        setAligns(false)
-    end
   
     while t[bool] do task.wait()
         if t.position == "Top" then
