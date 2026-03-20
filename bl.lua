@@ -35,13 +35,21 @@ local t = {
     autopoints = false,
     autoshop = false,
     instakill = false,
-    holdskill = "Z",
     noVfx = false,
     blackscreen = false,
+    keepPvEDmg = false,
+    holdskill = "Z",
     distance = 8,
     position = "Down",
     selectedTarget = "dahsdshaudahus",
     selectedShop = "Jotaro Kujo",
+    keepPvEAccessory = {
+        Common = false,
+        Uncommon = false,
+        Rare = false,
+        Legendary = false,
+        Mythical = false
+    },
     shopConfig = {
         buyCashShop = false,
         items = {}
@@ -340,6 +348,24 @@ function autoSell()
         if tab["Pips"] and allAccessorys[tab.Name] and t.selectedRarity[allAccessorys[tab.Name].Rarity] and not tab.Locked then
             if not tab["duplicates"] then tab["duplicates"] = 1 end
             table.insert(sellList, tab)
+        end
+    end
+
+    if t.keepPvEDmg then
+        for i,v in pairs(sellList) do
+            if t.keepPvEAccessory[allAccessorys[v.Name].Rarity] then
+                local count = 0
+
+                for _,pip in pairs(v.Pips) do
+                    if pip == "PvEDamage" then
+                        count += 1
+                    end
+                end
+
+                if count >= 2 then
+                    table.remove(sellList, i)
+                end
+            end
         end
     end
     
@@ -691,6 +717,7 @@ autosellToggle:OnChanged(function()
     t.autosell = Options.autosellToggle.Value
 end)
 
+
 -- Main Game Section
 
 Tabs.AutoFarm:CreateParagraph("Aligned Paragraph", {Title = "Main Game Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
@@ -930,6 +957,21 @@ local autosellDrop = Tabs.Config:CreateDropdown("autosellDrop", {Title = "Rarity
 autosellDrop:OnChanged(function(Value)
     for i,v in pairs(t.selectedRarity) do
         t.selectedRarity[i] = Value[i] or false
+    end
+end)
+
+local keepPvEToggle = Tabs.Config:CreateToggle("keepPvEToggle", {Title = "Keep High PvEDmg Accessories", Default = t.keepPvEDmg})
+keepPvEToggle:OnChanged(function()
+    t.keepPvEDmg = Options.keepPvEToggle.Value
+end)
+
+local allKeepRarities = {}
+local activesKeepAcc = {}
+for i,v in pairs(t.keepPvEAccessory) do table.insert(allKeepRarities, i) if v == true then table.insert(activesKeepAcc, i) end end
+local keeppveaccessoryDrop = Tabs.Config:CreateDropdown("keeppveaccessoryDrop", {Title = "PvEDmg Accessory To Keep", Values = allKeepRarities, Multi = true, Default = activesKeepAcc})
+keeppveaccessoryDrop:OnChanged(function(Value)
+    for i,v in pairs(t.keepPvEAccessory) do
+        t.keepPvEAccessory[i] = Value[i] or false
     end
 end)
 
