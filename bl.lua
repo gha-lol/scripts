@@ -733,9 +733,11 @@ local activeShopItems = {}
 for i,v in pairs(t.shopConfig.items) do table.insert(activeShopItems, v) end
 local cashshopDrop = Tabs.Config:CreateDropdown("cashshopDrop", {Title = "Cash Shop Items To Buy", Values = {"Stand Conjuration Essence", "Stat Point Essence"}, Multi = true, Default = activeShopItems})
 cashshopDrop:OnChanged(function(Value)
+    local newTab = {}
     for i,v in pairs(Value) do
-        table.insert(t.shopConfig.items, i)
+        table.insert(newTab, i)
     end
+    t.shopConfig.items = newTab
 end)
 
 local allShops = {}
