@@ -289,7 +289,7 @@ function autoShop()
                 game.ReplicatedStorage.requests.character.raid_shop:FireServer(thing, t.selectedShop)
             end
         else
-
+            game.ReplicatedStorage.requests.character.cash_shop:FireServer(thing)
         end
     end
   
