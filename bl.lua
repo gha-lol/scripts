@@ -501,9 +501,11 @@ function autofarm(bool, ignoreName, tab)
         if bool == "autofarm" and t.autoraid then t.autoraid = false task.wait(1)
         elseif bool == "autoraid" and t.autofarm then t.autofarm = false task.wait(1) end
     else
-        setAligns(false)
+        if not t.autoraid and not t.autofarm then
+            setAligns(false)
+        end
     end
-    
+
     if isAutoFarming then return end
     isAutoFarming = true
 
