@@ -778,8 +778,8 @@ local skinignore = {}
 for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do if v and (i == "Common" or i == "Rare") then table.insert(skinignore, i) end end
 local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = skinignore})
 ignoreSkinRarityDown:OnChanged(function(Value)
-    for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do
-        t.arrowConfig.ignoreSkinRarity[i] = Value[i] or false
+    for i,v in pairs(Value) do
+        t.arrowConfig.ignoreSkinRarity[i] = v
     end
     t.arrowConfig.ignoreSkinRarity["Legendary"] = false
     t.arrowConfig.ignoreSkinRarity["Secret"] = false
