@@ -21,6 +21,10 @@ local Tabs = {
     File = Window:CreateTab{
         Title = "File",
         Icon = "phosphor-users-bold"
+    },
+    AutoArrowConfig = Window:CreateTab{
+        Title = "Auto Arrow Config",
+        Icon = "phosphor-users-bold"
     }
 }
 local Options = Library.Options
@@ -813,61 +817,6 @@ ignoreSkinRarityDown:OnChanged(function(Value)
     t.arrowConfig.ignoreSkinRarity["Secret"] = false
 end)
 
-local dropss = {"Stand", "Trait", "Strength", "Specialty", "Speed"}
-local descTrait
-
-for i,v in pairs(dropss) do
-    local tabb = {}
-    if v == "Stand" then
-        tabb = {"Any", table.unpack(getData({Send = "stand"}))}
-    elseif v == "Trait" then
-        tabb = {"Any", table.unpack(getData({Send = "trait"}))}
-    else
-        tabb = {"Any", "S", "A", "B", "C"}
-    end
-  
-    local selectTopDown = Tabs.Automation:CreateDropdown("selectadsdasd"..v, {Title = v, Values = tabb, Multi = false, Default = "Any"})
-    selectTopDown:OnChanged(function(Value)
-        noSave[v] = Value
-        
-        if v == "Trait" then
-            pcall(function()
-                descTrait:SetValue(getData({Send = "trait", Desc = Value}))
-            end)
-        end
-    end)
-    if v == "Trait" then
-        descTrait = Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Description:", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
-    end
-end
-
-Tabs.Automation:CreateButton{Title = "Add Stand", Description = "", Callback = function()
-    table.insert(t.arrowConfig.stands, {Name = noSave.Stand, Trait = noSave.Trait, Strength = noSave.Strength, Specialty = noSave.Specialty, Speed = noSave.Speed, Identifier = math.random(1,999)})
-end}
-
-Tabs.Automation:CreateButton{Title = "Print All Stands", Description = "", Callback = function()
-    for i,v in pairs(t.arrowConfig.stands) do
-        print("---------")
-        print("Stand "..tostring(i))
-        for k,l in pairs(v) do
-            print(k,l)
-        end
-    end
-end}
-
-Tabs.Automation:CreateInput("InputIndenadsdsa", {Title = "Input Identifier", Default = tostring(0), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
-    noSave.Identifier = tonumber(value)
-end})
-
-Tabs.Automation:CreateButton{Title = "Delete Stand", Description = "", Callback = function()
-    for i,v in pairs(t.arrowConfig.stands) do
-        if v.Identifier == noSave.Identifier then
-            table.remove(t.arrowConfig.stands, i)
-            break
-        end
-    end
-end}
-
 -- Auto Points Section
 
 Tabs.Automation:CreateParagraph("Aligned Paragraph", {Title = "Auto Points Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
@@ -1016,6 +965,64 @@ Tabs.File:CreateButton{Title = "Print Save Table", Description = "", Callback = 
 
     for i,v in pairs(t) do
         printTable(i,v, "")
+    end
+end}
+
+
+-- Auto Arrow Config
+
+local dropss = {"Stand", "Trait", "Strength", "Specialty", "Speed"}
+local descTrait
+
+for i,v in pairs(dropss) do
+    local tabb = {}
+    if v == "Stand" then
+        tabb = {"Any", table.unpack(getData({Send = "stand"}))}
+    elseif v == "Trait" then
+        tabb = {"Any", table.unpack(getData({Send = "trait"}))}
+    else
+        tabb = {"Any", "S", "A", "B", "C"}
+    end
+  
+    local selectTopDown = Tabs.AutoArrowConfig:CreateDropdown("selectadsdasd"..v, {Title = v, Values = tabb, Multi = false, Default = "Any"})
+    selectTopDown:OnChanged(function(Value)
+        noSave[v] = Value
+        
+        if v == "Trait" then
+            pcall(function()
+                descTrait:SetValue(getData({Send = "trait", Desc = Value}))
+            end)
+        end
+    end)
+    if v == "Trait" then
+        descTrait = Tabs.AutoArrowConfig:CreateParagraph("Aligned Paragraph", {Title = "Description:", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+    end
+end
+
+Tabs.AutoArrowConfig:CreateButton{Title = "Add Stand", Description = "", Callback = function()
+    table.insert(t.arrowConfig.stands, {Name = noSave.Stand, Trait = noSave.Trait, Strength = noSave.Strength, Specialty = noSave.Specialty, Speed = noSave.Speed, Identifier = math.random(1,999)})
+end}
+
+Tabs.AutoArrowConfig:CreateButton{Title = "Print All Stands", Description = "", Callback = function()
+    for i,v in pairs(t.arrowConfig.stands) do
+        print("---------")
+        print("Stand "..tostring(i))
+        for k,l in pairs(v) do
+            print(k,l)
+        end
+    end
+end}
+
+Tabs.AutoArrowConfig:CreateInput("InputIndenadsdsa", {Title = "Input Identifier", Default = tostring(0), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+    noSave.Identifier = tonumber(value)
+end})
+
+Tabs.AutoArrowConfig:CreateButton{Title = "Delete Stand", Description = "", Callback = function()
+    for i,v in pairs(t.arrowConfig.stands) do
+        if v.Identifier == noSave.Identifier then
+            table.remove(t.arrowConfig.stands, i)
+            break
+        end
     end
 end}
 
