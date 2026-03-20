@@ -297,9 +297,6 @@ function autoShop()
         local decoded = Service:JSONDecode(plrData.RaidShopPurchases.Value)
         local shop = decoded[decoded.Version]
 
-        local decodedCashPurchases = Service:JSONDecode(plrData.CashShopPurchases.Value)
-        local decodedCashShop = Service:JSONDecode(plrData.CashShop.Value)
-
         if shop then shop = decoded[decoded.Version][t.selectedShop] end
         
         if shop then
@@ -320,9 +317,14 @@ function autoShop()
 
         task.wait(1)
 
-        for i,v in pairs(t.shopConfig.items) do
-            if decodedCashShop[v] and not decodedCashPurchases[v] then
-                buy(v, "cash")
+        if t.shopConfig.buyCashShop then
+            local decodedCashPurchases = Service:JSONDecode(plrData.CashShopPurchases.Value)
+            local decodedCashShop = Service:JSONDecode(plrData.CashShop.Value)
+
+            for i,v in pairs(t.shopConfig.items) do
+                if decodedCashShop[v] and not decodedCashPurchases[v] then
+                    buy(v, "cash")
+                end
             end
         end
         task.wait(4)
