@@ -42,6 +42,10 @@ local t = {
     position = "Down",
     selectedTarget = "dahsdshaudahus",
     selectedShop = "Jotaro Kujo",
+    shopConfig = {
+        buyCashShop = false,
+        items = {}
+    },
     selectedStats = {
       DefenseStat = 0,
       DestructiveEnergyStat = 0,
@@ -276,12 +280,16 @@ function autoShop()
     if isAutoShop then return end
     isAutoShop = true
 
-    local function buy(thing)
-        local times = 1
-        if thing == "Legendary Chest" then times = 3 end
-        
-        for i=1,times do
-            game.ReplicatedStorage.requests.character.raid_shop:FireServer(thing, t.selectedShop)
+    local function buy(thing, sho)
+        if sho == "raid" then
+            local times = 1
+            if thing == "Legendary Chest" then times = 3 end
+            
+            for i=1,times do
+                game.ReplicatedStorage.requests.character.raid_shop:FireServer(thing, t.selectedShop)
+            end
+        else
+
         end
     end
   
@@ -289,22 +297,33 @@ function autoShop()
         local decoded = Service:JSONDecode(plrData.RaidShopPurchases.Value)
         local shop = decoded[decoded.Version]
 
+        local decodedCashPurchases = Service:JSONDecode(plrData.CashShopPurchases.Value)
+        local decodedCashShop = Service:JSONDecode(plrData.CashShop.Value)
+
         if shop then shop = decoded[decoded.Version][t.selectedShop] end
         
         if shop then
             for i,v in pairs({["Lucky Arrow"] = 1, ["Legendary Chest"] = 3}) do
                 if shop[i] then
                     if shop[i] < v then
-                        buy(i)
+                        buy(i, "raid")
 						task.wait(1)
                     end
                 else
-                    buy(i)
+                    buy(i, "raid")
                 end
             end
         else
-            buy("Lucky Arrow")
-            buy("Legendary Chest")
+            buy("Lucky Arrow", "raid")
+            buy("Legendary Chest", "raid")
+        end
+
+        task.wait(1)
+
+        for i,v in pairs(t.shopConfig.items) do
+            if decodedCashShop[v] and not decodedCashPurchases[v] then
+                buy(v, "cash")
+            end
         end
         task.wait(4)
     end
@@ -705,12 +724,26 @@ autoshopToggle:OnChanged(function()
     autoShop()
 end)
 
+local autocashshopToggle = Tabs.Automation:CreateToggle("autocashshopToggle", {Title = "Buy From Cash Shop", Default = t.shopConfig.buyCashShop})
+autocashshopToggle:OnChanged(function()
+    t.shopConfig.buyCashShop = Options.autocashshopToggle.Value
+end)
+
+local activeShopItems = {}
+for i,v in pairs(t.shopConfig.items) do table.insert(activeShopItems, v) end
+local cashshopDrop = Tabs.Config:CreateDropdown("cashshopDrop", {Title = "Cash Shop Items To Buy", Values = {"Stand Conjuration Essence", "Stat Point Essence"}, Multi = true, Default = activeShopItems})
+cashshopDrop:OnChanged(function(Value)
+    for i,v in pairs(Value) do
+        table.insert(t.shopConfig.items, i)
+    end
+end)
+
 local allShops = {}
 for i,v in pairs(Service:JSONDecode(plrData.RaidTokens.Value)) do
     table.insert(allShops, i)
 end
 
-local autoshopDrop = Tabs.Automation:CreateDropdown("autoshopDrop", {Title = "Shop To Buy", Values = allShops, Multi = false, Default = t.selectedShop})
+local autoshopDrop = Tabs.Automation:CreateDropdown("autoshopDrop", {Title = "Raid Shop To Buy", Values = allShops, Multi = false, Default = t.selectedShop})
 autoshopDrop:OnChanged(function(Value)
     t.selectedShop = Value
 end)
@@ -738,7 +771,7 @@ stopshinyToggle:OnChanged(function()
 end)
 
 local skinignore = {}
-for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do if v == true then table.insert(skinignore, i) end end
+for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do if v and (i == "Common" or i == "Rare") then table.insert(skinignore, i) end end
 local ignoreSkinRarityDown = Tabs.Automation:CreateDropdown("ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = skinignore})
 ignoreSkinRarityDown:OnChanged(function(Value)
     for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do
