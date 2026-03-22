@@ -547,7 +547,7 @@ end
 local isAutoFarming = false
 function autofarm(bool, ignoreName, tab)
     if t[bool] then
-        if bool == "autoraid" and game.PlaceId == 14890802310 then return end
+        if bool == "autoraid" and game.PlaceId == 14890802310 then setAligns(false) return end
         setAligns(true)
         
         if bool == "autofarm" and t.autoraid then t.autoraid = false task.wait(1)
@@ -616,12 +616,17 @@ function autofarm(bool, ignoreName, tab)
                 bossMaxHealth = enemy.Humanoid.MaxHealth
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
-                if enemy.Humanoid.Health - lastHealth > 50 and not canInsta and not repeating then
+                if enemy.Humanoid.Health - lastHealth > 25 and not canInsta and not repeating then
                     repeating = true
-                    spawn(function()
-                        local bb = tick()
-                        repeat task.wait() until enemy:FindFirstChild("IFrame") or tick() - bb > 4
-                        canInsta = true
+
+                    local con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
+
+                        if tab.Part and tab.Part.Parent.Parent.Name:lower() == "awakening" and tab.WeldPart.Parent == enemy then
+                            task.wait(.1)
+                            canInsta = true
+                            con:Disconnect()
+                        end
+
                     end)
                 end
 
@@ -629,6 +634,8 @@ function autofarm(bool, ignoreName, tab)
                     lastHealth = enemy.Humanoid.Health
                 end
             else
+                repeating = false
+                canInsta = false
                 isBoss = false
             end
 
