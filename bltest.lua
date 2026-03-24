@@ -739,12 +739,12 @@ end
 createElement(Tabs.AutoFarm, "Paragraph", "Aligned Paragraph", {Title = "Raids Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local autoraidToggle = createElement(Tabs.AutoFarm, "Toggle", "autoraidToggle", {Title = "Auto Raid", Default = t.autoraid}, function(self)
-    t.autoraid = self.Option.Value
+    t.autoraid = self.Value
     autofarm("autoraid", true, {})
 end)
 
 local instakillToggle = createElement(Tabs.AutoFarm, "Toggle", "instakillToggle", {Title = "Insta Kill", Default = t.instakill}, function(self)
-    t.instakill = self.Option.Value
+    t.instakill = self.Value
 end)
 
 holdskillDropdown = createElement(Tabs.AutoFarm, "Dropdown", "holdskillDropdown", {Title = "Skill To Hold", Values = {"R","Z","X","C","V"}, Default = t.holdskill}, function(self, val)
@@ -752,11 +752,11 @@ holdskillDropdown = createElement(Tabs.AutoFarm, "Dropdown", "holdskillDropdown"
 end)
 
 createElement(Tabs.AutoFarm, "Toggle", "autochestToggle", {Title = "Auto Open Chest", Default = t.autochest}, function(self)
-    t.autochest = self.Option.Value
+    t.autochest = self.Value
 end)
 
 createElement(Tabs.AutoFarm, "Toggle", "autosellToggle", {Title = "Auto Sell", Default = t.autosell}, function(self)
-    t.autosell = self.Option.Value
+    t.autosell = self.Value
 end)
 
 
@@ -765,7 +765,7 @@ end)
 createElement(Tabs.AutoFarm, "Paragraph", "Aligned Paragraph", {Title = "Main Game Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local autofarmToggle = createElement(Tabs.AutoFarm, "Toggle", "autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm}, function(self)
-    t.autofarm = self.Option.Value
+    t.autofarm = self.Value
     autofarm("autofarm", false, {Selected = true})
 end)
 
