@@ -139,7 +139,9 @@ function createElement(tab, elementType, id, data, callback)
     end
 
     -- Salva global
-    UIElements[id] = element
+    if not elementType == "Paragraph" then
+        UIElements[id] = element
+    end
 
     -- Auto OnChanged
     if callback and element.OnChanged then
@@ -738,7 +740,7 @@ end
 
 -- Raids Section
 
-createElement(Tabs.AutoFarm, "Paragraph", nil, {Title = "Raids Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+createElement(Tabs.AutoFarm, "Paragraph", "Aligned Paragraph", {Title = "Raids Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local autoraidToggle = createElement(Tabs.AutoFarm, "Toggle", "autoraidToggle", {Title = "Auto Raid", Default = t.autoraid}, function(self)
     t.autoraid = self.Option.Value
@@ -764,7 +766,7 @@ end)
 
 -- Main Game Section
 
-createElement(Tabs.AutoFarm, "Paragraph", nil, {Title = "Main Game Section", Content = ""})
+createElement(Tabs.AutoFarm, "Paragraph", "Aligned Paragraph", {Title = "Main Game Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 local autofarmToggle = createElement(Tabs.AutoFarm, "Toggle", "autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm}, function(self)
     t.autofarm = self.Option.Value
