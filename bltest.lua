@@ -840,7 +840,7 @@ function autoStory()
                                     local lastChat = chat
 
                                     if chat[1] == npc then
-                                        if #chat[2].Choices == 0 then
+                                        if #chat[2].Choices == 0 or not npc:IsDescendantOf(workspace) then
                                             ended = true
                                         else
                                             game.ReplicatedStorage.requests.character.dialogue:FireServer(npc, chat[2].Choices[1])
