@@ -96,6 +96,7 @@ local char = plr.Character
 local plrData = plr.PlayerData.SlotData
 local get_data = game.ReplicatedStorage.requests.miscellaneous.get_data
 local allSkills = get_data:InvokeServer("ability")
+local allAccessorys = get_data:InvokeServer("accessory")
 local Service = game:GetService("HttpService")
 local Options = Library.Options
 local UIElements = {}
@@ -300,6 +301,18 @@ function openChests(esperar)
     end
 end
 
+local isAutoChest = false
+function autoChest()
+    if isAutoChest or game.PlaceId == 14890802310 then return end
+    isAutoChest = true
+
+    while t.autochest do task.wait(5)
+        openChests(false)
+    end
+
+    isAutoChest = false
+end
+
 function getData(arg)
     local dataTab = get_data:InvokeServer(arg.Send)
     local returner = {}
@@ -382,36 +395,52 @@ function autoShop()
     isAutoShop = false
 end
 
-function autoSell()
-    local allAccessorys = get_data:InvokeServer("accessory")
-    local sellList = {}
-    
-    for _,tab in pairs(getInventory()) do
-        if tab["Pips"] and allAccessorys[tab.Name] and t.selectedRarity[allAccessorys[tab.Name].Rarity] and not tab.Locked then
-            if not tab["duplicates"] then tab["duplicates"] = 1 end
-            table.insert(sellList, tab)
+local isAutoSell = false
+function autoSell(bool)
+    if bool and isAutoSell then return end
+
+    local function sell()
+        local sellList = {}
+        
+        for _,tab in pairs(getInventory()) do
+            if tab["Pips"] and allAccessorys[tab.Name] and t.selectedRarity[allAccessorys[tab.Name].Rarity] and not tab.Locked then
+                if not tab["duplicates"] then tab["duplicates"] = 1 end
+                table.insert(sellList, tab)
+            end
         end
-    end
 
-    if t.keepPvEDmg then
-        for i,v in pairs(sellList) do
-            if t.keepPvEAccessory[allAccessorys[v.Name].Rarity] then
-                local count = 0
+        if t.keepPvEDmg then
+            for i,v in pairs(sellList) do
+                if t.keepPvEAccessory[allAccessorys[v.Name].Rarity] then
+                    local count = 0
 
-                for _,pip in pairs(v.Pips) do
-                    if pip == "PvEDamage" then
-                        count += 1
+                    for _,pip in pairs(v.Pips) do
+                        if pip == "PvEDamage" then
+                            count += 1
+                        end
                     end
-                end
 
-                if count >= 2 then
-                    table.remove(sellList, i)
+                    if count >= 2 then
+                        table.remove(sellList, i)
+                    end
                 end
             end
         end
+        
+        game.ReplicatedStorage.requests.general.SellItem:FireServer(sellList)
     end
-    
-    game.ReplicatedStorage.requests.general.SellItem:FireServer(sellList)
+
+    if bool and game.PlaceId == 14890802310  then
+        isAutoSell = true
+
+        while t.autosell do task.wait(5)
+            sell()
+        end
+
+        isAutoSell = false
+    else
+        sell()
+    end
 end
 
 local isAutoPoints = false
@@ -752,14 +781,6 @@ createElement(Tabs.AutoFarm, "Dropdown", "holdskillDropdown", {Title = "Skill To
     t.holdskill = val
 end)
 
-createElement(Tabs.AutoFarm, "Toggle", "autochestToggle", {Title = "Auto Open Chest", Default = t.autochest}, function(self)
-    t.autochest = self.Value
-end)
-
-createElement(Tabs.AutoFarm, "Toggle", "autosellToggle", {Title = "Auto Sell", Default = t.autosell}, function(self)
-    t.autosell = self.Value
-end)
-
 
 -- Main Game Section
 
@@ -781,6 +802,42 @@ end})
 
 
 -- Automation Tab
+
+-- Auto Open Chest Section
+
+createElement(Tabs.Automation, "Paragraph", "Aligned Paragraph", {Title = "Auto Open Chest Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+createElement(Tabs.Automation, "Toggle", "autochestToggle", {Title = "Auto Open Chest", Default = t.autochest}, function(self)
+    t.autochest = self.Value
+    autochest()
+end)
+
+-- Auto Sell Section
+
+createElement(Tabs.Automation, "Paragraph", "Aligned Paragraph", {Title = "Auto Sell Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+createElement(Tabs.Automation, "Toggle", "autosellToggle", {Title = "Auto Sell", Default = t.autosell}, function(self)
+    t.autosell = self.Value
+    autosell(true)
+end)
+
+local allSellRarities, activesRarities = {}, {} for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) if v == true then table.insert(activesRarities, i) end end
+createElement(Tabs.Automation, "Dropdown", "autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Multi = true, Default = activesRarities}, function(_,Value)
+    for i,v in pairs(t.selectedRarity) do
+        t.selectedRarity[i] = Value[i] or false
+    end
+end)
+
+createElement(Tabs.Automation, "Toggle", "keepPvEToggle", {Title = "Keep High PvEDmg Accessories", Default = t.keepPvEDmg}, function(self)
+    t.keepPvEDmg = self.Value
+end)
+
+local allKeepRarities, activesKeepAcc = {}, {} for i,v in pairs(t.keepPvEAccessory) do table.insert(allKeepRarities, i) if v == true then table.insert(activesKeepAcc, i) end end
+createElement(Tabs.Automation, "Dropdown", "keeppveaccessoryDrop", {Title = "PvEDmg Accessory To Keep", Values = allKeepRarities, Multi = true, Default = activesKeepAcc}, function(_,Value)
+    for i,v in pairs(t.keepPvEAccessory) do
+        t.keepPvEAccessory[i] = Value[i] or false
+    end
+end)
 
 -- Auto Shop Section
 
@@ -902,29 +959,6 @@ end)
 createElement(Tabs.Config, "Toggle", "blackscreen", {Title = "Black Screen", Default = t.blackscreen}, function(self)
     t.blackscreen = self.Value
     blackScreen()
-end)
-
-
--- Auto Sell Section
-
-createElement(Tabs.Config, "Paragraph", "Aligned Paragraph", {Title = "Auto Sell Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
-
-local allSellRarities, activesRarities = {}, {} for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) if v == true then table.insert(activesRarities, i) end end
-createElement(Tabs.Config, "Dropdown", "autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Multi = true, Default = activesRarities}, function(_,Value)
-    for i,v in pairs(t.selectedRarity) do
-        t.selectedRarity[i] = Value[i] or false
-    end
-end)
-
-createElement(Tabs.Config, "Toggle", "keepPvEToggle", {Title = "Keep High PvEDmg Accessories", Default = t.keepPvEDmg}, function(self)
-    t.keepPvEDmg = self.Value
-end)
-
-local allKeepRarities, activesKeepAcc = {}, {} for i,v in pairs(t.keepPvEAccessory) do table.insert(allKeepRarities, i) if v == true then table.insert(activesKeepAcc, i) end end
-createElement(Tabs.Config, "Dropdown", "keeppveaccessoryDrop", {Title = "PvEDmg Accessory To Keep", Values = allKeepRarities, Multi = true, Default = activesKeepAcc}, function(_,Value)
-    for i,v in pairs(t.keepPvEAccessory) do
-        t.keepPvEAccessory[i] = Value[i] or false
-    end
 end)
 
 
