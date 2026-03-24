@@ -141,7 +141,7 @@ function createElement(tab, elementType, id, data, callback)
     end
 
     -- Salva global
-    if id and not elementType == "Paragraph" then
+    if id and elementType ~= "Paragraph" then
         UIElements[id] = element
     end
 
@@ -775,7 +775,7 @@ createElement(Tabs.AutoFarm, "Dropdown", "selectDropdown", {Title = "Target", Va
 end)
 
 createElement(Tabs.AutoFarm, "Button", nil, {Title = "Update Target List", Callback = function()
-    selectDropdown:SetValues(getEnemy({All = true}))
+    UIElements.selectDropdown:SetValues(getEnemy({All = true}))
 end})
 
 
@@ -858,7 +858,7 @@ end
 
 createElement(Tabs.Teleport, "Paragraph", "Aligned Paragraph", {Title = "Npcs Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-createElement(Tabs.Teleport, "Dropdown", "npcTpDown", {Title = "Npc", Values = getNpc({All=true}), Searchable = true, Multi = false, Default = noSave.selectedTpNpc}}, function(_, val)
+createElement(Tabs.Teleport, "Dropdown", "npcTpDown", {Title = "Npc", Values = getNpc({All=true}), Searchable = true, Multi = false, Default = noSave.selectedTpNpc}, function(_, val)
     noSave.selectedTpNpc = val
 end)
 
