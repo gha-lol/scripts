@@ -1058,7 +1058,7 @@ end})
 
 
 -- Activating Toggles Etc
-task.wait()
+task.wait(.1)
 UIElements.autofarmToggle:SetValue(t.autofarm)
 UIElements.autoraidToggle:SetValue(t.autoraid)
 UIElements.autochestToggle:SetValue(t.autochest)
