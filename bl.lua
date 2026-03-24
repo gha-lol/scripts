@@ -219,6 +219,16 @@ function saveSettings()
     writefile("bl.json", Service:JSONEncode(t))
 end
 
+function isMainGame()
+    local returner = false
+
+    if game.PlaceId == 14890802310 then
+        returner = true
+    end
+
+    return returner
+end
+
 function getInventory()
     return Service:JSONDecode(plrData.Inventory.Value)
 end
@@ -303,7 +313,7 @@ end
 
 local isAutoChest = false
 function autoChest()
-    if isAutoChest or game.PlaceId ~= 14890802310 then return end
+    if isAutoChest or not isMainGame() then return end
     isAutoChest = true
 
     while t.autochest do task.wait(5)
@@ -430,7 +440,7 @@ function autoSell(bool)
         game.ReplicatedStorage.requests.general.SellItem:FireServer(sellList)
     end
 
-    if bool and game.PlaceId == 14890802310  then
+    if bool and isMainGame()  then
         isAutoSell = true
 
         while t.autosell do task.wait(5)
@@ -613,7 +623,7 @@ end
 local isAutoFarming = false
 function autofarm(bool, ignoreName, tab)
     if t[bool] then
-        if bool == "autoraid" and game.PlaceId == 14890802310 then setAligns(false) return end
+        if bool == "autoraid" and isMainGame() then setAligns(false) return end
         setAligns(true)
         
         if bool == "autofarm" and t.autoraid then t.autoraid = false UIElements.autoraidToggle:SetValue(false) task.wait(1)
@@ -630,7 +640,6 @@ function autofarm(bool, ignoreName, tab)
     local enemy
     local canInsta = false
     local isBoss = false
-    local bossMaxHealth = nil
     local lastHealth = 9999
     local repeating
     
@@ -677,27 +686,29 @@ function autofarm(bool, ignoreName, tab)
             
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
-            if enemy.Humanoid.MaxHealth > 1400 and t.instakill then
+            if enemy:GetAttribute("Miniboss") and t.instakill then
                 isBoss = true
-                bossMaxHealth = enemy.Humanoid.MaxHealth
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
-                if enemy.Humanoid.Health - lastHealth > 25 and not canInsta and not repeating then
-                    repeating = true
+                if isMainGame() then
+                    canInsta = true
+                elseif enemy.Humanoid.Health - lastHealth > 25 and not canInsta and not repeating then
+                        repeating = true
 
-                    local con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
+                        local con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
 
-                        if tab.Part and tab.Part.Parent.Parent.Name:lower() == "awakening" and tab.WeldPart.Parent == enemy then
-                            task.wait(.1)
-                            canInsta = true
-                            con:Disconnect()
-                        end
+                            if tab.Part and tab.Part.Parent.Parent.Name:lower() == "awakening" and tab.WeldPart.Parent == enemy then
+                                task.wait(.1)
+                                canInsta = true
+                                con:Disconnect()
+                            end
 
-                    end)
-                end
+                        end)
+                    end
 
-                if enemy.Humanoid.Health < lastHealth then
-                    lastHealth = enemy.Humanoid.Health
+                    if enemy.Humanoid.Health < lastHealth then
+                        lastHealth = enemy.Humanoid.Health
+                    end
                 end
             else
                 repeating = false
@@ -718,7 +729,7 @@ function autofarm(bool, ignoreName, tab)
       						
                         i = t.holdskill
                         v = true
-          					elseif done > 1 and subst and i == t.holdskill then
+          			elseif done > 1 and subst and i == t.holdskill then
                         i = subst
                         v = vvalue
                     end
@@ -871,7 +882,7 @@ createElement(Tabs.Automation, "Paragraph", "Aligned Paragraph", {Title = "Auto 
 createElement(Tabs.Automation, "Toggle", "autoarrowToggle", {Title = "Auto Arrow", Default = noSave.autoarrow}, function(self)
     noSave.autoarrow = self.Value
     
-    if game.PlaceId == 14890802310 then
+    if isMainGame() then
         local e = autoArrow()
         if not e then
             noSave.autoarrow = false
