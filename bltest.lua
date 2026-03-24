@@ -780,7 +780,7 @@ end
 
 local isAutoStory = false
 function autoStory()
-    if isAutoStory or isMainGame() then return end
+    if isAutoStory or not isMainGame() then return end
     isAutoStory = true
 
     local chat = {}
