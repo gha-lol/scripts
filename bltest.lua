@@ -125,13 +125,13 @@ function createElement(tab, elementType, id, data, callback)
 
     -- Criador dinâmico
     if elementType == "Toggle" then
-		tab:CreateToggle(id, data)
+		element = tab:CreateToggle(id, data)
 	elseif elementType == "Paragraph" then
-		tab:CreateParagraph(id, data)
+		element = tab:CreateParagraph(id, data)
 	elseif elementType == "Button" then
-		tab:CreateButton(data)
+		element = tab:CreateButton(data)
 	elseif elementType == "Dropdown" then
-		tab:CreateDropdown(id, data)
+		element = tab:CreateDropdown(id, data)
 	end
 
     if not element then
