@@ -640,11 +640,24 @@ function autofarm(bool, ignoreName, tab)
         if bool == "autoraid" and isMainGame() then setAligns(false) return end
         setAligns(true)
         
-        if bool == "autofarm" and t.autoraid then t.autoraid = false UIElements.autoraidToggle:SetValue(false) task.wait(1)
-        elseif bool == "autoraid" and t.autofarm then t.autofarm = false UIElements.autofarmToggle:SetValue(false) task.wait(1) 
-        elseif bool == "doingstory" and (t.autofarm or t.autoraid) then UIElements.autoraidToggle:SetValue(false) UIElements.autofarmToggle:SetValue(false) task.wait(1) end
+        if bool == "autofarm" then
+            t.autostory = false
+            noSave.doingstory = false
+
+            UIElements.autostoryToggle:SetValue(false)
+        elseif bool = "autoraid" then
+            t.autofarm = false
+            noSave.doingstory = false
+
+            UIElements.autofarmToggle:SetValue(false)
+        elseif bool == "doingstory" then
+            t.autofarm = false
+
+            UIElements.autofarmToggle:SetValue(false)
+        end
+        task.wait(1)
     else
-        if not t.autoraid and not t.autofarm and not noSave.doingstory then
+        if not isAutoFarming then
             setAligns(false)
         end
     end
@@ -859,6 +872,7 @@ function autoStory()
                         end
 
                     until not keepLoop and not isAutoFarming
+                    autofarm("doingstory", false, {Selected = true, Story = true}) task.wait(.5)
                 end
 
             end
