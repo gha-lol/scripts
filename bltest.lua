@@ -799,8 +799,7 @@ function autoStory()
 
         for _,quest in pairs(quests) do
             if quest.Name:match("Storyline") then
-                print(quest.Name)
-
+                
                 if not plrData.TrackedQuest.Value:match("Storyline") then
                     game.ReplicatedStorage.requests.character.trackquest:FireServer(quest.Name)
                     repeat task.wait() until plrData.TrackedQuest.Value:match("Storyline")
@@ -846,13 +845,18 @@ function autoStory()
 
                     spawn(autofarm("doingstory", false, {Selected = true, Story = true}))
 
-                    while task.wait() do
+                    local keepLoop = true
+                    repeat task.wait(.1)
 
-                        if not table.find(Service:JSONDecode(plrData.CurrentQuests.Value), quest) then
-                            noSave.doingstory = false
-                            break
+                        for i,v in pairs(Service:JSONDecode(plrData.CurrentQuests.Value)) do
+                            if v.Name:match(quest.Name) then
+                                keepLoop = false
+                                noSave.doingstory = false
+                                break
+                            end
                         end
-                    end
+
+                    until not keepLoop
                 end
 
             end
