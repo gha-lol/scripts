@@ -655,7 +655,7 @@ function autofarm(bool, ignoreName, tab)
     local posY = -t.distance
     local cfAng = 90
   
-    while t[bool] or noSave[bool] do task.wait()
+    while (t[bool] or noSave[bool]) do task.wait()
         if t.position == "Top" then
             posY = t.distance
             cfAng = -90
@@ -702,18 +702,17 @@ function autofarm(bool, ignoreName, tab)
                 if isMainGame() then
                     canInsta = true
                 elseif enemy.Humanoid.Health - lastHealth > 25 and not canInsta and not repeating then
-                        repeating = true
+                    repeating = true
 
-                        local con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
+                    local con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
 
-                            if tab.Part and tab.Part.Parent.Parent.Name:lower() == "awakening" and tab.WeldPart.Parent == enemy then
-                                task.wait(.1)
-                                canInsta = true
-                                con:Disconnect()
-                            end
+                        if tab.Part and tab.Part.Parent.Parent.Name:lower() == "awakening" and tab.WeldPart.Parent == enemy then
+                            task.wait(.1)
+                            canInsta = true
+                            con:Disconnect()
+                        end
 
-                        end)
-                    end
+                    end)
 
                     if enemy.Humanoid.Health < lastHealth then
                         lastHealth = enemy.Humanoid.Health
