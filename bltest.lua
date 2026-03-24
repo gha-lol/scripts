@@ -581,6 +581,12 @@ end
 
 function getEnemy(a)
     local returner
+
+    if a.Story then
+        pcall(function()
+            char:PivotTo(workspace.Effects.questbrick:GetPivot())
+        end)
+    end
     
     if a.All then
         local aa = {}
@@ -836,11 +842,12 @@ function autoStory()
                 elseif quest.Kills then
                     noSave.doingstory = true
                     
-                    for tt,_ in pairs(quest.Kills) do noSave.storyTarget = tt end
+                    for tt,_ in pairs(quest.Kills) do noSave.storyTarget = tt or "akakaksdaksk" end
 
                     spawn(autofarm("doingstory", false, {Selected = true, Story = true}))
 
                     while task.wait() do
+
                         if not table.find(Service:JSONDecode(plrData.CurrentQuests.Value), quest) then
                             noSave.doingstory = false
                             break
