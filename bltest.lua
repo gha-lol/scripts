@@ -645,7 +645,7 @@ function autofarm(bool, ignoreName, tab)
             noSave.doingstory = false
 
             UIElements.autostoryToggle:SetValue(false)
-        elseif bool = "autoraid" then
+        elseif bool == "autoraid" then
             t.autofarm = false
             noSave.doingstory = false
 
