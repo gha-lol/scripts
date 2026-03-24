@@ -809,7 +809,7 @@ createElement(Tabs.Automation, "Paragraph", "Aligned Paragraph", {Title = "Auto 
 
 createElement(Tabs.Automation, "Toggle", "autochestToggle", {Title = "Auto Open Chest", Default = t.autochest}, function(self)
     t.autochest = self.Value
-    autochest()
+    autoChest()
 end)
 
 -- Auto Sell Section
@@ -818,7 +818,7 @@ createElement(Tabs.Automation, "Paragraph", "Aligned Paragraph", {Title = "Auto 
 
 createElement(Tabs.Automation, "Toggle", "autosellToggle", {Title = "Auto Sell", Default = t.autosell}, function(self)
     t.autosell = self.Value
-    autosell(true)
+    autoSell(true)
 end)
 
 local allSellRarities, activesRarities = {}, {} for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) if v == true then table.insert(activesRarities, i) end end
@@ -1058,7 +1058,7 @@ end})
 
 
 -- Activating Toggles Etc
-task.wait()
+task.wait(.1)
 UIElements.autofarmToggle:SetValue(t.autofarm)
 UIElements.autoraidToggle:SetValue(t.autoraid)
 UIElements.autochestToggle:SetValue(t.autochest)
