@@ -592,8 +592,8 @@ function getEnemy(a)
         local aa = {}
         
         for i,v in pairs(workspace.Live:GetChildren()) do
-            if not table.find(aa, v.Name:sub(1, -7)) and not string.find(v.Name, "entity clone") and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" then
-                table.insert(aa, v.Name:sub(1, -7))
+            if not table.find(aa, v:GetAttribute("DisplayName")) and not string.find(v.Name, "entity clone") and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" then
+                table.insert(aa, v:GetAttribute("DisplayName"))
             end
         end
         
@@ -602,12 +602,12 @@ function getEnemy(a)
         for i,v in pairs(workspace.Live:GetChildren()) do
             if a.Selected then
                 if a.Story then
-                    if string.find(v.Name, noSave.storyTarget) and checkAlive(v) then
+                    if v:GetAttribute("DisplayName") == noSave.storyTarget and checkAlive(v) then
                         returner = v
                         break
                     end
                 else
-                    if string.find(v.Name, t.selectedTarget) and checkAlive(v) then
+                    if v:GetAttribute("DisplayName") == t.selectedTarget and checkAlive(v) then
                         returner = v
                         break
                     end
@@ -815,12 +815,14 @@ function autoStory()
                                 repeat task.wait() char:PivotTo(npc:GetPivot()) until not plr.GameplayPaused
 
                                 local llchat = chat
+                                local lastTickk = tick()
                                 repeat
                                     game.ReplicatedStorage.requests.character.dialogue:FireServer(npc, 1)
                                     task.wait(.5) 
-                                until chat ~= llchat
+                                until chat ~= llchat or tick() - lastTickk > 10
 
                                 local ended = false
+                                local lastRepeatTick = tick()
                                 repeat
                                     local lastChat = chat
 
@@ -834,7 +836,7 @@ function autoStory()
 
                                     local lastTick = tick()
                                     repeat task.wait() until tick() - lastTick >= 1 or chat ~= lastChat or ended
-                                until ended
+                                until ended or tick() - lastRepeatTick > 6
                             end
                         end
                     end
@@ -856,7 +858,7 @@ function autoStory()
                             end
                         end
 
-                    until not keepLoop
+                    until not keepLoop and not isAutoFarming
                 end
 
             end
