@@ -27,9 +27,7 @@ local Tabs = {
         Icon = "phosphor-users-bold"
     }
 }
-local Options = Library.Options
 
-local Service = game:GetService("HttpService")
 local noSave = {Identifier = 0, selectedBus = "1", selectedTpNpc = "Chumbo", cds = {}, autoarrow = false}
 local t = {
     autofarm = false,
@@ -98,6 +96,9 @@ local char = plr.Character
 local plrData = plr.PlayerData.SlotData
 local get_data = game.ReplicatedStorage.requests.miscellaneous.get_data
 local allSkills = get_data:InvokeServer("ability")
+local Service = game:GetService("HttpService")
+local Options = Library.Options
+local UIElements = {}
 
 
 -- Pressing Start
@@ -118,8 +119,6 @@ end
 
 -- Important 
 
-local UIElements = {}
-
 function createElement(tab, elementType, id, data, callback)
     local element
 
@@ -132,6 +131,8 @@ function createElement(tab, elementType, id, data, callback)
 		element = tab:CreateButton(data)
 	elseif elementType == "Dropdown" then
 		element = tab:CreateDropdown(id, data)
+    elseif elementType == "Input" then
+        element = tab:CreateInput(id, data)
 	end
 
     if not element then
@@ -140,7 +141,7 @@ function createElement(tab, elementType, id, data, callback)
     end
 
     -- Salva global
-    if not elementType == "Paragraph" then
+    if id and not elementType == "Paragraph" then
         UIElements[id] = element
     end
 
@@ -738,16 +739,16 @@ end
 
 createElement(Tabs.AutoFarm, "Paragraph", "Aligned Paragraph", {Title = "Raids Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-local autoraidToggle = createElement(Tabs.AutoFarm, "Toggle", "autoraidToggle", {Title = "Auto Raid", Default = t.autoraid}, function(self)
+createElement(Tabs.AutoFarm, "Toggle", "autoraidToggle", {Title = "Auto Raid", Default = t.autoraid}, function(self)
     t.autoraid = self.Value
     autofarm("autoraid", true, {})
 end)
 
-local instakillToggle = createElement(Tabs.AutoFarm, "Toggle", "instakillToggle", {Title = "Insta Kill", Default = t.instakill}, function(self)
+createElement(Tabs.AutoFarm, "Toggle", "instakillToggle", {Title = "Insta Kill", Default = t.instakill}, function(self)
     t.instakill = self.Value
 end)
 
-holdskillDropdown = createElement(Tabs.AutoFarm, "Dropdown", "holdskillDropdown", {Title = "Skill To Hold", Values = {"R","Z","X","C","V"}, Default = t.holdskill}, function(self, val)
+createElement(Tabs.AutoFarm, "Dropdown", "holdskillDropdown", {Title = "Skill To Hold", Values = {"R","Z","X","C","V"}, Default = t.holdskill}, function(self, val)
     t.holdskill = val
 end)
 
@@ -764,15 +765,270 @@ end)
 
 createElement(Tabs.AutoFarm, "Paragraph", "Aligned Paragraph", {Title = "Main Game Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-local autofarmToggle = createElement(Tabs.AutoFarm, "Toggle", "autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm}, function(self)
+createElement(Tabs.AutoFarm, "Toggle", "autofarmToggle", {Title = "Auto Farm Selected", Default = t.autofarm}, function(self)
     t.autofarm = self.Value
     autofarm("autofarm", false, {Selected = true})
 end)
 
-local selectDropdown = createElement(Tabs.AutoFarm, "Dropdown", "selectDropdown", {Title = "Target", Values = getEnemy({All = true}), Default = t.selectedTarget, Searchable = true}, function(self, val)
+createElement(Tabs.AutoFarm, "Dropdown", "selectDropdown", {Title = "Target", Values = getEnemy({All = true}), Default = t.selectedTarget, Searchable = true}, function(self, val)
     t.selectedTarget = val
 end)
 
 createElement(Tabs.AutoFarm, "Button", nil, {Title = "Update Target List", Callback = function()
     selectDropdown:SetValues(getEnemy({All = true}))
 end})
+
+
+
+-- Automation Tab
+
+-- Auto Shop Section
+
+createElement(Tabs.Automation, "Paragraph", "Aligned Paragraph", {Title = "Auto Shop Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+createElement(Tabs.Automation, "Toggle", "autoshopToggle", {Title = "Auto Shop", Default = t.autoshop}, function(self)
+    t.autoshop = self.Value
+    autoShop()
+end)
+
+createElement(Tabs.Automation, "Toggle", "autocashshopToggle", {Title = "Buy From Cash Shop", Default = t.shopConfig.buyCashShop}, function(self)
+    t.shopConfig.buyCashShop = self.Value
+end)
+
+local activeShopItems = {} for i,v in pairs(t.shopConfig.items) do table.insert(activeShopItems, v) end
+createElement(Tabs.Automation, "Dropdown", "cashshopDrop", {Title = "Cash Shop Items To Buy", Values = {"Stand Conjuration Essence","Stat Point Essence"}, Multi = true, Default = activeShopItems}, function(self, val)
+    local tab = {}
+    for i,_ in pairs(val) do table.insert(tab, i) end
+    t.shopConfig.items = tab
+end)
+
+local allShops = {} for i,v in pairs(Service:JSONDecode(plrData.RaidTokens.Value)) do table.insert(allShops, i) end
+createElement(Tabs.Automation, "Dropdown", "autoshopDrop", {Title = "Raid Shop To Buy", Values = allShops, Multi = false, Default = t.selectedShop}, function(self, Value)
+    t.selectedShop = Value
+end)
+
+-- Auto Arrow Section
+
+createElement(Tabs.Automation, "Paragraph", "Aligned Paragraph", {Title = "Auto Arrow Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+createElement(Tabs.Automation, "Toggle", "autoarrowToggle", {Title = "Auto Arrow", Default = noSave.autoarrow}, function(self)
+    noSave.autoarrow = self.Value
+    
+    if game.PlaceId == 14890802310 then
+        local e = autoArrow()
+        if not e then
+            noSave.autoarrow = false
+            UIElements["autoarrowToggle"]:SetValue(false)
+        end
+    end
+end)
+
+createElement(Tabs.Automation, "Toggle", "stopshinyToggle", {Title = "Stop on Shiny", Default = t.arrowConfig.shiny}, function(self)
+    t.arrowConfig.shiny = self.Value
+end)
+
+local skinignore = {} for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do if v and (i == "Common" or i == "Rare") then table.insert(skinignore, i) end end
+createElement(Tabs.Automation, "Dropdown", "ignoreSkinRarityDown", {Title = "Ignore Skin Rarities", Values = {"Common", "Rare"}, Multi = true, Default = skinignore}, function(self, Value)
+    for i,v in pairs(t.arrowConfig.ignoreSkinRarity) do
+        t.arrowConfig.ignoreSkinRarity[i] = Value[i] or false
+    end
+    t.arrowConfig.ignoreSkinRarity["Legendary"] = false
+    t.arrowConfig.ignoreSkinRarity["Secret"] = false
+end)
+
+-- Auto Points Section
+
+createElement(Tabs.Automation, "Paragraph", "Aligned Paragraph", {Title = "Auto Points Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+createElement(Tabs.Automation, "Toggle", "autopointsToggle", {Title = "Auto Points", Default = t.autopoints}, function(self)
+    t.autopoints = self.Value
+    autoPoints()
+end)
+
+for i,v in pairs(t.selectedStats) do
+    createElement(Tabs.Automation, "Input", "InputStat"..tostring(i), {Title = i, Default = tostring(v), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+        t.selectedStats[i] = tonumber(value)
+    end})
+end
+
+
+-- Teleport Tab
+
+-- Npc Section
+
+createElement(Tabs.Teleport, "Paragraph", "Aligned Paragraph", {Title = "Npcs Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+createElement(Tabs.Teleport, "Dropdown", "npcTpDown", {Title = "Npc", Values = getNpc({All=true}), Searchable = true, Multi = false, Default = noSave.selectedTpNpc}}, function(_, val)
+    noSave.selectedTpNpc = val
+end)
+
+createElement(Tabs.Teleport, "Button", nil, {Title = "Teleport to Npc", Description = "", Callback = function()
+    char:PivotTo(getNpc({Name=noSave.selectedTpNpc}):GetPivot())
+end})
+
+-- Bus Section
+
+createElement(Tabs.Teleport, "Paragraph", "Aligned Paragraph", {Title = "Bus Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local busTable = {} for i=1,19 do table.insert(busTable, tostring(i)) end
+createElement(Tabs.Teleport, "Dropdown", "busDown", {Title = "Bus Stop", Values = busTable, Searchable = false, Multi = false, Default = "1"}, function(_,Value)
+    noSave.selectedBus = Value
+end)
+
+createElement(Tabs.Teleport, "Button", nil, {Title = "Teleport to Bus Stop", Description = "", Callback = function()
+    char:PivotTo(workspace.Map["Bus Stops"][noSave.selectedBus]:GetPivot())
+end})
+
+
+-- Config Tab
+
+-- Global Section
+
+createElement(Tabs.Config, "Paragraph", "Aligned Paragraph", {Title = "Global Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+createElement(Tabs.Config, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+    t.distance = tonumber(value)
+end})
+
+createElement(Tabs.Config, "Dropdown", "selectTopDown", {Title = "Farm Position", Values = {"Top", "Down"}, Multi = false, Default = t.position}, function(_, val)
+    t.position = val
+end)
+
+createElement(Tabs.Config, "Toggle", "noVfx", {Title = "No VFX", Default = t.noVfx}, function(self)
+    t.noVfx = self.Value
+    changeVfx()
+end)
+
+createElement(Tabs.Config, "Toggle", "blackscreen", {Title = "Black Screen", Default = t.blackscreen}, function(self)
+    t.blackscreen = self.Value
+    blackScreen()
+end)
+
+
+-- Auto Sell Section
+
+createElement(Tabs.Config, "Paragraph", "Aligned Paragraph", {Title = "Auto Sell Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local allSellRarities, activesRarities = {}, {} for i,v in pairs(t.selectedRarity) do table.insert(allSellRarities, i) if v == true then table.insert(activesRarities, i) end end
+createElement(Tabs.Config, "Dropdown", "autosellDrop", {Title = "Rarity To Sell", Values = allSellRarities, Multi = true, Default = activesRarities}, function(_,Value)
+    for i,v in pairs(t.selectedRarity) do
+        t.selectedRarity[i] = Value[i] or false
+    end
+end)
+
+createElement(Tabs.Config, "Toggle", "keepPvEToggle", {Title = "Keep High PvEDmg Accessories", Default = t.keepPvEDmg}, function(self)
+    t.keepPvEDmg = self.Value
+end)
+
+local allKeepRarities, activesKeepAcc = {}, {} for i,v in pairs(t.keepPvEAccessory) do table.insert(allKeepRarities, i) if v == true then table.insert(activesKeepAcc, i) end end
+createElement(Tabs.Config, "Dropdown", "keeppveaccessoryDrop", {Title = "PvEDmg Accessory To Keep", Values = allKeepRarities, Multi = true, Default = activesKeepAcc}, function(_,Value)
+    for i,v in pairs(t.keepPvEAccessory) do
+        t.keepPvEAccessory[i] = Value[i] or false
+    end
+end)
+
+
+-- Skills Section
+
+createElement(Tabs.Config, "Paragraph", "Aligned Paragraph", {Title = "Skills Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+local allKeyss, activeKeyss  = {}, {} for i,v in pairs(t.keys) do table.insert(allKeyss, i) if v == true then table.insert(activeKeyss, i) end end
+createElement(Tabs.Config, "Dropdown", "autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Multi = true, Default = activeKeyss}, function(_,Value)
+    for i,v in pairs(t.keys) do
+        t.keys[i] = Value[i] or false
+    end
+end)
+
+
+-- File
+
+createElement(Tabs.File, "Button", nil, {Title = "Save Config", Description = "", Callback = saveSettings})
+
+createElement(Tabs.File, "Button", nil, {Title = "Print Save Table", Description = "", Callback = function()
+    local function printTable(i,v, spc)
+        local pp = v
+        local isTab = false
+        local spac = spc .. "  "
+
+        if typeof(v) == "table" then pp = "" isTab = true end
+        print(spac .. i .. ": " .. tostring(pp))
+
+        if isTab then
+            for k,l in pairs(v) do
+                printTable(k,l,spac)
+            end
+        end
+    end
+
+    for i,v in pairs(t) do
+        printTable(i,v, "")
+    end
+end})
+
+-- Auto Arrow Config
+
+local dropss = {"Stand", "Trait", "Strength", "Specialty", "Speed"}
+local descTrait
+
+for i,v in pairs(dropss) do
+    local tabb = {}
+    if v == "Stand" then
+        tabb = {"Any", table.unpack(getData({Send = "stand"}))}
+    elseif v == "Trait" then
+        tabb = {"Any", table.unpack(getData({Send = "trait"}))}
+    else
+        tabb = {"Any", "S", "A", "B", "C"}
+    end
+  
+    createElement(Tabs.AutoArrowConfig, "Dropdown", "selectadssa"..v, {Title = v, Values = tabb, Multi = false, Default = "Any"}, function(_,Value)
+        noSave[v] = Value
+
+        if v == "Trait" then
+            pcall(function()
+                descTrait:SetValue(getData({Send = "trait", Desc = Value}))
+            end)
+        end
+    end)
+
+    if v == "Trait" then
+        descTrait = createElement(Tabs.AutoArrowConfig, "Paragraph", "Aligned Paragraph", {Title = "Description:", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+    end
+end
+
+createElement(Tabs.AutoArrowConfig, "Button", nil, {Title = "Add Stand", Description = "", Callback = function()
+    table.insert(t.arrowConfig.stands, {Name = noSave.Stand, Trait = noSave.Trait, Strength = noSave.Strength, Specialty = noSave.Specialty, Speed = noSave.Speed, Identifier = math.random(1,999)})
+end})
+
+createElement(Tabs.AutoArrowConfig, "Button", nil, {Title = "Print All Stands", Description = "", Callback = function()
+    for i,v in pairs(t.arrowConfig.stands) do
+        print("---------")
+        print("Stand "..tostring(i))
+        for k,l in pairs(v) do
+            print(k,l)
+        end
+    end
+end})
+
+createElement(Tabs.AutoArrowConfig, "Input", "InputIndenadsdsa", {Title = "Input Identifier", Default = tostring(0), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+    noSave.Identifier = tonumber(value)
+end})
+
+createElement(Tabs.AutoArrowConfig, "Button", nil, {Title = "Delete Stand", Description = "", Callback = function()
+    for i,v in pairs(t.arrowConfig.stands) do
+        if v.Identifier == noSave.Identifier then
+            table.remove(t.arrowConfig.stands, i)
+            break
+        end
+    end
+end})
+
+
+-- Activating Toggles Etc
+task.wait()
+UIElements.autofarmToggle:SetValue(t.autofarm)
+UIElements.autoraidToggle:SetValue(t.autoraid)
+UIElements.autochestToggle:SetValue(t.autochest)
+UIElements.autosellToggle:SetValue(t.autosell)
+UIElements.autoshopToggle:SetValue(t.autoshop)
+UIElements.noVfx:SetValue(t.noVfx)
+UIElements.blackscreen:SetValue(t.blackscreen)
