@@ -688,7 +688,7 @@ function autofarm(bool, ignoreName, tab)
 
         noClip()
         
-        if enemy and checkAlive(enemy) and (ignoreName or string.find(enemy.Name, t.selectedTarget) or string.find(enemy.Name, noSave.storyTarget) and bool == "doingstory") then
+        if enemy and checkAlive(enemy) and (ignoreName or string.find(enemy.Name, t.selectedTarget) and t.autofarm or string.find(enemy.Name, noSave.storyTarget) and bool == "doingstory") then
             if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
                 char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
             end
@@ -793,6 +793,7 @@ function autoStory()
 
         for _,quest in pairs(quests) do
             if quest.Name:match("Storyline") then
+                print(quest.Name)
 
                 if not plrData.TrackedQuest.Value:match("Storyline") then
                     game.ReplicatedStorage.requests.character.trackquest:FireServer(quest.Name)
@@ -834,11 +835,12 @@ function autoStory()
                     end
                 elseif quest.Kills then
                     noSave.doingstory = true
+                    noSave.storyTarget = quest.Kills[1]
 
                     spawn(autofarm("doingstory", false, {Selected = true, Story = true}))
 
                     while task.wait() do
-                        if table.find(Service:JSONDecode(plrData.CurrentQuests.Value), quest) then
+                        if not table.find(Service:JSONDecode(plrData.CurrentQuests.Value), quest) then
                             noSave.doingstory = false
                             break
                         end
