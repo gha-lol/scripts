@@ -126,10 +126,10 @@ function createElement(tab, elementType, id, data, callback)
     -- Criador dinâmico
     local creator = tab["Create" .. elementType]
     if creator then
-        if elementType == "Button" or elementType == "Paragraph" then
-            element = creator(tab, data)
+        if elementType == "Button" then
+            element = creator(data)
         else
-            element = creator(tab, id, data)
+            element = creator(id, data)
         end
     end
 
