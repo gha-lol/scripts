@@ -303,7 +303,7 @@ end
 
 local isAutoChest = false
 function autoChest()
-    if isAutoChest or game.PlaceId == 14890802310 then return end
+    if isAutoChest or game.PlaceId ~= 14890802310 then return end
     isAutoChest = true
 
     while t.autochest do task.wait(5)
@@ -616,8 +616,8 @@ function autofarm(bool, ignoreName, tab)
         if bool == "autoraid" and game.PlaceId == 14890802310 then setAligns(false) return end
         setAligns(true)
         
-        if bool == "autofarm" and t.autoraid then t.autoraid = false task.wait(1)
-        elseif bool == "autoraid" and t.autofarm then t.autofarm = false task.wait(1) end
+        if bool == "autofarm" and t.autoraid then t.autoraid = false UIElements.autoraidToggle:SetValue(false) task.wait(1)
+        elseif bool == "autoraid" and t.autofarm then t.autofarm = false UIElements.autofarmToggle:SetValue(false) task.wait(1) end
     else
         if not t.autoraid and not t.autofarm then
             setAligns(false)
