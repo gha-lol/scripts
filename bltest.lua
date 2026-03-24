@@ -147,13 +147,8 @@ function createElement(tab, elementType, id, data, callback)
     -- Auto OnChanged
     if callback and element.OnChanged then
         element:OnChanged(function(...)
-            callback(element, ...)
+            callback(Options[id], ...)
         end)
-    end
-
-    -- Auto Option shortcut
-    if Options[id] then
-        element.Option = Options[id]
     end
 
     return element
