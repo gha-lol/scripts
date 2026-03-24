@@ -122,17 +122,17 @@ local UIElements = {}
 
 function createElement(tab, elementType, id, data, callback)
     local element
-    print(data)
 
     -- Criador dinâmico
-    local creator = tab["Create" .. elementType]
-    if creator then
-        if elementType == "Button" then
-            element = creator(data)
-        else
-            element = creator(id, data)
-        end
-    end
+    if elementType == "Toggle" then
+		tab:CreateToggle(id, data)
+	elseif elementType == "Paragraph" then
+		tab:CreateParagraph(id, data)
+	elseif elementType == "Button" then
+		tab:CreateButton(data)
+	elseif elementType == "Dropdown" then
+		tab:CreateDropdown(id, data)
+	end
 
     if not element then
         warn("Failed to create element:", elementType, id)
