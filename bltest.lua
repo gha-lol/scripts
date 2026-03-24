@@ -122,13 +122,15 @@ local UIElements = {}
 
 function createElement(tab, elementType, id, data, callback)
     local element
+    print(data)
 
     -- Criador dinâmico
-    if tab["Create" .. elementType] then
+    local creator = tab["Create" .. elementType]
+    if creator then
         if elementType == "Button" then
-            element = tab["Create" .. elementType](data)
+            element = creator(data)
         else
-            element = tab["Create" .. elementType](id, data)
+            element = creator(id, data)
         end
     end
 
