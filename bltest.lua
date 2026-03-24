@@ -835,7 +835,8 @@ function autoStory()
                     end
                 elseif quest.Kills then
                     noSave.doingstory = true
-                    noSave.storyTarget = quest.Kills[1]
+                    
+                    for tt,_ in pairs(quest.Kills) do noSave.storyTarget = tt end
 
                     spawn(autofarm("doingstory", false, {Selected = true, Story = true}))
 
