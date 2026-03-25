@@ -203,7 +203,7 @@ function autofarm(bool)
     local alreadySetSpawn = false
 
     while t[bool] do task.wait()
-        if enemy and checkAlive(enemy) and alreadySetSpawn and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
+        if enemy and checkAlive(enemy) and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
             setAligns(true)
             noClip()
 
