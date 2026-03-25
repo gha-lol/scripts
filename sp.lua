@@ -229,6 +229,11 @@ function autofarm(bool)
                 game:GetService("ReplicatedStorage").Remotes.TeleportToPortal:FireServer(islandName)
             until spawnCrystal.Parent:FindFirstChild("PortalPrompt", true)
 
+            print(enemy, islandName, distance, spawnCrystal)
+            print(alreadySetSpawn)
+            print((plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25))
+            print(plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10)
+
             if not alreadySetSpawn then
                 local prox = spawnCrystal:FindFirstChild("CheckpointPrompt", true)
                 
