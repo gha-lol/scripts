@@ -886,9 +886,8 @@ function autoStory()
                         if not found then
                             keepLoop = false
                             noSave.doingstory = false
-                            break
                         end
-                    until not keepLoop and not isAutoFarming
+                    until not keepLoop --and not isAutoFarming
                     autofarm("doingstory", false, {Selected = true, Story = true}) task.wait(.5)
                 end
 
