@@ -128,13 +128,13 @@ function getClosestIsland(enemy)
         end
     end
 
-    local e,_ = string.gsub(toTp.Name, "Island", "")
-    for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.TeleportUI.MainFrame.Frame.Content.Holder:GetChildren()) do
+    local e,_ = string.gsub(spawnCrystal.Name, "SpawnPointCrystal_", "")
+    --[[for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.TeleportUI.MainFrame.Frame.Content.Holder:GetChildren()) do
         if v.Name:match(e) then
             e,_ = v.Name:gsub("Teleport_","")
             break
         end
-    end
+    end]]
 
     return e, distance, spawnCrystal
 end
@@ -203,7 +203,7 @@ function autofarm(bool)
 
             repeat task.wait(.1)
                 game:GetService("ReplicatedStorage").Remotes.TeleportToPortal:FireServer(islandName)
-            until plr:DistanceFromCharacter(enemy:GetPivot().Position) <= distance + 20
+            until plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) <= distance + 20
 
             if spawnCrystal then
                 local prox = spawnCrystal:FindFirstChild("CheckpointPrompt", true)
