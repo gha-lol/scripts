@@ -876,12 +876,16 @@ function autoStory()
                                 local targ = ""
 
                                 for enemy,killed in pairs(v.Kills) do
+                                    print(enemy,killed)
+                                    print(allQuests[v.Name].Kills[enemy])
                                     if allQuests[v.Name].Kills[enemy] < killed then
+                                        print("achou")
                                         targ = enemy
                                     end
                                 end
 
                                 noSave.storyTarget = targ
+                                print(noSave.storyTarget)
                             end
                         end
 
