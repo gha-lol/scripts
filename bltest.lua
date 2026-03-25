@@ -582,6 +582,7 @@ end
 
 function getEnemy(a)
     local returner
+    local distance = 9999999
 
     if a.Story then
         pcall(function()
@@ -607,20 +608,20 @@ function getEnemy(a)
         for i,v in pairs(workspace.Live:GetChildren()) do
             if a.Selected then
                 if a.Story then
-                    if v:GetAttribute("DisplayName") == noSave.storyTarget and checkAlive(v) then
+                    if v:GetAttribute("DisplayName") == noSave.storyTarget and checkAlive(v) and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < distance then
                         returner = v
-                        break
+                        distance = plr:DistanceFromCharacter(v.HumanoidRootPart.Position)
                     end
                 else
-                    if v:GetAttribute("DisplayName") == t.selectedTarget and checkAlive(v) then
+                    if v:GetAttribute("DisplayName") == t.selectedTarget and checkAlive(v) and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < distance then
                         returner = v
-                        break
+                        distance = plr:DistanceFromCharacter(v.HumanoidRootPart.Position)
                     end
                 end
             else
-                if checkAlive(v) and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" then
+                if checkAlive(v) and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < distance then
                     returner = v
-                    break
+                    distance = plr:DistanceFromCharacter(v.HumanoidRootPart.Position)
                 end
             end
         end
@@ -643,6 +644,7 @@ local isAutoFarming = false
 function autofarm(bool, ignoreName, tab)
     if t[bool] or noSave[bool] then
         if bool == "autoraid" and isMainGame() then setAligns(false) return end
+        task.wait(.5)
         if bool == "autofarm" then
             t.autostory = false
             noSave.doingstory = false
@@ -658,7 +660,7 @@ function autofarm(bool, ignoreName, tab)
 
             UIElements.autofarmToggle:SetValue(false)
         end
-        task.wait(1)
+        task.wait(.5)
         setAligns(true)
     else
         if not isAutoFarming then
@@ -900,7 +902,6 @@ function autoStory()
                             noSave.doingstory = false
                         end
                     until not keepLoop --and not isAutoFarming
-                    print("loop end")
                     task.wait(.2)
                     setAligns(false)
                 end
