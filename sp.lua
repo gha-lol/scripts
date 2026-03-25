@@ -46,7 +46,7 @@ Instance.new("Attachment", part)
 
 local align = Instance.new("AlignPosition", part)
 align.MaxForce = 99e99
-align.MaxVelocity = 500
+align.MaxVelocity = 125
 align.Responsiveness = 200
 align.Attachment0 = char.HumanoidRootPart.RootAttachment
 align.Attachment1 = part.Attachment
