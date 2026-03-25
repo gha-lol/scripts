@@ -227,9 +227,9 @@ end
 
 -- AUTO BOSSES SECTION
 
-createElement(Tab.AutoFarm, "Paragraph", "Alignss", {Title = "Auto Bosses Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+createElement(Tabs.AutoFarm, "Paragraph", "Alignss", {Title = "Auto Bosses Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-createElement(Tab.AutoFarm, "Toggle", "autobossesToggle", {Title = "Auto Bosses", Default = t.autoboss}, function(self)
+createElement(Tabs.AutoFarm, "Toggle", "autobossesToggle", {Title = "Auto Bosses", Default = t.autoboss}, function(self)
     t.autoboss = self.Value
     autofarm("autoboss")
 end)
@@ -251,9 +251,9 @@ end})
 
 -- AUTOFARM SECTION
 
-createElement(Tab.AutoFarm, "Paragraph", "Alignss", {Title = "Auto Farm Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+createElement(Tabs.AutoFarm, "Paragraph", "Alignss", {Title = "Auto Farm Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-createElement(Tab.AutoFarm, "Toggle", "autofarmToggle", {Title = "Auto Farm", Default = t.autofarm}, function(self)
+createElement(Tabs.AutoFarm, "Toggle", "autofarmToggle", {Title = "Auto Farm", Default = t.autofarm}, function(self)
     t.autofarm = self.Value
     autofarm("autofarm")
 end)
