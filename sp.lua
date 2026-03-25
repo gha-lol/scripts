@@ -194,7 +194,7 @@ function autofarm(bool)
     local posY, cfAng = t.distance, -90
 
     while t[bool] do task.wait()
-        if enemy and checkAlive(enemy) and plr:DistanceFromCharacter(enemy:GetPivot().Position) <= distance + 20 then
+        if enemy and checkAlive(enemy) and plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) <= distance + 20 then
             setAligns(true)
 
             part.CFrame = CFrame.new(enemy:GetPivot().Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
@@ -210,7 +210,9 @@ function autofarm(bool)
                 
                 for i=1,4 do
                     char:PivotTo(spawnCrystal:GetPivot())
-                    fireproximityprompt(prox)
+                    if prox then
+                        fireproximityprompt(prox)
+                    end
                     task.wait(.1)
                 end
             end
