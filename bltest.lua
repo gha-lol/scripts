@@ -864,6 +864,7 @@ function autoStory()
                     
                     spawn(function()
                         autofarm("doingstory", false, {Selected = true, Story = true})
+                        setAligns(true)
                     end)
 
                     local keepLoop = true
@@ -890,7 +891,9 @@ function autoStory()
                             noSave.doingstory = false
                         end
                     until not keepLoop --and not isAutoFarming
-                    autofarm("doingstory", false, {Selected = true, Story = true}) task.wait(.5)
+                    print("loop end")
+                    task.wait(.2)
+                    setAligns(false)
                 end
 
             end
