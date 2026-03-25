@@ -643,8 +643,6 @@ local isAutoFarming = false
 function autofarm(bool, ignoreName, tab)
     if t[bool] or noSave[bool] then
         if bool == "autoraid" and isMainGame() then setAligns(false) return end
-        setAligns(true)
-        
         if bool == "autofarm" then
             t.autostory = false
             noSave.doingstory = false
@@ -661,6 +659,7 @@ function autofarm(bool, ignoreName, tab)
             UIElements.autofarmToggle:SetValue(false)
         end
         task.wait(1)
+        setAligns(true)
     else
         if not isAutoFarming then
             setAligns(false)
@@ -678,6 +677,16 @@ function autofarm(bool, ignoreName, tab)
     
     local posY = -t.distance
     local cfAng = 90
+
+    local function checkToggles(tog)
+        local returner = false
+        if tog == "autofarm" and string.find(enemy.Name or "ashdashdajs", t.selectedTarget) and t.autofarm then
+            returner = true
+        elseif tog == "doingstory" and string.find(enemy.Name or "ashdashdajs", noSave.storyTarget) and noSave.doingstory then
+            returner = true
+        end
+        return returner
+    end
   
     while (t[bool] or noSave[bool]) do task.wait()
         if t.position == "Top" then
@@ -712,7 +721,7 @@ function autofarm(bool, ignoreName, tab)
 
         noClip()
         
-        if enemy and checkAlive(enemy) and (ignoreName or string.find(enemy.Name, t.selectedTarget) and t.autofarm or string.find(enemy.Name, noSave.storyTarget) and bool == "doingstory") then
+        if enemy and checkAlive(enemy) and (ignoreName or checkToggles(bool)) then
             if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
                 char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
             end
