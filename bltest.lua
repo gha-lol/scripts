@@ -98,6 +98,7 @@ local plrData = plr.PlayerData.SlotData
 local get_data = game.ReplicatedStorage.requests.miscellaneous.get_data
 local allSkills = get_data:InvokeServer("ability")
 local allAccessorys = get_data:InvokeServer("accessory")
+local allQuests = get_data:InvokeServer("quest")
 local Service = game:GetService("HttpService")
 local Options = Library.Options
 local UIElements = {}
@@ -584,7 +585,11 @@ function getEnemy(a)
 
     if a.Story then
         pcall(function()
-            char:PivotTo(workspace.Effects.questbrick:GetPivot())
+            for i,v in pairs(workspace.Effects:GetChildren()) do
+                if v.Name == "questbrick" and v:FindFirstChild("Title",true).Text:match(noSave.storyTarget) then
+                    char:PivotTo(workspace.Effects.questbrick:GetPivot())
+                end
+            end
         end)
     end
     
@@ -855,22 +860,34 @@ function autoStory()
                     end
                 elseif quest.Kills then
                     noSave.doingstory = true
+                    noSave.storyTarget = "asdjas"
                     
-                    for tt,_ in pairs(quest.Kills) do noSave.storyTarget = tt or "akakaksdaksk" end
-
                     spawn(autofarm("doingstory", false, {Selected = true, Story = true}))
 
                     local keepLoop = true
                     repeat task.wait(.1)
+                        local found = false
 
                         for i,v in pairs(Service:JSONDecode(plrData.CurrentQuests.Value)) do
                             if v.Name:match(quest.Name) then
-                                keepLoop = false
-                                noSave.doingstory = false
-                                break
+                                found = true
+                                local targ = ""
+
+                                for enemy,killed in pairs(v.Kills) do
+                                    if allQuests[v.Name].Kills[enemy] < killed then
+                                        targ = enemy
+                                    end
+                                end
+
+                                noSave.storyTarget = targ
                             end
                         end
 
+                        if not found then
+                            keepLoop = false
+                            noSave.doingstory = false
+                            break
+                        end
                     until not keepLoop and not isAutoFarming
                     autofarm("doingstory", false, {Selected = true, Story = true}) task.wait(.5)
                 end
