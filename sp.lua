@@ -195,10 +195,11 @@ end
 
 function getDistance(part, dis)
     local returner = false
-    if char and char:FindFirstChild("HumanoidRootPart") then
-        if (char.HumanoidRootPart.Position - part).Magnitude <= dis then
+    if char and char.PrimaryPart then
+        if (char.PrimaryPart.Position - part).Magnitude <= dis then
             returner = true
         end
+        print((char.PrimaryPart.Position - part).Magnitude <= dis)
     end
     return returner
 end
@@ -210,9 +211,7 @@ function autofarm(bool)
 
     local enemy, islandName, distance, spawnCrystal = nil, nil, nil, nil
     local posY, cfAng = t.distance, -90
-    local alreadySetSpawn = false
-    local can = false
-
+    
     while t[bool] do task.wait()
         if enemy and checkAlive(enemy) and (getDistance(enemy:GetPivot().Position, distance + 25) or getDistance(spawnCrystal:GetPivot().Position, 10)) then
             local hasHuman = false
@@ -250,10 +249,8 @@ function autofarm(bool)
                 task.wait(.1)
             end
 
-            print(enemy, islandName, distance, spawnCrystal)
-            print(alreadySetSpawn, distance)
-            print(plr:DistanceFromCharacter(enemy:GetPivot().Position))
-            print(plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position))
+            --print(enemy, islandName, distance, spawnCrystal)
+            --print(alreadySetSpawn, distance)
         else
             enemy, islandName, distance, spawnCrystal = getEnemy(bool)
         end
