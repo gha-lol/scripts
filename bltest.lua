@@ -848,7 +848,7 @@ function autoStory()
                                 repeat
                                     game.ReplicatedStorage.requests.character.dialogue:FireServer(npc, 1)
                                     task.wait(.5) 
-                                until chat ~= llchat or tick() - lastTickk > 10
+                                until chat ~= llchat and npc:IsDescendantOf(workspace) or tick() - lastTickk > 10 and npc:IsDescendantOf(workspace)
 
                                 local ended = false
                                 local lastRepeatTick = tick()
