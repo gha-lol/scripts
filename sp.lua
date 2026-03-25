@@ -214,7 +214,7 @@ function autofarm(bool)
     local can = false
 
     while t[bool] do task.wait()
-        if can and enemy and checkAlive(enemy) and (getDistance(enemy:GetPivot().Position, distance + 25) or getDistance(spawnCrystal:GetPivot().Position, 10)) then
+        if enemy and checkAlive(enemy) and (getDistance(enemy:GetPivot().Position, distance + 25) or getDistance(spawnCrystal:GetPivot().Position, 10)) then
             local hasHuman = false
             
             setAligns(true)
