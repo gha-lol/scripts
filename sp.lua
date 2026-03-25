@@ -146,6 +146,14 @@ function checkAlive(enemy)
     return false
 end
 
+function noClip()
+    for i,v in pairs(plr.Character:GetDescendants()) do
+        if v:IsA("BasePart") and v.CanCollide == true then
+            v.CanCollide = false
+        end
+    end
+end
+
 function getEnemy(bool, getAll)
     local returner, a, b, c = nil, nil, nil, nil
 
@@ -192,12 +200,21 @@ function autofarm(bool)
 
     local enemy, islandName, distance, spawnCrystal = nil, nil, nil, nil
     local posY, cfAng = t.distance, -90
+    local alreadySetSpawn = false
 
     while t[bool] do task.wait()
-        if enemy and checkAlive(enemy) and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
+        if enemy and checkAlive(enemy) and alreadySetSpawn and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
             setAligns(true)
+            noClip()
 
             part.CFrame = CFrame.new(enemy:GetPivot().Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
+
+            if enemy:FindFirstChild("HumanoidRootPart") then
+                for i=1,4 do
+                    game.ReplicatedStorage.AbilitySystem.Remotes.RequestAbility:FireServer(i, {ChargeTier = 3, HoldDuration = math.huge})
+                end
+                game.ReplicatedStorage.CombatSystem.Remotes.RequestHit:FireServer()
+            end
         elseif enemy and checkAlive(enemy) then
             setAligns(false)
 
@@ -205,10 +222,11 @@ function autofarm(bool)
                 game:GetService("ReplicatedStorage").Remotes.TeleportToPortal:FireServer(islandName)
             until plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) <= (distance + 20)
 
-            if spawnCrystal then
+            if spawnCrystal and not alreadySetSpawn then
                 local prox = spawnCrystal:FindFirstChild("CheckpointPrompt", true)
+                alreadySetSpawn = true
                 
-                for i=1,4 do
+                for i=1,3 do
                     char:PivotTo(spawnCrystal:GetPivot())
                     if prox then
                         fireproximityprompt(prox)
@@ -217,6 +235,7 @@ function autofarm(bool)
                 end
             end
         else
+            alreadySetSpawn = false
             enemy, islandName, distance, spawnCrystal = getEnemy(bool)
         end
     end
