@@ -231,7 +231,7 @@ function autofarm(bool)
 
             print(enemy, islandName, distance, spawnCrystal)
             print(alreadySetSpawn)
-            print((plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25))
+            print(plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25))
             print(plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10)
 
             if not alreadySetSpawn then
