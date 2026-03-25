@@ -164,7 +164,7 @@ function getEnemy(bool, getAll)
             end
         end
 
-    elseif bool = "autofarm" then
+    elseif bool == "autofarm" then
         returner = {}
 
         for i,v in pairs(workspace.NPCs:GetChildren()) do
