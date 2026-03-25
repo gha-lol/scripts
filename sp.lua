@@ -48,13 +48,11 @@ local align = Instance.new("AlignPosition", part)
 align.MaxForce = 99e99
 align.MaxVelocity = 125
 align.Responsiveness = 200
-align.Attachment0 = char.HumanoidRootPart.RootAttachment
 align.Attachment1 = part.Attachment
 
 local orient = Instance.new("AlignOrientation", part)
 orient.MaxTorque = math.huge
 orient.Responsiveness = 200
-orient.Attachment0 = char.HumanoidRootPart.RootAttachment
 orient.Attachment1 = part.Attachment
 
 plr.CharacterAdded:Connect(function(cha)
@@ -119,11 +117,13 @@ function getClosestIsland(enemy)
     for i,v in pairs(workspace:GetChildren()) do
         if v.Name:match("Island") and v:IsA("Folder") then
             local dis
-            for _,spawnp in pairs(v:GetChildren()) do if spawnp.Name:match("SpawnPointCrystal") then spawnCrystal = spawnp dis = (spawnp:GetPivot().Position - enemy:GetPivot().Position).Magnitude end end
+            local nspc
+            for _,spawnp in pairs(v:GetChildren()) do if spawnp.Name:match("SpawnPointCrystal") then nspc = spawnp dis = (spawnp:GetPivot().Position - enemy:GetPivot().Position).Magnitude end end
 
             if dis < distance then
                 toTp = v
                 distance = dis
+                spawnCrystal = nspc
             end
         end
     end
