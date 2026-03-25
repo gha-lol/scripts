@@ -586,8 +586,8 @@ function getEnemy(a)
     if a.Story then
         pcall(function()
             for i,v in pairs(workspace.Effects:GetChildren()) do
-                if v.Name == "questbrick" and v:FindFirstChild("Title",true).Text:match(noSave.storyTarget) then
-                    char:PivotTo(workspace.Effects.questbrick:GetPivot())
+                if v.Name == "questbrick" and string.find(v["Quest Marker"].Image.Title.Text, noSave.storyTarget) then
+                    char:PivotTo(v:GetPivot())
                 end
             end
         end)
@@ -862,7 +862,9 @@ function autoStory()
                     noSave.doingstory = true
                     noSave.storyTarget = "asdjas"
                     
-                    spawn(autofarm("doingstory", false, {Selected = true, Story = true}))
+                    spawn(function()
+                        autofarm("doingstory", false, {Selected = true, Story = true})
+                    end)
 
                     local keepLoop = true
                     repeat task.wait(.1)
