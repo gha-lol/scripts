@@ -27,7 +27,7 @@ local t = {
 -- Variables
 
 local plr = game.Players.LocalPlayer
-local char = plr.Character or plr.CharacterAdded:Wait()
+local char = plr.Character
 
 local allBosses = {}
 local Options = Library.Options
@@ -205,10 +205,11 @@ function autofarm(bool)
     local enemy, islandName, distance, spawnCrystal = nil, nil, nil, nil
     local posY, cfAng = t.distance, -90
     local alreadySetSpawn = false
+    local can = false
 
     while t[bool] do task.wait()
-        if char then char:WaitForChild("HumanoidRootPart") end
-        
+        if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Head") then can = true end
+
         if enemy and checkAlive(enemy) and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
             local hasHuman = false
             
