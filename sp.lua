@@ -136,7 +136,7 @@ function getClosestIsland(enemy)
         end
     end
 
-    return toTp, distance, spawnCrystal
+    return e, distance, spawnCrystal
 end
 
 function checkAlive(enemy)
