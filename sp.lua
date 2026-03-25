@@ -172,6 +172,7 @@ function getEnemy(bool, getAll)
             end
         end
 
+        allBosses = returner
     elseif bool == "autofarm" then
         returner = {}
 
@@ -189,7 +190,6 @@ function getEnemy(bool, getAll)
 
     end
 
-    allBosses = returner
     return returner, a, b, c
 end
 
@@ -204,12 +204,19 @@ function autofarm(bool)
 
     while t[bool] do task.wait()
         if enemy and checkAlive(enemy) and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
+            local hasHuman = false
+            
             setAligns(true)
             noClip()
 
-            part.CFrame = CFrame.new(enemy:GetPivot().Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
+            if not enemy:FindFirstChild("HumanoidRootPart") then
+                part.CFrame = CFrame.new(enemy:GetPivot().Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
+            else
+                hasHuman = true
+                part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
+            end
 
-            if enemy:FindFirstChild("HumanoidRootPart") then
+            if hasHuman and plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) < 15 then
                 for i=1,4 do
                     game.ReplicatedStorage.AbilitySystem.Remotes.RequestAbility:FireServer(i, {ChargeTier = 3, HoldDuration = math.huge})
                 end
@@ -220,18 +227,18 @@ function autofarm(bool)
 
             repeat task.wait(.1)
                 game:GetService("ReplicatedStorage").Remotes.TeleportToPortal:FireServer(islandName)
-            until plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) <= (distance + 20)
+            until spawnCrystal.Parent:FindFirstChild("PortalPrompt", true)
 
-            if spawnCrystal and not alreadySetSpawn then
+            if not alreadySetSpawn then
                 local prox = spawnCrystal:FindFirstChild("CheckpointPrompt", true)
-                alreadySetSpawn = true
                 
                 for i=1,3 do
-                    char:PivotTo(spawnCrystal:GetPivot())
                     if prox then
+                        alreadySetSpawn = true
+                        char:PivotTo(spawnCrystal:GetPivot())
                         fireproximityprompt(prox)
+                        task.wait(.1)
                     end
-                    task.wait(.1)
                 end
             end
         else
