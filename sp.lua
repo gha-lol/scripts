@@ -239,8 +239,8 @@ function autofarm(bool)
                 char:PivotTo(spawnCrystal:GetPivot())
                 if prox then
                     fireproximityprompt(prox)
-                    task.wait(.1)
                 end
+                task.wait(.1)
             end
 
             print(enemy, islandName, distance, spawnCrystal)
