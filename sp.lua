@@ -140,7 +140,7 @@ function getClosestIsland(enemy)
 end
 
 function checkAlive(enemy)
-    if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 then
+    if enemy and typeof(enemy) == "Instance" and enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 then
         return true
     end
     return false
