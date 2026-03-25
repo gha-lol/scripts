@@ -157,7 +157,7 @@ function getEnemy(bool, getAll)
                 returner = v
                 a, b, c = getClosestIsland(v)
                 break
-            elseif v:FindFirstChild("Boss") and getAll then
+            elseif checkAlive(v) and v:FindFirstChild("Boss") and getAll then
                 if not table.find(returner, v.Name) then
                     table.insert(returner, v.Name)
                 end
@@ -172,7 +172,7 @@ function getEnemy(bool, getAll)
                 returner = v
                 a, b, c = getClosestIsland(v)
                 break
-            elseif getAll then
+            elseif checkAlive(v) and getAll then
                 if not table.find(returner, v.Name) then
                     table.insert(returner, v.Name)
                 end
@@ -194,7 +194,7 @@ function autofarm(bool)
     local posY, cfAng = t.distance, -90
 
     while t[bool] do task.wait()
-        if enemy and checkAlive(enemy) and plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) <= distance + 20 then
+        if enemy and checkAlive(enemy) and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
             setAligns(true)
 
             part.CFrame = CFrame.new(enemy:GetPivot().Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
@@ -203,7 +203,7 @@ function autofarm(bool)
 
             repeat task.wait(.1)
                 game:GetService("ReplicatedStorage").Remotes.TeleportToPortal:FireServer(islandName)
-            until plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) <= distance + 20
+            until plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) <= (distance + 20)
 
             if spawnCrystal then
                 local prox = spawnCrystal:FindFirstChild("CheckpointPrompt", true)
@@ -222,6 +222,7 @@ function autofarm(bool)
     end
 
     isAutoFarming = false
+    setAligns(false)
 end
 
 
