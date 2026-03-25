@@ -193,8 +193,14 @@ function getEnemy(bool, getAll)
     return returner, a, b, c
 end
 
-function getDistance(enemy)
-
+function getDistance(part, dis)
+    local returner = false
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        if (char.HumanoidRootPart.Position - part).Magnitude <= dis then
+            returner = true
+        end
+    end
+    return returner
 end
 
 local isAutoFarming = false
@@ -208,9 +214,7 @@ function autofarm(bool)
     local can = false
 
     while t[bool] do task.wait()
-        if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Head") then can = true else can = false end
-
-        if can and enemy and checkAlive(enemy) and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
+        if can and enemy and checkAlive(enemy) and (getDistance(enemy:GetPivot().Position, distance + 25) or getDistance(spawnCrystal:GetPivot().Position, 10)) then
             local hasHuman = false
             
             setAligns(true)
