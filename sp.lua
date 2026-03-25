@@ -193,6 +193,10 @@ function getEnemy(bool, getAll)
     return returner, a, b, c
 end
 
+function getDistance(enemy)
+
+end
+
 local isAutoFarming = false
 function autofarm(bool)
     if isAutoFarming then return end
@@ -229,25 +233,21 @@ function autofarm(bool)
                 game:GetService("ReplicatedStorage").Remotes.TeleportToPortal:FireServer(islandName)
             until spawnCrystal.Parent:FindFirstChild("PortalPrompt", true)
 
-            print(enemy, islandName, distance, spawnCrystal)
-            print(alreadySetSpawn)
-            print(plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25))
-            print(plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10)
-
-            if not alreadySetSpawn then
-                local prox = spawnCrystal:FindFirstChild("CheckpointPrompt", true)
+            local prox = spawnCrystal:FindFirstChild("CheckpointPrompt", true)
                 
-                for i=1,3 do
-                    if prox then
-                        alreadySetSpawn = true
-                        char:PivotTo(spawnCrystal:GetPivot())
-                        fireproximityprompt(prox)
-                        task.wait(.1)
-                    end
+            for i=1,3 do
+                char:PivotTo(spawnCrystal:GetPivot())
+                if prox then
+                    fireproximityprompt(prox)
+                    task.wait(.1)
                 end
             end
+
+            print(enemy, islandName, distance, spawnCrystal)
+            print(alreadySetSpawn, distance)
+            print(plr:DistanceFromCharacter(enemy:GetPivot().Position))
+            print(plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position))
         else
-            alreadySetSpawn = false
             enemy, islandName, distance, spawnCrystal = getEnemy(bool)
         end
     end
