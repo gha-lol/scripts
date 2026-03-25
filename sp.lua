@@ -56,6 +56,7 @@ orient.Responsiveness = 200
 orient.Attachment1 = part.Attachment
 
 plr.CharacterAdded:Connect(function(cha)
+    task.wait(.5)
     char = cha
     align.Attachment0 = nil
     orient.Attachment0 = nil
