@@ -208,9 +208,9 @@ function autofarm(bool)
     local can = false
 
     while t[bool] do task.wait()
-        if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Head") then can = true end
+        if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Head") then can = true else can = false end
 
-        if enemy and checkAlive(enemy) and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
+        if can and enemy and checkAlive(enemy) and (plr:DistanceFromCharacter(enemy:GetPivot().Position) <= (distance + 25) or plr:DistanceFromCharacter(spawnCrystal:GetPivot().Position) < 10) then
             local hasHuman = false
             
             setAligns(true)
