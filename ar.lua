@@ -9,6 +9,10 @@ local Tabs = {
     Auto = Window:CreateTab{
         Title = "Auto",
         Icon = "phosphor-users-bold"
+    },
+    Misc = Window:CreateTab{
+        Title = "Misc",
+        Icon = "phosphor-users-bold"
     }
 }
 
@@ -27,6 +31,11 @@ local Remotes = game.ReplicatedStorage:FindFirstChild("Remotes")
 local gameStatus = workspace:FindFirstChild("GameStatus")
 
 local lastUnits = {}
+local lagRemotes = {
+    Remotes.ClientDisplay,
+    Remotes.Parent.ReturnSkill,
+    Remotes.HitEffect
+}
 
 
 -- Functions
@@ -203,5 +212,21 @@ createElement(Tabs.Auto, "Toggle", "AutoWitchToggle", {Title = "Auto Witch Inf",
         table.insert(consAutoWitch, con1)
         table.insert(consAutoWitch, con2)
         table.insert(consAutoWitch, con3)
+    end
+end)
+
+
+
+-- Misc / Other
+
+createElement(Tabs.Misc, "Toggle", "NoLagToggle", {Title = "Less Lag", Default = false}, function(self)
+    for _,v in pairs(lagRemotes) do
+        for _,con in pairs(getconnections(v.OnClientEvent)) do
+            if self.Value then
+                con:Disable()
+            else
+                con:Enable()
+            end
+        end
     end
 end)
