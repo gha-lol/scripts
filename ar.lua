@@ -25,6 +25,7 @@ local t = {
 
 -- Variables
 
+local plr = game.Players.LocalPlayer
 local Options = Library.Options
 local UIElements = {}
 local Remotes = game.ReplicatedStorage:FindFirstChild("Remotes")
@@ -107,6 +108,27 @@ function card(vezes, a)
     delay(5,function()
         for i,v in pairs(con) do v:Enable() end 
     end)
+end
+
+local allScreens = {}
+for _,v in pairs(plr.PlayerGui:GetChildren()) do if v.Name == "bbbl" then table.insert(allScreens, v) end end
+function blackScreen(bool)
+    if bool then
+        for _,v in pairs(allScreens) do v:Destroy() end
+
+        local a = Instance.new("ScreenGui", plr.PlayerGui)
+    		a.IgnoreGuiInset = true
+            a.Name = "bbbl"
+        local b = Instance.new("Frame", a)
+    		b.Size = UDim2.new(2,0,2,0)
+    		b.Position = UDim2.new(0,0,0,0)
+    		b.BackgroundColor3 = Color3.new(0,0,0)
+    		b.ZIndex = -100
+        
+        table.insert(allScreens, a)
+    else
+        for _,v in pairs(allScreens) do v:Destroy() end
+    end
 end
 
 
@@ -229,4 +251,8 @@ createElement(Tabs.Misc, "Toggle", "NoLagToggle", {Title = "Less Lag", Default =
             end
         end
     end
+end)
+
+createElement(Tabs.Misc, "Toggle", "BlackscreenToggle", {Title = "Blackscreen", Default = false}, function(self)
+    blackScreen(self.Value)
 end)
