@@ -190,7 +190,7 @@ createElement(Tabs.Auto, "Toggle", "AutoWitchToggle", {Title = "Auto Witch Inf",
             Remotes.Replay:FireServer()
         end)
 
-        local con3 = gameStatus.Wave:Connect(function()
+        local con3 = gameStatus.Wave.Changed:Connect(function()
             if gameStatus.Wave.Value >= 3 and not alreadyGotCards then
                 alreadyGotCards = true
 
