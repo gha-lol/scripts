@@ -13,10 +13,8 @@ local Tabs = {
 }
 
 local t = {
-    fuseDropdown1,
-    fuseDropdown2,
-    selectedMainFuse,
-    selectedFodderFuse,
+    selectedMainFuse = "",
+    selectedFodderFuse = "",
     selectedStat = "Damage"
 }
 
