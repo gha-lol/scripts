@@ -33,9 +33,9 @@ local gameStatus = workspace:FindFirstChild("GameStatus")
 
 local lastUnits = {}
 local lagRemotes = {
-    Remotes.ClientDisplay,
-    Remotes.Parent.ReturnSkill,
-    Remotes.HitEffect
+    Remotes:FindFirstChild("ClientDisplay"),
+    Remotes.Parent:FindFirstChild("ReturnSkill"),
+    Remotes:FindFirstChild("HitEffect")
 }
 
 
