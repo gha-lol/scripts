@@ -247,11 +247,11 @@ noVfx(false)
 
 game.ReplicatedStorage.Remotes.Interface.OnClientEvent:Connect(function(tipo, tab)
     if tipo == "arenaResults" then
-        task.wait(2)
+        task.wait(4)
         if tab.remote and not Retrying then
             Retrying = true
             tab.remote:FireServer("replay")
-            task.wait(3)
+            task.wait(2)
             Retrying = false
 
             local newData = getData()
