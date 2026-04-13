@@ -251,14 +251,20 @@ function noVfx(val)
         end
     end
 
+    local clearedTick
     noVfxCon = game.ReplicatedStorage.Remotes.FX.OnClientEvent:Connect(function(tipo, tabbb)
-        if tipo == "arenaWaypoint" then
+        if tipo == "arenaWaypoint" and tabbb.waypoint then
             setAligns(false)
             local tt = tick()
+
             repeat task.wait()
-                char.HumanoidRootPart.CFrame = tabbb.location
-            until tick() - tt > 1
+                char.HumanoidRootPart.CFrame = tabbb.waypoint.CFrame
+            until tick() - tt > 2 or clearedTick and tick() - clearedTick <= .5
+
             setAligns(true)
+            clearedTick = nil
+        elseif tipo == "arenaWaypoint" and tabbb.clearWaypoints then
+            clearedTick = tick()
         end
     end)
 end
