@@ -12,7 +12,7 @@ local Tabs = {
 -- Data
 
 local t = {
-    autofarm = true,
+    autofarm = false,
     distance = 8
 }
 
@@ -130,7 +130,7 @@ function getEnemy()
 
     for i,v in pairs(mainWorkspace.Living:GetChildren()) do
         if v.Name ~= plr.Name and checkAlive(v) then
-            returner = V
+            returner = v
             break
         end
     end
@@ -150,9 +150,9 @@ function autofarm()
             part.CFrame = mainWorkspace.FX:FindFirstChild("Marker").CFrame
         end
 
-        if enemy and checkAlive(enemy) then
-            noClip()
+        noClip()
 
+        if enemy and checkAlive(enemy) then
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
             for i=1,4 do
