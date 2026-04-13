@@ -24,6 +24,7 @@ local char = plr.Character or plr.CharacterAdded:Wait()
 
 local mainWorkspace = workspace.MainWorkspaceComponents
 local Options = Library.Options
+local UIElements = {}
 
 
 -- Important
