@@ -13,7 +13,8 @@ local Tabs = {
 
 local t = {
     autofarm = false,
-    distance = 8
+    distance = 8,
+    position = "Down"
 }
 
 
@@ -159,7 +160,14 @@ function autofarm()
     local noEnemyTick = tick()
 
     while t.autofarm do task.wait()
-        posY = -t.distance
+        if t.position == "Top" then
+            posY = t.distance
+            cfAng = -90
+        else
+            posY = -t.distance
+            cfAng = 90
+        end
+
         task.spawn(noClip)
 
         if plr.PlayerGui:FindFirstChild("ResultsScreenNew") and plr.PlayerGui:FindFirstChild("ResultsScreenNew").Enabled then
@@ -311,6 +319,10 @@ end)
 createElement(Tabs.Main, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = true, Callback = function(value)
     t.distance = tonumber(value)
 end})
+
+createElement(Tabs.Config, "Dropdown", "selectTopDown", {Title = "Farm Position", Values = {"Top", "Down"}, Multi = false, Default = t.position}, function(_, val)
+    t.position = val
+end)
 
 createElement(Tabs.Main, "Toggle", "BlackScreenToggle", {Title = "Black Screen", Default = false}, function(self)
     blackScreen(self.Value)
