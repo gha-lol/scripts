@@ -320,7 +320,7 @@ createElement(Tabs.Main, "Input", "InputDistance", {Title = "Distance", Default 
     t.distance = tonumber(value)
 end})
 
-createElement(Tabs.Config, "Dropdown", "selectTopDown", {Title = "Farm Position", Values = {"Top", "Down"}, Multi = false, Default = t.position}, function(_, val)
+createElement(Tabs.Main, "Dropdown", "selectTopDown", {Title = "Farm Position", Values = {"Top", "Down"}, Multi = false, Default = t.position}, function(_, val)
     t.position = val
 end)
 
