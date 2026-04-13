@@ -155,8 +155,10 @@ function autofarm()
         if enemy and checkAlive(enemy) then
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
-            for i=1,4 do
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, tostring(i), false, game)
+            for i,v in pairs(plr.PlayerGui.Skills.Hotbar:GetChildren()) do
+                if not table.find({"UIAspectRatioConstraint", "UIListLayout"}, v.Name) and not v.CooldownFrame:FindFirstChild("Value") then
+                    game.ReplicatedStorage.Remotes.Input:FireServer(v.Name)
+                end
             end
             game.ReplicatedStorage.Remotes.Input:FireServer(nil,Enum.UserInputType.MouseButton1,nil,{holdingControl = false})
         else
