@@ -23,8 +23,11 @@ local plr = game.Players.LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
 
 local mainWorkspace = workspace.MainWorkspaceComponents
+local Retrying = false
 local Options = Library.Options
+local http = game:GetService("HttpService")
 local UIElements = {}
+local Before
 
 
 -- Important
@@ -53,6 +56,7 @@ orient.Attachment1 = part.Attachment
 plr.CharacterAdded:Connect(function(cha)
     char = cha
     if t.autofarm then
+        task.wait(1)
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
     end
@@ -60,6 +64,11 @@ end)
 
 
 -- Functions
+
+function getData()
+    return game.ReplicatedStorage.Remotes.ReturnData:InvokeServer()
+end
+Before = getData()
 
 function createElement(tab, elementType, id, data, callback)
     local element
@@ -166,6 +175,56 @@ function autofarm()
         end
     end
 end
+
+function sendWebhook(embed)
+    local body = http:JSONEncode({
+        ["content"] = "@everyone"
+        ["embeds"] = {
+            {
+                ["title"] = embed.title or "a",
+                ["description"] = embed.description or "b",
+                ["type"] = "rich",
+                ["color"] = embed.color or tonumber(0xffffff),
+                ["fields"] = embed.fields,
+                ["footer"] = {
+                    ["text"] = embed.footer or "c"
+                }
+            }
+        }
+    })
+    request({
+        Body = body,
+        Url = "https://discord.com/api/webhooks/1457194910506684625/mXXODUWh7Hs4u4lDdy36wZbrJlM7rbwlFdX652vt5GNfAov9rridFSdJ4BK5pr2-vWsO",
+        Method = "POST",
+        Headers = {["Content-Type"] = "application/json"}
+    })
+end
+
+
+-- Retry
+
+game.ReplicatedStorage.Remotes.Interface.OnClientEvent:Connect(function(tipo, tab)
+    if tipo == "arenaResults" then
+        task.wait(.5)
+        if tab.remote and not Retrying then
+            Retrying = true
+            tab.remote:FireServer("replay")
+            task.wait(5)
+            Retrying = false
+
+            local newData = getData()
+
+            for i,v in pairs(newData.Items) do
+                local bamount = Before.Items[i] or 0
+                if game.ReplicatedStorage.Items["Maruto Shippuden"]:FindFirstChild(i) and v > bamount then
+                    sendWebhook({title = "Anime Voxel", description = "Obtained " .. i, footer = "You have " .. tostring(v) .. " now"})
+                end
+            end
+
+            Before = newData
+        end
+    end
+end)
 
 
 -- Code
