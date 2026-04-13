@@ -57,6 +57,7 @@ plr.CharacterAdded:Connect(function(cha)
     char = cha
     if t.autofarm then
         task.wait(1)
+        part.CFrame = char.HumanoidRootPart.CFrame
         align.Attachment0 = char.HumanoidRootPart.RootAttachment
         orient.Attachment0 = char.HumanoidRootPart.RootAttachment
     end
@@ -107,7 +108,7 @@ function createElement(tab, elementType, id, data, callback)
 end
 
 function noClip()
-    for i,v in pairs(plr.Character:GetDescendants()) do
+    for i,v in pairs(char:GetDescendants()) do
         if v:IsA("BasePart") and v.CanCollide == true then
             v.CanCollide = false
         end
@@ -159,7 +160,7 @@ function autofarm()
             part.CFrame = mainWorkspace.FX:FindFirstChild("Marker").CFrame
         end
 
-        noClip()
+        task.spawn(noClip)
 
         if enemy and checkAlive(enemy) then
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
@@ -201,12 +202,15 @@ function sendWebhook(embed)
 end
 
 local allScreens = {}
+for i,v in pairs(plr.PlayerGui:GetChildren()) do if v.Name == "blackScreeis" then table.insert(allScreens, v) end end
 function blackScreen(val)
     if val then
         for _,v in pairs(allScreens) do v:Destroy() end
         local a = Instance.new("ScreenGui", plr.PlayerGui)
+            a.Name = "blackScreeis"
+            a.ResetOnSpawn = false
     		a.IgnoreGuiInset = true
-    		local b = Instance.new("Frame", a)
+    	local b = Instance.new("Frame", a)
     		b.Size = UDim2.new(2,0,2,0)
     		b.Position = UDim2.new(0,0,0,0)
     		b.BackgroundColor3 = Color3.new(0,0,0)
