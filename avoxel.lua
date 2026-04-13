@@ -14,7 +14,8 @@ local Tabs = {
 local t = {
     autofarm = false,
     distance = 8,
-    position = "Down"
+    position = "Down",
+    noVfx = false
 }
 
 
@@ -23,6 +24,7 @@ local t = {
 local plr = game.Players.LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
 
+local whitelisted = {"arenaWaypoint", "deathFX", "notification", "itemFX", "expGained", "expOrbs"}
 local mainWorkspace = workspace.MainWorkspaceComponents
 local Retrying = false
 local Options = Library.Options
@@ -256,42 +258,10 @@ function blackScreen(val)
     end
 end
 
-function noVfx(val)
-    if noVfxCon then noVfxCon:Disconnect() end
-    local a = getconnections(game.ReplicatedStorage.Remotes.FX.OnClientEvent)
 
-    for _,v in pairs(a) do
-        if val then
-            v:Disable()
-        else
-            v:Enable()
-        end
-    end
-
-    local clearedTick
-    noVfxCon = game.ReplicatedStorage.Remotes.FX.OnClientEvent:Connect(function(tipo, tabbb)
-        if tipo == "arenaWaypoint" and tabbb.waypoint then
-            setAligns(false)
-            local tt = tick()
-
-            repeat task.wait()
-                char.HumanoidRootPart.CFrame = tabbb.waypoint.CFrame
-            until tick() - tt > 2 or clearedTick and tick() - clearedTick <= .5
-
-            setAligns(true)
-            clearedTick = nil
-        elseif tipo == "arenaWaypoint" and tabbb.clearWaypoints then
-            clearedTick = tick()
-        elseif tipo == "deathFX" then
-            table.insert(deadNpcs, tabbb.model)
-        end
-    end)
-end
-noVfx(false)
-
+-- Connections
 
 -- Retry
-
 game.ReplicatedStorage.Remotes.Interface.OnClientEvent:Connect(function(tipo, tab)
     if tipo == "arenaResults" then
         --task.wait(4)
@@ -315,6 +285,42 @@ game.ReplicatedStorage.Remotes.Interface.OnClientEvent:Connect(function(tipo, ta
     end
 end)
 
+-- FXs
+game.ReplicatedStorage.Remotes.FX.OnClientEvent:Connect(function(tipo, tabbb)
+    if tipo == "arenaWaypoint" and tabbb.waypoint then
+        setAligns(false)
+        local tt = tick()
+
+        repeat task.wait()
+            char.HumanoidRootPart.CFrame = tabbb.waypoint.CFrame
+        until tick() - tt > 2 or clearedTick and tick() - clearedTick <= .5
+
+        setAligns(true)
+        clearedTick = nil
+    elseif tipo == "arenaWaypoint" and tabbb.clearWaypoints then
+        clearedTick = tick()
+    elseif tipo == "deathFX" then
+        table.insert(deadNpcs, tabbb.model)
+    end
+end)
+
+-- Hookfunction
+local reg = getreg()
+for _,v in pairs(reg) do
+    if type(v) == "function" then
+        local info = getinfo(v)
+        if info.name == "requireEffectModule" then
+            local hooook
+            hooook = hookfunction(info.func, newcclosure(function(tipo, tabb)
+                if not table.find(whitelisted, tipo) and t.noVfx then
+                    return nil
+                end
+                return hooook(tipo,tabb)
+            end))
+        end
+    end
+end
+
 
 -- Code
 
@@ -337,5 +343,5 @@ createElement(Tabs.Main, "Toggle", "BlackScreenToggle", {Title = "Black Screen",
 end)
 
 createElement(Tabs.Main, "Toggle", "noVfxToggle", {Title = "No Vfx", Default = false}, function(self)
-    noVfx(self.Value)
+    t.noVfx = self.Value
 end)
