@@ -200,16 +200,34 @@ function sendWebhook(embed)
     })
 end
 
+local allScreens = {}
+function blackScreen(val)
+    if val then
+        for _,v in pairs(allScreens) do v:Destroy() end
+        local a = Instance.new("ScreenGui", plr.PlayerGui)
+    		a.IgnoreGuiInset = true
+    		local b = Instance.new("Frame", a)
+    		b.Size = UDim2.new(2,0,2,0)
+    		b.Position = UDim2.new(0,0,0,0)
+    		b.BackgroundColor3 = Color3.new(0,0,0)
+    		b.ZIndex = -100
+        
+        table.insert(allScreens, a)
+    else
+        for _,v in pairs(allScreens) do v:Destroy() end
+    end
+end
+
 
 -- Retry
 
 game.ReplicatedStorage.Remotes.Interface.OnClientEvent:Connect(function(tipo, tab)
     if tipo == "arenaResults" then
-        task.wait(.5)
+        task.wait(2)
         if tab.remote and not Retrying then
             Retrying = true
             tab.remote:FireServer("replay")
-            task.wait(5)
+            task.wait(3)
             Retrying = false
 
             local newData = getData()
@@ -238,3 +256,7 @@ end)
 createElement(Tabs.Main, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
     t.distance = tonumber(value)
 end})
+
+createElement(Tabs.Main, "Toggle", "BlackScreenToggle", {Title = "Black Screen", Default = false}, function(self)
+    blackScreen(self.Value)
+end)
