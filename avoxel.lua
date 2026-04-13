@@ -182,7 +182,7 @@ function autofarm()
                 for i,v in pairs(mainWorkspace.Map:GetChildren()) do if v:FindFirstChild("spawnLocations") then map = v break end end
                 
                 setAligns(false)
-                for i,v in pairs(map:GetChildren()) do
+                for i,v in pairs(map.spawnLocations:GetChildren()) do
                     char.HumanoidRootPart.CFrame = v.CFrame
                     task.wait(.25)
                 end
