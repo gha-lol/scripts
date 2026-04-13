@@ -240,6 +240,7 @@ function noVfx(val)
         end
     end)
 end
+noVfx(false)
 
 
 -- Retry
