@@ -27,6 +27,7 @@ local Retrying = false
 local Options = Library.Options
 local http = game:GetService("HttpService")
 local UIElements = {}
+local deadNpcs = {}
 local Before
 local noVfxCon
 
@@ -140,7 +141,7 @@ function getEnemy()
     local returner
 
     for i,v in pairs(mainWorkspace.Living:GetChildren()) do
-        if v.Name ~= plr.Name and checkAlive(v) then
+        if v.Name ~= plr.Name and not table.find(deadNpcs, v) and checkAlive(v) then
             returner = v
             break
         end
@@ -265,6 +266,8 @@ function noVfx(val)
             clearedTick = nil
         elseif tipo == "arenaWaypoint" and tabbb.clearWaypoints then
             clearedTick = tick()
+        elseif tipo == "deathFX" then
+            table.insert(deadNpcs, tabbb.model)
         end
     end)
 end
