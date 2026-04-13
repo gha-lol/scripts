@@ -158,7 +158,13 @@ function autofarm()
     local noEnemyTick = tick()
 
     while t.autofarm do task.wait()
+        posY = -t.distance
         task.spawn(noClip)
+
+        if plr.PlayerGui:FindFirstChild("ResultsScreenNew") and plr.PlayerGui:FindFirstChild("ResultsScreenNew").Enabled then
+            local p = mainWorkspace.FX:FindFirstChild("RemoteEvent")
+            if p then task.wait(4) p:FireServer("replay") task.wait(2) end
+        end
 
         if enemy and checkAlive(enemy) then
             noEnemyTick = tick()
@@ -263,10 +269,10 @@ noVfx(false)
 
 game.ReplicatedStorage.Remotes.Interface.OnClientEvent:Connect(function(tipo, tab)
     if tipo == "arenaResults" then
-        task.wait(4)
+        --task.wait(4)
         if tab.remote and not Retrying then
             Retrying = true
-            tab.remote:FireServer("replay")
+            --tab.remote:FireServer("replay")
             task.wait(2)
             Retrying = false
 
@@ -293,7 +299,7 @@ createElement(Tabs.Main, "Toggle", "AutoFarmToggle", {Title = "Auto Farm", Defau
     autofarm()
 end)
 
-createElement(Tabs.Main, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+createElement(Tabs.Main, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = true, Callback = function(value)
     t.distance = tonumber(value)
 end})
 
