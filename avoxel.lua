@@ -183,7 +183,7 @@ function autofarm()
             if p then task.wait(4) p:FireServer("replay") task.wait(2) end
         end
 
-        if enemy and not table.find(deadNpcs, v) and checkAlive(enemy) then
+        if enemy and not table.find(deadNpcs, enemy) and checkAlive(enemy) then
             noEnemyTick = tick()
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
