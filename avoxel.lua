@@ -23,6 +23,7 @@ local plr = game.Players.LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
 
 local mainWorkspace = workspace.MainWorkspaceComponents
+local Options = Library.Options
 
 
 -- Important
