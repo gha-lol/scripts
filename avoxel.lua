@@ -28,6 +28,7 @@ local Options = Library.Options
 local http = game:GetService("HttpService")
 local UIElements = {}
 local Before
+local noVfxCon
 
 
 -- Important
@@ -156,10 +157,6 @@ function autofarm()
     local cfAng = 90
 
     while t.autofarm do task.wait()
-        if mainWorkspace.FX:FindFirstChild("WaveSilo") and mainWorkspace.FX:FindFirstChild("Marker") then
-            part.CFrame = mainWorkspace.FX:FindFirstChild("Marker").CFrame
-        end
-
         task.spawn(noClip)
 
         if enemy and checkAlive(enemy) then
@@ -222,6 +219,28 @@ function blackScreen(val)
     end
 end
 
+function noVfx(val)
+    if noVfxCon then noVfxCon:Disconnect() end
+    local a = getconnections(game.ReplicatedStorage.Remotes.FX.OnClientEvent)
+
+    for _,v in pairs(a) do
+        if val then
+            v:Disable()
+        else
+            v:Enable()
+        end
+    end
+
+    noVfxCon = game.ReplicatedStorage.Remotes.FX.OnClientEvent:Connect(function(tipo, tabbb)
+        if tipo == "arenaWaypoint" then
+            local tt = tick()
+            repeat task.wait()
+                part.CFrame = tabbb.location
+            until tick() - tt > 1
+        end
+    end)
+end
+
 
 -- Retry
 
@@ -263,4 +282,8 @@ end})
 
 createElement(Tabs.Main, "Toggle", "BlackScreenToggle", {Title = "Black Screen", Default = false}, function(self)
     blackScreen(self.Value)
+end)
+
+createElement(Tabs.Main, "Toggle", "noVfxToggle", {Title = "No Vfx", Default = false}, function(self)
+    noVfx(self.Value)
 end)
