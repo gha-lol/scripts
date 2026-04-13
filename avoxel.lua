@@ -178,7 +178,7 @@ end
 
 function sendWebhook(embed)
     local body = http:JSONEncode({
-        ["content"] = "@everyone"
+        ["content"] = "@everyone",
         ["embeds"] = {
             {
                 ["title"] = embed.title or "a",
