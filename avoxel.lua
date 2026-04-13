@@ -170,17 +170,19 @@ function autofarm()
                 end
             end
             game.ReplicatedStorage.Remotes.Input:FireServer(nil,Enum.UserInputType.MouseButton1,nil,{holdingControl = false})
-        elseif tick() - noEnemyTick >= 20 then
-            local map
-            for i,v in pairs(mainWorkspace.Map:GetChildren()) do if v:FindFirstChild("spawnLocations") then map = v break end end
-            
-            setAligns(false)
-            for i,v in pairs(map:GetChildren()) do
-                char.HumanoidRootPart.CFrame = v.CFrame
-                task.wait(.25)
-            end
-            setAligns(true)
         else
+            if tick() - noEnemyTick >= 20 then
+                local map
+                for i,v in pairs(mainWorkspace.Map:GetChildren()) do if v:FindFirstChild("spawnLocations") then map = v break end end
+                
+                setAligns(false)
+                for i,v in pairs(map:GetChildren()) do
+                    char.HumanoidRootPart.CFrame = v.CFrame
+                    task.wait(.25)
+                end
+                setAligns(true)
+            end
+
             enemy = getEnemy()
         end
     end
