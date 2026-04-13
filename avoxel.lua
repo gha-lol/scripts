@@ -66,6 +66,14 @@ plr.CharacterAdded:Connect(function(cha)
     end
 end)
 
+for _, connection in pairs(getconnections(plr.Idled)) do
+    if connection["Disable"] then
+        connection["Disable"](connection)
+    elseif connection["Disconnect"] then
+        connection["Disconnect"](connection)
+    end
+end
+
 
 -- Functions
 
