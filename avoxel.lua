@@ -176,6 +176,6 @@ createElement(Tabs.Main, "Toggle", "AutoFarmToggle", {Title = "Auto Farm", Defau
     autofarm()
 end)
 
-createElement(Tabs.Main, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = true, Callback = function(value)
+createElement(Tabs.Main, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
     t.distance = tonumber(value)
 end})
