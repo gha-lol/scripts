@@ -155,11 +155,13 @@ function autofarm()
     local enemy
     local posY = -t.distance
     local cfAng = 90
+    local noEnemyTick = tick()
 
     while t.autofarm do task.wait()
         task.spawn(noClip)
 
         if enemy and checkAlive(enemy) then
+            noEnemyTick = tick()
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
             for i,v in pairs(plr.PlayerGui.Skills.Hotbar:GetChildren()) do
@@ -168,6 +170,16 @@ function autofarm()
                 end
             end
             game.ReplicatedStorage.Remotes.Input:FireServer(nil,Enum.UserInputType.MouseButton1,nil,{holdingControl = false})
+        elseif tick() - noEnemyTick >= 20 then
+            local map
+            for i,v in pairs(mainWorkspace.Map:GetChildren()) do if v:FindFirstChild("spawnLocations") then map = v break end end
+            
+            setAligns(false)
+            for i,v in pairs(map:GetChildren()) do
+                char.HumanoidRootPart.CFrame = v.CFrame
+                task.wait(.25)
+            end
+            setAligns(true)
         else
             enemy = getEnemy()
         end
@@ -233,10 +245,12 @@ function noVfx(val)
 
     noVfxCon = game.ReplicatedStorage.Remotes.FX.OnClientEvent:Connect(function(tipo, tabbb)
         if tipo == "arenaWaypoint" then
+            setAligns(false)
             local tt = tick()
             repeat task.wait()
-                part.CFrame = tabbb.location
+                char.HumanoidRootPart.CFrame = tabbb.location
             until tick() - tt > 1
+            setAligns(true)
         end
     end)
 end
