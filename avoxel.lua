@@ -228,7 +228,10 @@ function autofarm()
             game.ReplicatedStorage.Remotes.Input:FireServer(nil,Enum.UserInputType.MouseButton1,nil,{holdingControl = false})
         else
             if tick() - noEnemyTick >= 25 then
-                char.Torso:Destroy()
+                if char and char:FindFirstChild("Torso") then
+                    char.Torso:Destroy()
+                    task.wait(1)
+                end
             elseif tick() - noEnemyTick >= 15 then
                 local map
                 for i,v in pairs(mainWorkspace.Map:GetChildren()) do if v:FindFirstChild("spawnLocations") then map = v break end end
