@@ -207,6 +207,7 @@ function autofarm()
         task.spawn(noClip)
 
         if plr.PlayerGui:FindFirstChild("ResultsScreenNew") and plr.PlayerGui:FindFirstChild("ResultsScreenNew").Enabled then
+            noEnemyTick = tick()
             local p = mainWorkspace.FX:FindFirstChild("RemoteEvent")
             if p then task.wait(4) p:FireServer("replay") task.wait(2) end
         end
