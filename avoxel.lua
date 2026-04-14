@@ -26,6 +26,7 @@ local char = plr.Character or plr.CharacterAdded:Wait()
 
 local whitelisted = {"arenaWaypoint", "deathFX", "notification", "itemFX", "expGained", "expOrbs"}
 local mainWorkspace = workspace.MainWorkspaceComponents
+local globalEnemy
 local Retrying = false
 local Options = Library.Options
 local http = game:GetService("HttpService")
@@ -58,15 +59,40 @@ orient.Responsiveness = 200
 orient.Attachment0 = char.HumanoidRootPart.RootAttachment
 orient.Attachment1 = part.Attachment
 
+function returnMouseFunction()
+    local hitPos
+    local hit
+    local cameraCf
+
+    if globalEnemy and globalEnemy:FindFirstChild("HumanoidRootPart") then
+        hitPos = globalEnemy.HumanoidRootPart.Position
+        hit = globalEnemy.HumanoidRootPart.CFrame
+        cameraCf = CFrame.new(globalEnemy.HumanoidRootPart.Position + Vector3.new(0,7,0), globalEnemy.HumanoidRootPart.Position)
+    else
+        local pos = char.HumanoidRootPart.CFrame * CFrame.new(0,0,-t.distance)
+        local cf = CFrame.new(pos.Position, pos.Position + char.HumanoidRootPart.CFrame.LookVector * (t.distance + 1))
+        hitPos = cf.Position
+        hit = cf
+        cameraCf = CFrame.new(char.HumanoidRootPart.Position, char.HumanoidRootPart.Position + char.HumanoidRootPart.CFrame.LookVector * (t.distance + 1))
+    end
+
+    return hitPos, hit, cameraCf
+end
+
 plr.CharacterAdded:Connect(function(cha)
     char = cha
     if t.autofarm then
-        task.wait(1)
-        part.CFrame = char.HumanoidRootPart.CFrame
-        align.Attachment0 = char.HumanoidRootPart.RootAttachment
-        orient.Attachment0 = char.HumanoidRootPart.RootAttachment
+        task.spawn(function()
+            task.wait(1)
+            part.CFrame = char.HumanoidRootPart.CFrame
+            align.Attachment0 = char.HumanoidRootPart.RootAttachment
+            orient.Attachment0 = char.HumanoidRootPart.RootAttachment
+        end)
     end
+    task.wait(1)
+    game.ReplicatedStorage.Remotes.ReturnMouse.OnClientInvoke = returnMouseFunction
 end)
+game.ReplicatedStorage.Remotes.ReturnMouse.OnClientInvoke = returnMouseFunction
 
 for _, connection in pairs(getconnections(plr.Idled)) do
     if connection["Disable"] then
@@ -189,6 +215,10 @@ function autofarm()
             noEnemyTick = tick()
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+            end
+
             for i,v in pairs(plr.PlayerGui.Skills.Hotbar:GetChildren()) do
                 if not table.find({"UIAspectRatioConstraint", "UIListLayout"}, v.Name) and not v.CooldownFrame:FindFirstChild("Value") then
                     game.ReplicatedStorage.Remotes.Input:FireServer(v.Name)
@@ -209,6 +239,7 @@ function autofarm()
             end
 
             enemy = getEnemy()
+            globalEnemy = enemy
         end
     end
 end
