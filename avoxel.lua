@@ -1,5 +1,5 @@
 local Library = loadstring(game:HttpGetAsync("https://github.com/ActualMasterOogway/Fluent-Renewed/releases/latest/download/Fluent.luau"))()
-local Window = Library:CreateWindow{Title = "av", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(1000, 750), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
+local Window = Library:CreateWindow{Title = "av", SubTitle = "by gha", TabWidth = 160, Size = UDim2.fromOffset(1500, 900), Resize = true,MinSize = Vector2.new(470, 380),Acrylic = true,Theme = "Dark",MinimizeKey = Enum.KeyCode.Q}
 
 local Tabs = {
     Main = Window:CreateTab{
@@ -380,7 +380,7 @@ createElement(Tabs.Main, "Dropdown", "selectTopDown", {Title = "Farm Position", 
     t.position = val
 end)
 
-createElement(Tabs.Main, "Dropdown", "selectedSkills", {Title = "Skills To Use", Values = {"1", "2", "3", "4"}, Multi = false, Default = t.selectedSkills}, function(_, val)
+createElement(Tabs.Main, "Dropdown", "selectedSkills", {Title = "Skills To Use", Values = {"1", "2", "3", "4"}, Multi = true, Default = t.selectedSkills}, function(_, val)
     t.selectedSkills = val
 end)
 
