@@ -228,7 +228,7 @@ function autofarm()
                 if char and char:FindFirstChild("Torso") then
                     char.Torso:Destroy()
                     plr.CharacterAdded:Wait()
-                    task.wait(2)
+                    repeat task.wait() until wave == 1
                 end
                 resettingWave = false
             end)
