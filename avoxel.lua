@@ -37,6 +37,7 @@ local Options = Library.Options
 local http = game:GetService("HttpService")
 local UIElements = {}
 local deadNpcs = {}
+local skillsRemoteDmg = {}
 local Before
 local noVfxCon
 
@@ -172,7 +173,7 @@ end
 function checkAlive(enemy)
     local returner = false
 
-    if enemy:FindFirstChild("HumanoidRootPart") and enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 then
+    if not table.find(deadNpcs, enemy) and enemy:FindFirstChild("HumanoidRootPart") and enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health > 0 then
         returner = true
     end
 
@@ -183,7 +184,7 @@ function getEnemy()
     local returner
 
     for i,v in pairs(mainWorkspace.Living:GetChildren()) do
-        if v.Name ~= plr.Name and not table.find(deadNpcs, v) and checkAlive(v) then
+        if v.Name ~= plr.Name and checkAlive(v) then
             returner = v
             break
         end
@@ -217,12 +218,16 @@ function autofarm()
             if p then task.wait(4) p:FireServer("replay") task.wait(2) end
         end
 
-        if enemy and not table.find(deadNpcs, enemy) and checkAlive(enemy) then
+        if enemy and checkAlive(enemy) then
             noEnemyTick = tick()
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
             if char and char:FindFirstChild("HumanoidRootPart") then
                 char.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+            end
+
+            for _,v in pairs(skillsRemoteDmg) do
+                v:FireServer(enemy.HumanoidRootPart.CFrame)
             end
 
             for i,v in pairs(plr.PlayerGui.Skills.Hotbar:GetChildren()) do
@@ -337,7 +342,9 @@ game.ReplicatedStorage.Remotes.FX.OnClientEvent:Connect(function(tipo, tabbb)
             char.HumanoidRootPart.CFrame = tabbb.waypoint.CFrame
         until tick() - tt > 2 or clearedTick and tick() - clearedTick <= .5
 
-        setAligns(true)
+        if t.autofarm then
+            setAligns(true)
+        end
         clearedTick = nil
     elseif tipo == "arenaWaypoint" and tabbb.clearWaypoints then
         clearedTick = tick()
@@ -355,6 +362,9 @@ for _,v in pairs(reg) do
             local hooook
             hooook = hookfunction(info.func, newcclosure(function(tipo, tabb)
                 if not table.find(whitelisted, tipo) and t.noVfx then
+                    if tabb.model == char and tabb.remote then
+                        table.insert(skillsRemoteDmg, tabb.remote)
+                    end
                     return nil
                 end
                 return hooook(tipo,tabb)
