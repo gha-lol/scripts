@@ -381,7 +381,13 @@ createElement(Tabs.Main, "Dropdown", "selectTopDown", {Title = "Farm Position", 
 end)
 
 createElement(Tabs.Main, "Dropdown", "selectedSkills", {Title = "Skills To Use", Values = {"1", "2", "3", "4"}, Multi = true, Default = t.selectedSkills}, function(_, val)
-    t.selectedSkills = val
+    local newSkills = {}
+
+    for i,_ in pairs(val) do
+        table.insert(newSkills, tostring(i))
+    end
+    
+    t.selectedSkills = newSkills
 end)
 
 -- Misc Tab
