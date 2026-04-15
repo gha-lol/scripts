@@ -18,8 +18,10 @@ local Tabs = {
 local t = {
     autofarm = false,
     distance = 8,
+    waveToReset = 9,
     position = "Down",
     noVfx = false,
+    resetWave = false,
     selectedSkills = {"1", "2", "3", "4"}
 }
 
@@ -40,6 +42,7 @@ local deadNpcs = {}
 local skillsRemoteDmg = {}
 local Before
 local noVfxCon
+local wave = 1
 
 
 -- Important
@@ -197,6 +200,7 @@ function autofarm()
     setAligns(t.autofarm)
 
     local enemy
+    local resettingWave
     local posY = -t.distance
     local cfAng = 90
     local noEnemyTick = tick()
@@ -218,7 +222,20 @@ function autofarm()
             if p then task.wait(4) p:FireServer("replay") task.wait(2) end
         end
 
-        if enemy and checkAlive(enemy) then
+        if t.resetWave and not resettingWave and wave >= t.waveToReset then
+            resettingWave = true
+            task.spawn(function()
+                if char and char:FindFirstChild("Torso") then
+                    char.Torso:Destroy()
+                    plr.CharacterAdded:Wait()
+                end
+                resettingWave = false
+            end)
+        elseif not t.resetWave then
+            resettingWave = false
+        end
+
+        if not resettingWave and enemy and checkAlive(enemy) then
             noEnemyTick = tick()
             part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
 
@@ -329,6 +346,8 @@ game.ReplicatedStorage.Remotes.Interface.OnClientEvent:Connect(function(tipo, ta
 
             Before = newData
         end
+    elseif tipo == "displayWave" then
+        wave = tab[1] or 1
     end
 end)
 
@@ -398,6 +417,10 @@ createElement(Tabs.Main, "Dropdown", "selectedSkills", {Title = "Skills To Use",
     end
     
     t.selectedSkills = newSkills
+end)
+
+createElement(Tabs.Main, "Toggle", "ResetWaveToggle", {Title = "Reset Wave 9", Default = false}, function(self)
+    t.resetWave = self.Value
 end)
 
 -- Misc Tab
