@@ -92,7 +92,7 @@ plr.CharacterAdded:Connect(function(cha)
     char = cha
     if t.autofarm then
         task.spawn(function()
-            task.wait(1)
+            task.wait(2)
             part.CFrame = char.HumanoidRootPart.CFrame
             align.Attachment0 = char.HumanoidRootPart.RootAttachment
             orient.Attachment0 = char.HumanoidRootPart.RootAttachment
@@ -228,6 +228,7 @@ function autofarm()
                 if char and char:FindFirstChild("Torso") then
                     char.Torso:Destroy()
                     plr.CharacterAdded:Wait()
+                    task.wait(2)
                 end
                 resettingWave = false
             end)
