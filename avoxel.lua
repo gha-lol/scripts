@@ -5,6 +5,10 @@ local Tabs = {
     Main = Window:CreateTab{
         Title = "Main",
         Icon = "phosphor-users-bold"
+    },
+    Misc = Window:CreateTab{
+        Title = "Misc",
+        Icon = "phosphor-users-bold"
     }
 }
 
@@ -15,7 +19,8 @@ local t = {
     autofarm = false,
     distance = 8,
     position = "Down",
-    noVfx = false
+    noVfx = false,
+    selectedSkills = {"1", "2", "3", "4"}
 }
 
 
@@ -221,7 +226,7 @@ function autofarm()
             end
 
             for i,v in pairs(plr.PlayerGui.Skills.Hotbar:GetChildren()) do
-                if not table.find({"UIAspectRatioConstraint", "UIListLayout"}, v.Name) and not v.CooldownFrame:FindFirstChild("Value") then
+                if not table.find({"UIAspectRatioConstraint", "UIListLayout"}, v.Name) and not v.CooldownFrame:FindFirstChild("Value") and table.find(t.selectedSkills, v.KeyText.Text:match("%[(%d+)%]")) then
                     game.ReplicatedStorage.Remotes.Input:FireServer(v.Name)
                 end
             end
@@ -375,10 +380,16 @@ createElement(Tabs.Main, "Dropdown", "selectTopDown", {Title = "Farm Position", 
     t.position = val
 end)
 
-createElement(Tabs.Main, "Toggle", "BlackScreenToggle", {Title = "Black Screen", Default = false}, function(self)
+createElement(Tabs.Main, "Dropdown", "selectedSkills", {Title = "Skills To Use", Values = {"1", "2", "3", "4"}, Multi = false, Default = t.selectedSkills}, function(_, val)
+    t.selectedSkills = val
+end)
+
+-- Misc Tab
+
+createElement(Tabs.Misc, "Toggle", "BlackScreenToggle", {Title = "Black Screen", Default = false}, function(self)
     blackScreen(self.Value)
 end)
 
-createElement(Tabs.Main, "Toggle", "noVfxToggle", {Title = "No Vfx", Default = false}, function(self)
+createElement(Tabs.Misc, "Toggle", "noVfxToggle", {Title = "No Vfx", Default = false}, function(self)
     t.noVfx = self.Value
 end)
