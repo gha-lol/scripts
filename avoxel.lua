@@ -324,6 +324,7 @@ function blackScreen(val)
 end
 
 function fpsBoost()
+    local Lightning = game:GetService("Lighting")
     local Terrain = workspace:FindFirstChildWhichIsA("Terrain")
 	Terrain.WaterWaveSize = 0
 	Terrain.WaterWaveSpeed = 0
@@ -351,7 +352,7 @@ function fpsBoost()
 			v.Lifetime = NumberRange.new(0)
 		end
 	end
-	for _, v in pairs(game:GetService("Lighting"):GetDescendants()) do
+	for _, v in pairs(Lighting:GetDescendants()) do
 		if v:IsA("PostEffect") then
 			v.Enabled = false
 		end
@@ -481,4 +482,4 @@ createElement(Tabs.Misc, "Toggle", "noVfxToggle", {Title = "No Vfx", Default = f
     t.noVfx = self.Value
 end)
 
-createElement(Tabs.Misc, "Button", nil, {Title = "Boost Fps", Description = "". Callback = fpsBoost})
+createElement(Tabs.Misc, "Button", nil, {Title = "Boost Fps", Description = "", Callback = fpsBoost})
