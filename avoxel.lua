@@ -31,7 +31,7 @@ local t = {
 local plr = game.Players.LocalPlayer
 local char = plr.Character or plr.CharacterAdded:Wait()
 
-local whitelisted = {"arenaWaypoint", "deathFX", "notification", "itemFX", "expGained", "expOrbs"}
+local whitelisted = {"arenaWaypoint", "deathFX", "notification", "itemFX", "expGained"}
 local mainWorkspace = workspace.MainWorkspaceComponents
 local globalEnemy
 local Retrying = false
@@ -381,11 +381,23 @@ for _,v in pairs(reg) do
         if info.name == "requireEffectModule" then
             local hooook
             hooook = hookfunction(info.func, newcclosure(function(tipo, tabb)
-                if not table.find(whitelisted, tipo) and t.noVfx then
+                if tipo == "expOrbs" then
+
+                    for i=1,tabb.amount do
+                        if tabb.remote then
+                            tabb.remote:FireServer()
+                            task.wait(.2)
+                        end
+                    end
+                    return nil
+
+                elseif not table.find(whitelisted, tipo) and t.noVfx then
+
                     if tabb.model == char and tabb.remote then
                         table.insert(skillsRemoteDmg, tabb.remote)
                     end
                     return nil
+
                 end
                 return hooook(tipo,tabb)
             end))
@@ -420,7 +432,7 @@ createElement(Tabs.Main, "Dropdown", "selectedSkills", {Title = "Skills To Use",
     t.selectedSkills = newSkills
 end)
 
-createElement(Tabs.Main, "Toggle", "ResetWaveToggle", {Title = "Reset Wave 9", Default = false}, function(self)
+createElement(Tabs.Main, "Toggle", "ResetWaveToggle", {Title = "Reset Wave 10", Default = false}, function(self)
     t.resetWave = self.Value
 end)
 
