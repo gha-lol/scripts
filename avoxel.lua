@@ -324,7 +324,7 @@ function blackScreen(val)
 end
 
 function fpsBoost()
-    local Lightning = game:GetService("Lighting")
+    local Lighting = game:GetService("Lighting")
     local Terrain = workspace:FindFirstChildWhichIsA("Terrain")
 	Terrain.WaterWaveSize = 0
 	Terrain.WaterWaveSpeed = 0
