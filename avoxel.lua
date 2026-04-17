@@ -22,7 +22,12 @@ local t = {
     position = "Down",
     noVfx = false,
     resetWave = false,
-    selectedSkills = {"1", "2", "3", "4"}
+    selectedSkills = {"1", "2", "3", "4"},
+    rerollCharacter = "",
+    rerollTier = "SSS+",
+    rerollAttackSpeed = false,
+    rerollDamage = false,
+    rerollCooldown = false
 }
 
 
@@ -43,6 +48,7 @@ local skillsRemoteDmg = {}
 local Before
 local noVfxCon
 local wave = 1
+local arChars = {}
 
 
 -- Important
@@ -359,6 +365,31 @@ function fpsBoost()
 	end
 end
 
+function isMainGame()
+    if game.PlaceId == 86942044800556 then
+        return true
+    else
+        return false
+    end
+end
+
+function autoStatReroll(stat, bool)
+    while t[bool] do task.wait(.05)
+        if t.rerollCharacter ~= "" then
+            local resultado, novaData = game.ReplicatedStorage.Remotes.rollStats:InvokeServer(t.rerollCharacter, stat)
+
+            if resultado then
+                if resultado[stat].Tier == t.rerollTier then
+                    t[bool] = false
+                    UIElements[bool]:SetValue(false)
+                end
+
+                char.ClientHandler.Bindables.UpdateData:Fire(novaData)
+            end
+        end
+    end
+end
+
 
 -- Connections
 
@@ -483,3 +514,40 @@ createElement(Tabs.Misc, "Toggle", "noVfxToggle", {Title = "No Vfx", Default = f
 end)
 
 createElement(Tabs.Misc, "Button", nil, {Title = "Boost Fps", Description = "", Callback = fpsBoost})
+
+-- Auto Reroll Tab
+
+if isMainGame() then
+    Tabs["AutoReroll"] = Window:CreateTab{Title = "Auto Reroll", Icon = "phosphor-users-bold"}
+
+    createElement(Tabs.AutoReroll, "Button", nil, {Title = "Update Character List", Description = "", Callback = function()
+        local data = getData()
+        local charDrop = {}
+        table.clear(arChars)
+
+        for i,v in pairs(data.Characters) do
+            local nome = v.charName .. " " .. tostring(v.Level) .. " " .. "ID: " .. tostring(math.random(1,9999))
+            arChars[nome] = i
+            table.insert(charDrop,nome)
+        end
+
+        UIElements.arSelectChar:SetValues(charDrop)
+    end})
+
+    createElement(Tabs.AutoReroll, "Dropdown", "arSelectChar", {Title = "Select Character", Values = {}, Searchable = true, FocusSearch = false, Default = ""}, function(self, Value)
+        t.rerollCharacter = arChars[Value]
+    end)
+
+    createElement(Tabs.AutoReroll, "Dropdown", "arSelectTier", {Title = "Select Tier", Values = {"SSS+", "SSS", "SSS-", "SS+", "SS"}, Default = t.rerollTier}, function(self, Value)
+        t.rerollTier = Value
+    end)
+
+    for _,v in pairs({"AttackSpeed", "Damage", "Cooldown"}) do
+        createElement(Tabs.AutoReroll, "Toggle", "reroll".. v, {Title = "Auto " .. v, Default = false}, function(self)
+            t["reroll"..v] = self.Value
+            if self.Value then
+                autoStatReroll(v, "reroll"..v)
+            end
+        end)
+    end
+end
