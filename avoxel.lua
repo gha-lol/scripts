@@ -45,6 +45,7 @@ local http = game:GetService("HttpService")
 local UIElements = {}
 local deadNpcs = {}
 local skillsRemoteDmg = {}
+local allItems
 local Before
 local noVfxCon
 local wave = 1
@@ -396,6 +397,21 @@ function autoStatReroll(stat, bool)
     end
 end
 
+function getAllItems()
+    local returner = {}
+
+    for _,v in pairs(game.ReplicatedStorage.Items:GetChildren()) do
+        if v.Name ~= "General" then
+            for _,l in pairs(v:GetChildren()) do
+                table.insert(returner, l.Name)
+            end
+        end
+    end
+
+    return returner
+end
+allItems = getAllItems()
+
 
 -- Connections
 
@@ -411,9 +427,31 @@ game.ReplicatedStorage.Remotes.Interface.OnClientEvent:Connect(function(tipo, ta
 
             local newData = getData()
 
+            -- Item Webhook
             for i,v in pairs(newData.Items) do
                 local bamount = Before.Items[i] or 0
-                if game.ReplicatedStorage.Items["Maruto Shippuden"]:FindFirstChild(i) and v > bamount then
+                if table.find(allItems,i) and v > bamount then
+                    sendWebhook({title = "Anime Voxel", description = "Obtained " .. i, footer = "You have " .. tostring(v) .. " now"})
+                end
+            end
+
+            -- Character Webhook
+            local newCharacters = {}
+            for i,v in pairs(newData.Characters) do
+                if table.find(allItems,v.charName) then
+                    newCharacters[v.charName] = (newCharacters[v.charName] or 0) + 1
+                end
+            end
+            
+            local beforeCharacters = {}
+            for i,v in pairs(Before.Characters) do
+                if table.find(allItems,v.charName) then
+                    beforeCharacters[v.charName] = (beforeCharacters[v.charName] or 0) + 1
+                end
+            end
+
+            for i,v in pairs(newCharacters) do
+                if not beforeCharacters[i] or v > beforeCharacters[i] then
                     sendWebhook({title = "Anime Voxel", description = "Obtained " .. i, footer = "You have " .. tostring(v) .. " now"})
                 end
             end
