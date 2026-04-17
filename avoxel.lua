@@ -542,7 +542,7 @@ if isMainGame() then
         t.rerollTier = Value
     end)
 
-    for _,v in pairs({"AttackSpeed", "Damage", "Cooldown"}) do
+    for _,v in pairs({"Damage", "Cooldown", "AttackSpeed"}) do
         createElement(Tabs.AutoReroll, "Toggle", "reroll".. v, {Title = "Auto " .. v, Default = false}, function(self)
             t["reroll"..v] = self.Value
             if self.Value then
