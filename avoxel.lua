@@ -374,8 +374,10 @@ function isMainGame()
 end
 
 function autoStatReroll(stat, bool)
+    local data = getData()
+
     while t[bool] do task.wait(.05)
-        if t.rerollCharacter ~= "" then
+        if t.rerollCharacter ~= "" and data.Characters[t.rerollCharacter].Stats[stat].Tier ~= t.rerollTier then
             local resultado, novaData = game.ReplicatedStorage.Remotes.rollStats:InvokeServer(t.rerollCharacter, stat)
 
             if resultado then
@@ -384,8 +386,12 @@ function autoStatReroll(stat, bool)
                     UIElements[bool]:SetValue(false)
                 end
 
+                data = novaData
                 char.ClientHandler.Bindables.UpdateData:Fire(novaData)
             end
+        elseif t.rerollCharacter ~= "" then
+            t[bool] = false
+            UIElements[bool]:SetValue(false)
         end
     end
 end
