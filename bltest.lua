@@ -51,7 +51,8 @@ local t = {
         Uncommon = false,
         Rare = false,
         Legendary = false,
-        Mythical = false
+        Mythical = false,
+        Secret = false
     },
     shopConfig = {
         buyCashShop = false,
@@ -70,7 +71,8 @@ local t = {
       Uncommon = false,
       Rare = false,
       Legendary = false,
-      Mythical = false
+      Mythical = false,
+      Secret = false
     },
     arrowConfig = {
       shiny = false,
@@ -702,7 +704,7 @@ function autofarm(bool, ignoreName, tab)
         if bool == "autoraid" and plr.PlayerGui:FindFirstChild("raidcomplete") then
             task.wait(1.5)
             --queueonteleport('if _G.tickLoads then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))()')
-            queueonteleport('function loadScript(skip) if  _G.tickLoads and not skip then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end local s,e = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bl.lua",true))() end) if not s then task.wait(1) loadScript(true) end end loadScript()')
+            queueonteleport('function loadScript(skip) if  _G.tickLoads and not skip then if tick() - _G.tickLoads < 10 then return end else _G.tickLoads = tick() end local s,e = pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/gha-lol/scripts/main/bltest.lua",true))() end) if not s then task.wait(1) loadScript(true) end end loadScript()')
             
             if t.autochest then
                 openChests(true)
