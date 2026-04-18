@@ -778,6 +778,7 @@ function autofarm(bool, ignoreName, tab)
 
             if enemy:GetAttribute("Miniboss") and t.instakill then
                 isBoss = true
+                
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
                 if isMainGame() then
@@ -786,7 +787,7 @@ function autofarm(bool, ignoreName, tab)
                     repeating = true
 
                     local con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
-                        if tab.WeldPart and tab.WeldPart:IsDescendantOf(enemy) then
+                        --[[if tab.WeldPart and tab.WeldPart:IsDescendantOf(enemy) then
                             for i,v in pairs(tab) do
                                 if i == "Part" or i == "WeldPart" then
                                     print"------------"
@@ -796,7 +797,8 @@ function autofarm(bool, ignoreName, tab)
                                     print"------------"
                                 end
                             end
-                        end
+                        end]]
+
                         if tab.Part and (checkDescendant(tab.Part) or tab.Part.Parent.Name == "intro 2") and tab.WeldPart.Parent == enemy then
                             task.wait(.1)
                             canInsta = true
@@ -804,10 +806,10 @@ function autofarm(bool, ignoreName, tab)
                         end
 
                     end)
+                end
 
-                    if enemy.Humanoid.Health < lastHealth then
-                        lastHealth = enemy.Humanoid.Health
-                    end
+                if enemy.Humanoid.Health < lastHealth then
+                    lastHealth = enemy.Humanoid.Health
                 end
             else
                 repeating = false
