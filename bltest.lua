@@ -642,6 +642,19 @@ function setAligns(a)
     end
 end
 
+function getNetherStar()
+    local returner = false
+
+    for i,v in pairs(workspace.Live:GetChildren()) do
+        if table.find({"Netherstar1","Netherstar2","Netherstar3"}, v.Name) then
+            returner = v
+            break
+        end
+    end
+
+    return returner
+end
+
 local allAwakenings = {}
 for _,v in pairs(game:GetService("ReplicatedStorage").assets.effects.stands:GetChildren()) do
     for k,l in pairs(v:GetChildren()) do
@@ -752,7 +765,16 @@ function autofarm(bool, ignoreName, tab)
                 char.HumanoidRootPart.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,-8,0))
             end
             
-            part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
+            if enemy.Name:match("Heaven Ascension DIO") then
+                local star = getNetherStar()
+                if not canInsta and star then
+                    part.CFrame = CFrame.new(star.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
+                else
+                    part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
+                end
+            else
+                part.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0,posY,0)) * CFrame.Angles(math.rad(cfAng),0,0)
+            end
 
             if enemy:GetAttribute("Miniboss") and t.instakill then
                 isBoss = true
