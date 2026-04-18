@@ -669,7 +669,7 @@ function checkDescendant(part)
     local returner = false
 
     for i,v in pairs(allAwakenings) do
-        if part:IsDescendantOf(v) then
+        if part:IsDescendantOf(v) or part == v then
             returner = true
             break
         end
