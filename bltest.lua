@@ -98,6 +98,7 @@ local char = plr.Character
 
 local plrData = plr.PlayerData.SlotData
 local get_data = game.ReplicatedStorage.requests.miscellaneous.get_data
+local enemiesBlacklist = {"Hostage"}
 local allSkills = get_data:InvokeServer("ability")
 local allAccessorys = get_data:InvokeServer("accessory")
 local allQuests = get_data:InvokeServer("quest")
@@ -621,7 +622,7 @@ function getEnemy(a)
                     end
                 end
             else
-                if checkAlive(v) and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < distance then
+                if v:GetAttribute("DisplayName") and not table.find(enemiesBlacklist,v:GetAttribute("DisplayName")) and checkAlive(v) and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" and plr:DistanceFromCharacter(v.HumanoidRootPart.Position) < distance then
                     returner = v
                     distance = plr:DistanceFromCharacter(v.HumanoidRootPart.Position)
                 end
