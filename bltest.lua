@@ -99,6 +99,7 @@ local char = plr.Character
 local plrData = plr.PlayerData.SlotData
 local get_data = game.ReplicatedStorage.requests.miscellaneous.get_data
 local enemiesBlacklist = {"Hostage"}
+local instaRaidBosses = {"Death 13"}
 local allSkills = get_data:InvokeServer("ability")
 local allAccessorys = get_data:InvokeServer("accessory")
 local allQuests = get_data:InvokeServer("quest")
@@ -782,7 +783,7 @@ function autofarm(bool, ignoreName, tab)
                 
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
-                if isMainGame() then
+                if isMainGame() or table.find(instaRaidBosses, enemy:GetAttribute("DisplayName")) then
                     canInsta = true
                 elseif enemy.Humanoid.Health - lastHealth > 25 and not canInsta and not repeating then
                     repeating = true
