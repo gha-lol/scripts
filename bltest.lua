@@ -642,6 +642,28 @@ function setAligns(a)
     end
 end
 
+local allAwakenings = {}
+for _,v in pairs(game:GetService("ReplicatedStorage").assets.effects.stands:GetChildren()) do
+    for k,l in pairs(v:GetChildren()) do
+        if l.Name:lower():match("awakening") then
+            table.insert(allAwakenings, l)
+        end
+    end
+end
+
+function checkDescendant(part)
+    local returner = false
+
+    for i,v in pairs(allAwakenings) do
+        if part:IsDescendantOf(v) then
+            returner = true
+            break
+        end
+    end
+
+    return returner
+end
+
 local isAutoFarming = false
 function autofarm(bool, ignoreName, tab)
     if t[bool] or noSave[bool] then
@@ -743,7 +765,7 @@ function autofarm(bool, ignoreName, tab)
 
                     local con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
 
-                        if tab.Part and tab.Part.Parent.Parent.Name:lower() == "awakening" and tab.WeldPart.Parent == enemy then
+                        if tab.Part and checkDescendant(tab.Part) and tab.WeldPart.Parent == enemy then
                             task.wait(.1)
                             canInsta = true
                             con:Disconnect()
@@ -812,6 +834,7 @@ function autofarm(bool, ignoreName, tab)
             enemy = getEnemy(tab)
         end
     end
+    setAligns(false)
     isAutoFarming = false
 end
 
