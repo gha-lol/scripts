@@ -100,7 +100,7 @@ plr.CharacterAdded:Connect(function(cha)
     if t.autofarm then
         task.spawn(function()
             task.wait(2)
-            part.CFrame = char.HumanoidRootPart.CFrame
+            part.CFrame = char:WaitForChild("HumanoidRootPart").CFrame
             align.Attachment0 = char.HumanoidRootPart.RootAttachment
             orient.Attachment0 = char.HumanoidRootPart.RootAttachment
         end)
@@ -504,7 +504,7 @@ for _,v in pairs(reg) do
 
                 elseif not table.find(whitelisted, tipo) and t.noVfx then
 
-                    if tabb.model == char and tabb.remote then
+                    if tabb.model and tabb.model == char and tabb.remote then
                         table.insert(skillsRemoteDmg, tabb.remote)
                     end
                     return nil
