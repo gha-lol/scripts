@@ -646,7 +646,7 @@ function getNetherStar()
     local returner = false
 
     for i,v in pairs(workspace.Live:GetChildren()) do
-        if table.find({"Netherstar1","Netherstar2","Netherstar3"}, v.Name) then
+        if table.find({"Netherstar1","Netherstar2"}, v.Name) and v:FindFirstChild("HumanoidRootPart") then
             returner = v
             break
         end
