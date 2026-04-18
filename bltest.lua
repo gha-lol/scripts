@@ -783,7 +783,7 @@ function autofarm(bool, ignoreName, tab)
                 
                 if lastHealth == nil then lastHealth = enemy.Humanoid.Health end
                 
-                if isMainGame() or table.find(instaRaidBosses, enemy:GetAttribute("DisplayName")) then
+                if isMainGame() or table.find(instaRaidBosses, enemy:GetAttribute("DisplayName")) and enemy.Humanoid.Health < (enemy.Humanoid.MaxHealth/2) then
                     canInsta = true
                 elseif enemy.Humanoid.Health - lastHealth > 25 and not canInsta and not repeating then
                     repeating = true
