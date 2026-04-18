@@ -820,7 +820,7 @@ function autofarm(bool, ignoreName, tab)
                 lastHealth = nil
             end
 
-            if not enemy:FindFirstChild("IFrame") then
+            if not enemy:FindFirstChild("IFrame") and char and char:FindFirstChild("HumanoidRootPart") and plr:DistanceFromCharacter(part.Position) <= 2 then
                 local done = 0
                 local subst = nil
                 local vvalue = false
@@ -1294,3 +1294,9 @@ UIElements.autosellToggle:SetValue(t.autosell)
 UIElements.autoshopToggle:SetValue(t.autoshop)
 UIElements.noVfx:SetValue(t.noVfx)
 UIElements.blackscreen:SetValue(t.blackscreen)
+
+
+-- Security check
+if not isMainGame() and #game.Players:GetChildren() > 1 then
+    game:GetService("TeleportService"):Teleport(14890802310)
+end
