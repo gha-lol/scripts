@@ -218,6 +218,29 @@ game.ReplicatedStorage.requests.character_server_client.communicate.OnClientEven
     noSave.cds = tab.Cooldowns
 end)
 
+for i,v in pairs(t.keys) do
+    if i:match(": ") then
+        local found = false
+
+        for _,l in pairs(Service:JSONDecode(plrData.Hotbar.Value)) do
+            if i == l then
+                found = true
+                break
+            end
+        end
+
+        if not found then
+            t.keys[i] = nil
+        end
+    end
+end
+
+for _,v in pairs(Service:JSONDecode(plrData.Hotbar.Value)) do 
+    if t.keys[v] == nil then
+        t.keys[v] = false
+    end
+end
+
 
 -- Functions
 
@@ -243,10 +266,16 @@ function isCooldown(button)
     local returner = true
     local equipped = Service:JSONDecode(plrData.Stand.Value)
     
-    for i,v in pairs(allSkills) do
-        if tostring(i):match(equipped.Name .. ": ") and v.Keybind == button and not noSave.cds[v.Name] then
+    if button:match(": ") then
+        if not noSave.cds[allSkills[button].Name] then
             returner = false
-            break
+        end
+    else
+        for i,v in pairs(allSkills) do
+            if tostring(i):match(equipped.Name .. ": ") and v.Keybind == button and not noSave.cds[v.Name] then
+                returner = false
+                break
+            end
         end
     end
     
@@ -443,7 +472,9 @@ function autoSell(bool)
             end
         end
         
-        game.ReplicatedStorage.requests.general.SellItem:FireServer(sellList)
+        if #sellList > 0 then
+            game.ReplicatedStorage.requests.general.SellItem:FireServer(sellList)
+        end
     end
 
     if bool and isMainGame()  then
@@ -602,7 +633,7 @@ function getEnemy(a)
         local aa = {}
         
         for i,v in pairs(workspace.Live:GetChildren()) do
-            if not table.find(aa, v:GetAttribute("DisplayName")) and not string.find(v.Name, "entity clone") and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" then
+            if not table.find(aa, v:GetAttribute("DisplayName")) and (v:GetAttribute("DisplayName") == plr.Name or string.find(v.Name, "entity clone") == nil) and not game.Players:FindFirstChild(v.Name) and v.Name ~= "Server" then
                 table.insert(aa, v:GetAttribute("DisplayName"))
             end
         end
@@ -841,10 +872,18 @@ function autofarm(bool, ignoreName, tab)
                     if i ~= "M2" and v then
                         if i == t.holdskill and isBoss and t.instakill then
                             if canInsta then
-                                char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                                if i:match(": ") then
+                                    game:GetService("ReplicatedStorage").requests.general.skillcast:FireServer(i,true)
+                                else
+                                    char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                                end
                             end
                         elseif not isCooldown(i) then
-                            char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                            if i:match(": ") then
+                                game:GetService("ReplicatedStorage").requests.general.skillcast:FireServer(i,true)
+                            else
+                                char["client_character_controller"].Skill:FireServer(tostring(i),true)
+                            end
                         end
                     elseif i == "M2" and v then
                         char["client_character_controller"]["M2"]:FireServer(true,false)
@@ -995,7 +1034,8 @@ createElement(Tabs.AutoFarm, "Toggle", "instakillToggle", {Title = "Insta Kill",
     t.instakill = self.Value
 end)
 
-createElement(Tabs.AutoFarm, "Dropdown", "holdskillDropdown", {Title = "Skill To Hold", Values = {"R","Z","X","C","V"}, Default = t.holdskill}, function(self, val)
+local toHoldSkills = {}; for i,_ in pairs(t.keys) do if i ~= "M2" then table.insert(toHoldSkills,i) end end
+createElement(Tabs.AutoFarm, "Dropdown", "holdskillDropdown", {Title = "Skill To Hold", Values = toHoldSkills--[[{"R","Z","X","C","V"}]], Default = t.holdskill}, function(self, val)
     t.holdskill = val
 end)
 
@@ -1131,7 +1171,7 @@ createElement(Tabs.Automation, "Toggle", "autopointsToggle", {Title = "Auto Poin
 end)
 
 for i,v in pairs(t.selectedStats) do
-    createElement(Tabs.Automation, "Input", "InputStat"..tostring(i), {Title = i, Default = tostring(v), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+    createElement(Tabs.Automation, "Input", "InputStat"..tostring(i), {Title = i, Default = tostring(v), Placeholder = "Number", Numeric = true, Finished = true, Callback = function(value)
         t.selectedStats[i] = tonumber(value)
     end})
 end
@@ -1171,7 +1211,7 @@ end})
 
 createElement(Tabs.Config, "Paragraph", "Aligned Paragraph", {Title = "Global Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-createElement(Tabs.Config, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = false, Callback = function(value)
+createElement(Tabs.Config, "Input", "InputDistance", {Title = "Distance", Default = tostring(t.distance), Placeholder = "Number", Numeric = true, Finished = true, Callback = function(value)
     t.distance = tonumber(value)
 end})
 
@@ -1194,7 +1234,9 @@ end)
 
 createElement(Tabs.Config, "Paragraph", "Aligned Paragraph", {Title = "Skills Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
-local allKeyss, activeKeyss  = {}, {} for i,v in pairs(t.keys) do table.insert(allKeyss, i) if v == true then table.insert(activeKeyss, i) end end
+local allKeyss, activeKeyss  = {}, {} 
+for i,v in pairs(t.keys) do table.insert(allKeyss, i) if v == true then table.insert(activeKeyss, i) end end
+
 createElement(Tabs.Config, "Dropdown", "autoskillKeys", {Title = "Skills To Use", Values = allKeyss, Multi = true, Default = activeKeyss}, function(_,Value)
     for i,v in pairs(t.keys) do
         t.keys[i] = Value[i] or false
