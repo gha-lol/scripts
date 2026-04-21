@@ -242,27 +242,6 @@ for _,v in pairs(Service:JSONDecode(plrData.Hotbar.Value)) do
     end
 end
 
-local reg = getreg()
-for i,v in pairs(reg) do
-    if type(v) == "function" then
-        local info = getinfo(v)
-        if info.name == "play_vfx" then
-            local hoook; hoook = hookfunction(info.func, newcclosure(function(tipo,tab,...)
-                if tipo.Name == "Grab" then
-                    isGrabbing += 1
-                    task.delay(3,function()
-                        isGrabbing -= 1
-                    end)
-                end
-
-                if t.noVfx then return nil end
-
-                return hoook(tipo,tab,...)
-            end))
-        end
-    end
-end
-
 
 -- Functions
 
@@ -841,7 +820,7 @@ function autofarm(bool, ignoreName, tab)
                 elseif enemy.Humanoid.Health - lastHealth > 25 and not canInsta and not repeating then
                     repeating = true
 
-                    local con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
+                    local con; con = game:GetService("ReplicatedStorage").requests.general.vfx.OnClientEvent:Connect(function(_,tab)
                         --[[if tab.WeldPart and tab.WeldPart:IsDescendantOf(enemy) then
                             for i,v in pairs(tab) do
                                 if i == "Part" or i == "WeldPart" then
@@ -1360,6 +1339,28 @@ UIElements.autoshopToggle:SetValue(t.autoshop)
 UIElements.noVfx:SetValue(t.noVfx)
 UIElements.blackscreen:SetValue(t.blackscreen)
 
+
+-- No Vfx
+local reg = getreg()
+for i,v in pairs(reg) do
+    if type(v) == "function" then
+        local info = getinfo(v)
+        if info.name == "play_vfx" then
+            local hoook; hoook = hookfunction(info.func, newcclosure(function(tipo,tab,...)
+                if tipo.Name == "Grab" and tab.Part2 and char and tab.Part2 == char:FindFirstChild("HumanoidRootPart") then
+                    isGrabbing += 1
+                    task.delay(3,function()
+                        isGrabbing -= 1
+                    end)
+                end
+
+                if t.noVfx then return nil end
+
+                return hoook(tipo,tab,...)
+            end))
+        end
+    end
+end
 
 -- Security check
 if not isMainGame() and #game.Players:GetChildren() > 1 then
