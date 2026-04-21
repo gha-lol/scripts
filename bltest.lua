@@ -852,7 +852,7 @@ function autofarm(bool, ignoreName, tab)
                 lastHealth = nil
             end
 
-            if not enemy:FindFirstChild("IFrame") and char and char:FindFirstChild("HumanoidRootPart") and plr:DistanceFromCharacter(part.Position) <= 3 then
+            if not enemy:FindFirstChild("IFrame") and char and char:FindFirstChild("HumanoidRootPart") and (char.HumanoidRootPart.Position - part.Position).Magnitude <= 3 then
                 local done = 0
                 local subst = nil
                 local vvalue = false
