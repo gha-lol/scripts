@@ -106,6 +106,7 @@ local allQuests = get_data:InvokeServer("quest")
 local Service = game:GetService("HttpService")
 local Options = Library.Options
 local UIElements = {}
+local isGrabbing = 0
 
 
 -- Pressing Start
@@ -172,7 +173,7 @@ Instance.new("Attachment", part)
 
 local align = Instance.new("AlignPosition", part)
 align.MaxForce = 99e99
-align.MaxVelocity = 500
+align.MaxVelocity = 800
 align.Responsiveness = 200
 align.Attachment0 = char.HumanoidRootPart.RootAttachment
 align.Attachment1 = part.Attachment
@@ -241,6 +242,27 @@ for _,v in pairs(Service:JSONDecode(plrData.Hotbar.Value)) do
     end
 end
 
+local reg = getreg()
+for i,v in pairs(reg) do
+    if type(v) == "function" then
+        local info = getinfo(v)
+        if info.name == "play_vfx" then
+            local hoook; hoook = hookfunction(info.func, newcclosure(function(tipo,tab,...)
+                if tipo.Name == "Grab" then
+                    isGrabbing += 1
+                    task.delay(3,function()
+                        isGrabbing -= 1
+                    end)
+                end
+
+                if t.noVfx then return nil end
+
+                return hoook(tipo,tab,...)
+            end))
+        end
+    end
+end
+
 
 -- Functions
 
@@ -263,17 +285,17 @@ function getInventory()
 end
 
 function isCooldown(button)
-    local returner = true
+    local returner = false
     local equipped = Service:JSONDecode(plrData.Stand.Value)
     
     if button:match(": ") then
-        if not noSave.cds[allSkills[button].Name] then
-            returner = false
+        if noSave.cds[allSkills[button].Name] then
+            returner = true
         end
     else
         for i,v in pairs(allSkills) do
-            if tostring(i):match(equipped.Name .. ": ") and v.Keybind == button and not noSave.cds[v.Name] then
-                returner = false
+            if tostring(i):match(equipped.Name .. ": ") and v.Keybind == button and noSave.cds[v.Name] then
+                returner = true
                 break
             end
         end
@@ -791,7 +813,7 @@ function autofarm(bool, ignoreName, tab)
             task.wait()
         end
 
-        noClip()
+        task.spawn(noClip)
         
         if enemy and checkAlive(enemy) and (ignoreName or checkToggles(bool)) then
             if plr:DistanceFromCharacter(enemy.HumanoidRootPart.Position) > 500 then
@@ -833,7 +855,7 @@ function autofarm(bool, ignoreName, tab)
                         end]]
 
                         if tab.Part and (checkDescendant(tab.Part) or tab.Part.Parent.Name == "intro 2") and tab.WeldPart.Parent == enemy then
-                            task.wait(.1)
+                            task.wait(.5)
                             canInsta = true
                             con:Disconnect()
                         end
@@ -851,7 +873,7 @@ function autofarm(bool, ignoreName, tab)
                 lastHealth = nil
             end
 
-            if not enemy:FindFirstChild("IFrame") and char and char:FindFirstChild("HumanoidRootPart") and plr:DistanceFromCharacter(part.Position) <= 2 then
+            if not enemy:FindFirstChild("IFrame") and char and char:FindFirstChild("HumanoidRootPart") and plr:DistanceFromCharacter(part.Position) <= 3 then
                 local done = 0
                 local subst = nil
                 local vvalue = false
@@ -871,6 +893,7 @@ function autofarm(bool, ignoreName, tab)
 					
                     if i ~= "M2" and v then
                         if i == t.holdskill and isBoss and t.instakill then
+                            -- TA USANDO O GRAB DO FIGHTING STYLE MSM SEM O BOSS ESTAR COM CANINSTA
                             if canInsta then
                                 if i:match(": ") then
                                     game:GetService("ReplicatedStorage").requests.general.skillcast:FireServer(i,true)
@@ -891,7 +914,7 @@ function autofarm(bool, ignoreName, tab)
                 end
                 
                 char["client_character_controller"]["M1"]:FireServer(true,false)
-            elseif char:FindFirstChild("IFrame") and t.instakill and canInsta then
+            elseif (char:FindFirstChild("IFrame") or isGrabbing > 0) and t.instakill and canInsta then
                 workspace.FallenPartsDestroyHeight = -5000
                 setAligns(false)
                 
@@ -1221,7 +1244,7 @@ end)
 
 createElement(Tabs.Config, "Toggle", "noVfx", {Title = "No VFX", Default = t.noVfx}, function(self)
     t.noVfx = self.Value
-    changeVfx()
+    --changeVfx()
 end)
 
 createElement(Tabs.Config, "Toggle", "blackscreen", {Title = "Black Screen", Default = t.blackscreen}, function(self)
