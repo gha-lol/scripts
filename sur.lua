@@ -344,7 +344,7 @@ game:GetService("ReplicatedStorage").Events.PressedPlay:FireServer()
 task.wait(.5)
 game.StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
 char.Humanoid.Health = 0
-task.wait(.75)
+plr.CharacterAdded:Wait()
 
 UIElements.easterToggle:SetValue(t.autoeaster)
 Window:SelectTab(1)
