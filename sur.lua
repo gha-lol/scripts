@@ -6,6 +6,10 @@ local Tabs = {
         Title = "Main",
         Icon = "phosphor-users-bold"
     },
+    AutoArrow = Window:CreateTab{
+        Title = "Auto Arrow",
+        Icon = "phosphor-users-bold"
+    },
     File = Window:CreateTab{
         Title = "File",
         Icon = "phosphor-users-bold"
@@ -17,7 +21,15 @@ local Options = Library.Options
 --   Data
 
 local t = {
-    autoeaster = false
+    autoeaster = false,
+    autoarrow = false,
+    easterteleport = false,
+    easterserverhop = false,
+    arrowConfig = {
+        useCharged = false,
+        standsSelected = {},
+        traitsSelected = {}
+    }
 }
 noSave = {noclip = false}
 
@@ -32,6 +44,8 @@ local UIElements = {}
 local eggBlacklist = {}
 local http = game:GetService("HttpService")
 local newChar = 0
+local allTraits = {"Daemon", "Godly", "Glass Cannon", "Hacker", "Invincible", "Scourge", "Legendary", "Tragic"}
+local allStands = {}
 
 
 --   Important
@@ -68,6 +82,12 @@ game:GetService("RunService").RenderStepped:Connect(function()
         end
     end
 end)
+
+for i,v in pairs(game:GetService("ReplicatedStorage").StandNameConvert:GetChildren()) do
+    if v:IsA("StringValue") then
+        table.insert(allStands, v.Value)
+    end
+end
 
 
 --   Functions
@@ -232,39 +252,45 @@ function autoEaster()
                     end
                     eend = true
                 elseif tick() - lastChanged >= 90 then
-                    serverHop()
+                    if t.easterserverhop then
+                        serverHop()
+                    end
                 else
-                    setAligns(true)
-                    noSave.noclip = true
+                    if t.easterteleport then
+                        setAligns(true)
+                        noSave.noclip = true
 
-                    for i,v in pairs(easterSpawns:GetChildren()) do
-                        if not t.autoeaster or easterEggs.Eggs.Value == 0 or easterEggs.Eggs.Value == 15 then break end
-                        pcall(function()
-                            platform.CFrame = CFrame.new(v.Position + Vector3.new(0,-37,0))
-                            char.HumanoidRootPart.CFrame = CFrame.new(platform.Position + Vector3.new(0,3,0))
+                        for i,v in pairs(easterSpawns:GetChildren()) do
+                            if not t.autoeaster or easterEggs.Eggs.Value == 0 or easterEggs.Eggs.Value == 15 then break end
+                            pcall(function()
+                                platform.CFrame = CFrame.new(v.Position + Vector3.new(0,-37,0))
+                                char.HumanoidRootPart.CFrame = CFrame.new(platform.Position + Vector3.new(0,3,0))
 
-                            local started = tick()
-                            task.spawn(function()
-                                repeat task.wait()
-                                    pcall(function()
-                                        char.HumanoidRootPart.CFrame = CFrame.new(platform.Position + Vector3.new(0,3,0))
-                                        char.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
-                                    end)
-                                until tick() - started >= 1.5 or not t.autoeaster
+                                local started = tick()
+                                task.spawn(function()
+                                    repeat task.wait()
+                                        pcall(function()
+                                            char.HumanoidRootPart.CFrame = CFrame.new(platform.Position + Vector3.new(0,3,0))
+                                            char.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+                                        end)
+                                    until tick() - started >= 1.5 or not t.autoeaster
+                                end)
                             end)
-                        end)
 
-                        task.wait(1.5)
+                            task.wait(1.5)
 
-                        if getEgg() then
-                            break
+                            if getEgg() then
+                                break
+                            end
                         end
                     end
                 end
 
             end
         else
-            serverHop()
+            if t.easterserverhop then
+                serverHop()
+            end
         end
     end
 
@@ -280,6 +306,67 @@ function setAligns(a)
             align.Attachment0 = nil
         end
     end)
+end
+
+function checkItem(item)
+    local itm = plr.Backpack:FindFirstChild(item) or char:FindFirstChild(item)
+    if itm then
+        return itm
+    else
+        return false
+    end
+end
+
+function autoArrow()
+    while t.autoarrow do task.wait()
+        if table.find(t.arrowConfig.traitsSelected, plr.Data.Attri.Value) or plr.Data.Stand.Value ~= "None" and table.find(t.arrowConfig.standsSelected, game:GetService("ReplicatedStorage").StandNameConvert[plr.Data.Stand.Value].Value) then
+            UIElements.autoarrowToggle:SetValue(false)
+            break
+        else
+
+            if checkItem("Rokakaka") and (t.arrowConfig.useCharged and checkItem("Charged Arrow") or not t.arrowConfig.useCharged and checkItem("Stand Arrow")) then
+                
+                local item
+                if plr.Data.Stand.Value == "None" then
+
+                    if t.arrowConfig.useCharged then
+                        item = checkItem("Charged Arrow")
+                    else
+                        item = checkItem("Stand Arrow")
+                    end
+
+                else
+
+                    item = checkItem("Rokakaka")
+
+                end
+
+                if item then
+                    if item.Parent.Name == "Backpack" then
+                        char.Humanoid:EquipTool(item)
+                        task.wait(.1)
+                    end
+
+                    local inicio = tick()
+                    local thing = plr.Data.Stand
+                    --[[if item.Name == "Rokakaka" then
+                        thing = plr.Data.GUID
+                    else
+                        thing = plr.Data.Stand
+                    end]]
+                    local antes = thing.Value
+                    local aantes = plr.Data.Attri.Value
+                    if plr.Data.Stand.Value == "None" then aantes = "ahsdkasjda" end
+
+                    game:GetService("ReplicatedStorage").Events.UseItem:FireServer()
+                    repeat task.wait() until thing.Value ~= antes and plr.Data.Attri.Value ~= aantes or tick() - inicio >= 10
+                    
+                end
+
+            end
+
+        end
+    end
 end
 
 
@@ -298,7 +385,46 @@ createElement(Tabs.Main, "Toggle", "easterToggle", {Title = "Auto Easter", Defau
     end
 end)
 
+createElement(Tabs.Main, "Toggle", "easterteleportToggle", {Title = "Load Teleport", Default = false}, function(self)
+    t.easterteleport = self.Value
+end)
+
+createElement(Tabs.Main, "Toggle", "easterserverhopToggle", {Title = "Serverhop Easter", Default = false}, function(self)
+    t.easterserverhop = self.Value
+end)
+
 createElement(Tabs.Main, "Button", nil, {Title = "Server Hop", Description = "", Callback = serverHop})
+
+
+-- Auto Arrow
+
+createElement(Tabs.AutoArrow, "Toggle", "autoarrowToggle", {Title = "Auto Arrow", Default = false}, function(self)
+    t.autoarrow = self.Value
+
+    if self.Value then
+        autoArrow()
+    end
+end)
+
+createElement(Tabs.AutoArrow, "Toggle", "usechargedToggle", {Title = "Use Charged Arrow", Default = false}, function(self)
+    t.arrowConfig.useCharged = self.Value
+end)
+
+createElement(Tabs.AutoArrow, "Dropdown", "selectstandDrop", {Title = "Select Stands", Values = allStands, Multi = true, Searchable = true, Default = t.arrowConfig.standsSelected}, function(_,Value)
+    local newTab = {}
+
+    for i,v in pairs(Value) do table.insert(newTab,i) end
+
+    t.arrowConfig.standsSelected = newTab
+end)
+
+createElement(Tabs.AutoArrow, "Dropdown", "selecttraitDrop", {Title = "Select Traits", Values = allTraits, Multi = true, Default = t.arrowConfig.traitsSelected}, function(_,Value)
+    local newTab = {}
+
+    for i,v in pairs(Value) do table.insert(newTab,i) end
+
+    t.arrowConfig.traitsSelected = newTab
+end)
 
 
 -- File Tab
@@ -340,11 +466,20 @@ if isfile("standUprightData.json") then
     end
 end
 
-game:GetService("ReplicatedStorage").Events.PressedPlay:FireServer()
-task.wait(.5)
-game.StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
-char.Humanoid.Health = 0
-plr.CharacterAdded:Wait()
+if not plr.PressedPlay.Value then
+    game:GetService("ReplicatedStorage").Events.PressedPlay:FireServer()
+    task.wait(.5)
+    game.StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, true)
+    char.Humanoid.Health = 0
+    plr.CharacterAdded:Wait()
+    task.wait(.7)
+end
 
+UIElements.easterserverhopToggle:SetValue(t.easterserverhop)
+UIElements.easterteleportToggle:SetValue(t.easterteleport)
 UIElements.easterToggle:SetValue(t.autoeaster)
+
+UIElements.selectstandDrop:SetValues(t.arrowConfig.standsSelected)
+UIElements.selecttraitDrop:SetValues(t.arrowConfig.traitsSelected)
+UIElements.usechargedToggle:SetValue(t.arrowConfig.useCharged)
 Window:SelectTab(1)
