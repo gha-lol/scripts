@@ -180,8 +180,6 @@ function fpsBoost()
 		elseif v:IsA("Decal") then
 			v.Transparency = 1
 			v.Texture = ""
-		elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
-			v.Lifetime = NumberRange.new(0)
 		end
 	end
 	for _, v in pairs(Lighting:GetDescendants()) do
