@@ -267,10 +267,12 @@ function dropWebhook(items)
         local jumpLine = "\n"
         if desc == "" then jumpLine = "" end
 
-        desc = desc .. jumpLine .. "**Relics:**"
-
         for relic,values in pairs(items.Relics) do
             if t.whDropsRarity[values.Rarity] then
+                if not desc:find("**Relics:**") then
+                    desc = desc .. jumpLine .. "**Relics:**"
+                end
+                
                 desc = desc .. "\n" .. "* " .. relic .. ": " .. tostring(values.Amount)
                 --itemsToSend[relic] = values.Amount or 1
             end
@@ -279,7 +281,6 @@ function dropWebhook(items)
 
     for i,v in pairs(items) do
         local jumpLine = "\n"
-
         if desc == "" then jumpLine = "" end
 
         if typeof(v) == "table" and i ~= "Relics" and t.whDropsItems.Items then
@@ -295,7 +296,9 @@ function dropWebhook(items)
         end
     end
 
-    sendWebhook({title = "UTDX", description = desc, footer = ""})
+    if desc ~= "" then
+        sendWebhook({title = "UTDX", description = desc, footer = ""})
+    end
 end
 
 
