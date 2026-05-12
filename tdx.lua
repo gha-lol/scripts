@@ -26,6 +26,20 @@ local Tabs = {
 local t = {
     autoClaimEventMission = false,
     selectedClaimEvent = "",
+
+    webhookDrops = false,
+    whDropsItems = {
+        Items = false,
+        Rerolls = false,
+        Relics = false
+    },
+    whDropsRarity = {
+        Boundless = false,
+        Exclusive = false,
+        Secret = false,
+        Mythic = false
+    },
+
     antiAfk = false
 }
 
@@ -92,13 +106,27 @@ function createElement(tab, elementType, id, data, callback)
     return element
 end
 
+function checkMissions(tab)
+    local count = 0
+
+    for _,_ in pairs(tab) do
+        count += 1
+    end
+
+    if count > 0 then
+        return true
+    else
+        return false
+    end
+end
+
 function getClaimEvents(var)
     local returner = {}
 
     local a = Remotes.CalendarEventService.RF.getEventState:InvokeServer()
 
     for i,v in pairs(a.events) do
-        if v.missions then
+        if v.missions and checkMissions(v.missions) then
 
             if var == "claimable" then
 
@@ -189,6 +217,98 @@ function fpsBoost()
 	end
 end
 
+function getTableIs(tab,var)
+    local returner = {}
+
+    for i,v in pairs(tab) do
+        if var and v or not var then
+            table.insert(returner,i)
+        end
+    end
+
+    return returner
+end
+
+function sendWebhook(embed)
+    local body = Service:JSONEncode({
+        ["content"] = "@everyone",
+        ["embeds"] = {
+            {
+                ["title"] = embed.title or "a",
+                ["description"] = embed.description or "b",
+                ["type"] = "rich",
+                ["color"] = embed.color or tonumber(0xffffff),
+                ["fields"] = embed.fields,
+                ["footer"] = {
+                    ["text"] = embed.footer or "c"
+                }
+            }
+        }
+    })
+    request({
+        Body = body,
+        Url = "https://discord.com/api/webhooks/1457194910506684625/mXXODUWh7Hs4u4lDdy36wZbrJlM7rbwlFdX652vt5GNfAov9rridFSdJ4BK5pr2-vWsO",
+        Method = "POST",
+        Headers = {["Content-Type"] = "application/json"}
+    })
+end
+
+function dropWebhook(items)
+    if not items then return end
+
+    local itemsToSend = {}
+    local desc = ""
+
+    if items.Rerolls and items.Rerolls > 0 and t.whDropsItems.Rerolls then
+        desc = desc .. "**Rerolls:** " .. tostring(items.Rerolls)
+    end
+
+    if items.Relics and checkMissions(items.Relics) and t.whDropsItems.Relics then
+        local jumpLine = "\n"
+        if desc == "" then jumpLine = "" end
+
+        desc = desc .. jumpLine .. "**Relics:**"
+
+        for relic,values in pairs(items.Relics) do
+            if t.whDropsRarity[values.Rarity] then
+                desc = desc .. "\n" .. "* " .. relic .. ": " .. tostring(values.Amount)
+                --itemsToSend[relic] = values.Amount or 1
+            end
+        end
+    end
+
+    for i,v in pairs(items) do
+        local jumpLine = "\n"
+
+        if desc == "" then jumpLine = "" end
+
+        if typeof(v) == "table" and i ~= "Relics" and t.whDropsItems.Items then
+            if not desc:find("**Items:**") then
+                desc = desc .. jumpLine .. "**Items:**"
+            end
+
+            if t.whDropsRarity[v.Rarity] then
+                desc = desc .. "\n" .. "* " .. i .. ": " .. tostring(v.Amount)
+                --itemsToSend[i] = v.Amount or 1
+            end
+
+        end
+    end
+
+    sendWebhook({title = "UTDX", description = desc, footer = ""})
+end
+
+
+-- Connections
+
+if Remotes:FindFirstChild("WaveService") then
+    Remotes.WaveService.RE.SendFinished.OnClientEvent:Connect(function(_,items,match)
+        if items and match and t.webhookDrops then
+            dropWebhook(items)
+        end
+    end)
+end
+
 
 -- Code
 
@@ -212,7 +332,12 @@ createElement(Tabs.Auto, "Dropdown", "dropdownClaimEventMission", {Title = "Sele
 end)
 
 
+
 --     Misc Tab
+
+-- Global Section
+
+createElement(Tabs.Misc, "Paragraph", "Aligned Paragraph", {Title = "Global Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
 
 createElement(Tabs.Misc, "Toggle", "toggleAntiAfk", {Title = "Anti Afk", Default = t.antiAfk}, function(self)
     t.antiAfk = self.Value
@@ -220,6 +345,27 @@ createElement(Tabs.Misc, "Toggle", "toggleAntiAfk", {Title = "Anti Afk", Default
 end)
 
 createElement(Tabs.Misc, "Button", nil, {Title = "Boost Fps", Description = "", Callback = fpsBoost})
+
+-- Webhook Section
+
+createElement(Tabs.Misc, "Paragraph", "Aligned Paragraph", {Title = "Drops Webhook Section", Content = "", TitleAlignment = "Middle", ContentAlignment = Enum.TextXAlignment.Center})
+
+createElement(Tabs.Misc, "Toggle", "toggleDropsWebhook", {Title = "Webhook Drops", Default = t.webhookDrops}, function(self)
+    t.webhookDrops = self.Value
+end)
+
+createElement(Tabs.Misc, "Dropdown", "dropdownSelectDropWebhook", {Title = "Select Items", Values = getTableIs(t.whDropsItems), Default = getTableIs(t.whDropsItems, true), Multi = true}, function(self, Value)
+    for i,_ in pairs(t.whDropsItems) do
+        t.whDropsItems[i] = Value[i] or false
+    end
+end)
+
+createElement(Tabs.Misc, "Dropdown", "dropdownSelectDropWebhookRarity", {Title = "Select Rarity", Values = getTableIs(t.whDropsRarity), Default = getTableIs(t.whDropsRarity, true), Multi = true}, function(self, Value)
+    for i,_ in pairs(t.whDropsRarity) do
+        t.whDropsRarity[i] = Value[i] or false
+    end
+end)
+
 
 
 --     File Tab
