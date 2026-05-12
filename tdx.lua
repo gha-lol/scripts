@@ -283,11 +283,11 @@ function dropWebhook(items)
         if desc == "" then jumpLine = "" end
 
         if typeof(v) == "table" and i ~= "Relics" and t.whDropsItems.Items then
-            if not desc:find("**Items:**") then
-                desc = desc .. jumpLine .. "**Items:**"
-            end
-
             if t.whDropsRarity[v.Rarity] then
+                if not desc:find("**Items:**") then
+                    desc = desc .. jumpLine .. "**Items:**"
+                end
+                
                 desc = desc .. "\n" .. "* " .. i .. ": " .. tostring(v.Amount)
                 --itemsToSend[i] = v.Amount or 1
             end
