@@ -29,6 +29,7 @@ local t = {
 
     webhookDrops = false,
     whDropsItems = {
+        Units = false,
         Items = false,
         Rerolls = false,
         Relics = false
@@ -253,10 +254,21 @@ function sendWebhook(embed)
     })
 end
 
+function descLine(desc, str)
+    local jumpLine = "\n"
+    if desc == "" then jumpLine = "" end
+
+    if not desc:find(str) then
+        desc = desc .. jumpLine .. str
+    end
+
+    return desc
+end
+
 function dropWebhook(items)
     if not items then return end
 
-    local itemsToSend = {}
+    local units = {}
     local desc = ""
 
     if items.Rerolls and items.Rerolls > 0 and t.whDropsItems.Rerolls then
@@ -264,36 +276,29 @@ function dropWebhook(items)
     end
 
     if items.Relics and checkMissions(items.Relics) and t.whDropsItems.Relics then
-        local jumpLine = "\n"
-        if desc == "" then jumpLine = "" end
-
         for relic,values in pairs(items.Relics) do
             if t.whDropsRarity[values.Rarity] then
-                if not desc:find("**Relics:**") then
-                    desc = desc .. jumpLine .. "**Relics:**"
-                end
-                
+                desc = descLine(desc, "**Relics:**")
                 desc = desc .. "\n" .. "* " .. relic .. ": " .. tostring(values.Amount)
-                --itemsToSend[relic] = values.Amount or 1
+
             end
         end
     end
 
     for i,v in pairs(items) do
-        local jumpLine = "\n"
-        if desc == "" then jumpLine = "" end
-
-        if typeof(v) == "table" and i ~= "Relics" and t.whDropsItems.Items then
-            if t.whDropsRarity[v.Rarity] then
-                if not desc:find("**Items:**") then
-                    desc = desc .. jumpLine .. "**Items:**"
-                end
-                
-                desc = desc .. "\n" .. "* " .. i .. ": " .. tostring(v.Amount)
-                --itemsToSend[i] = v.Amount or 1
-            end
+        if typeof(v) == "table" and i ~= "Relics" and i ~= "Unit" and t.whDropsItems.Items and t.whDropsRarity[v.Rarity] then
+            desc = descLine(desc, "**Items:**")
+            desc = desc .. "\n" .. "* " .. i .. ": " .. tostring(v.Amount)
+        
+        elseif typeof(v) == "table" and i == "Unit" and t.whDropsItems.Units and t.whDropsRarity[v.Rarity] then
+            table.insert(units, v.Name)
 
         end
+    end
+
+    for _,v in pairs(units) do
+        desc = descLine(desc, "**Units:**")
+        desc = desc .. "\n" .. "* " .. v
     end
 
     if desc ~= "" then
